@@ -190,6 +190,21 @@ if is_local():
                        "bdist_wheel", "publish", "publish_doc", "register",
                        "upload_docs", "bdist_wininst"} & set(sys.argv)):
         raise Exception("unable to interpret command line: " + str(sys.argv))
+        
+    must_build = False
+    for k in {'unittests', 'unittests_LONG', 'unittests_SKIP', 'unittests_GUI', 'build_sphinx'}:
+        if k in sys.argv:
+            must_build = True
+            break
+    if must_build:
+        exe = os.executable
+        setup = os.path.join(os.path.abspath(os.path.dirname(__file__)), "setup.py")
+        cmd = "{0} {1} build_ext --inplace".format(exe, setup)
+        from pyquickhelper.loghelper import run_cmd
+        out, err = run_cmd(cmd, wait)
+        if len(err) > 0:
+            raise Exeception(err)
+        print(out)
 else:
     r = False
 
@@ -198,7 +213,7 @@ if not r:
         pyquickhelper = import_pyquickhelper()
         from pyquickhelper.pycode import process_standard_options_for_setup_help
         process_standard_options_for_setup_help(sys.argv)
-
+    root = os.path.abspath(os.path.dirname(__file__))
     setup(
         name=project_var_name,
         ext_modules=[
