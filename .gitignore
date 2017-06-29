@@ -1,0 +1,5 @@
+build/
+dist/
+cpyquickhelper.egg-info/
+__pycache__
+*.pyd
