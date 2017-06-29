@@ -1,7 +1,11 @@
 #-*- coding: utf-8 -*-
 """
-@file
-@brief Main file for module *cpyquickhelper*.
+
+
+Main file for module *cpyquickhelper*.
+
+
+:githublink:`%|py|6`
 """
 
 __version__ = "0.1"
@@ -28,21 +32,29 @@ __blog__ = """
 
 def check(log=False):
     """
-    Checks the library is working.
-    It raises an exception.
-    If you want to disable the logs:
+    
+        Checks the library is working.
+        It raises an exception.
+        If you want to disable the logs:
+    
+        :param      log:     if True, display information, otherwise
+        :return:             0 or exception
+        
 
-    @param      log     if True, display information, otherwise
-    @return             0 or exception
+        :githublink:`%|py|37`
     """
     return True
 
 
 def _setup_hook(use_print=False):
     """
-    if this function is added to the module,
-    the help automation and unit tests call it first before
-    anything goes on as an initialization step.
+    
+        if this function is added to the module,
+        the help automation and unit tests call it first before
+        anything goes on as an initialization step.
+        
+
+        :githublink:`%|py|46`
     """
     # we can check many things, needed module
     # any others things before unit tests are started

@@ -11,13 +11,13 @@ def capture_output(function_to_call):
     Capture the standard output and error when
     function *function_to_call* wraps C code whichs
     throws information from the command line.
-    
+
     @param      function_to_call        function to call
     @return                             output, error
-    
+
     This function must not be called in parallel with another
     call of the same function.
-    
+
     .. warning:: *error* is always empty. Both streams are merged.
     """
     if not callable(function_to_call):
@@ -32,5 +32,3 @@ def capture_output(function_to_call):
         return res
     else:
         raise TypeError("Unexpected return type '{0}'.".format(type(res)))
-    
-
