@@ -174,8 +174,14 @@ if "--verbose" in sys.argv:
 if is_local():
     pyquickhelper = import_pyquickhelper()
     logging_function = pyquickhelper.get_fLOG()
-    from pyquickhelper.pycode import process_standard_options_for_setup
     logging_function(OutputPrint=True)
+    must_build, run_build_ext = pyquickhelper.get_insetup_functions()
+
+    if must_build():
+        out = run_build_ext(__file__)
+        print(out)
+    
+    from pyquickhelper.pycode import process_standard_options_for_setup
     r = process_standard_options_for_setup(
         sys.argv, __file__, project_var_name,
         unittest_modules=["pyquickhelper"],
@@ -188,23 +194,8 @@ if is_local():
         fLOG=logging_function, covtoken=("24e81424-08ba-4ca7-be23-66c12926565f ", "'_UT_36_std' in outfile"))
     if not r and not ({"bdist_msi", "sdist",
                        "bdist_wheel", "publish", "publish_doc", "register",
-                       "upload_docs", "bdist_wininst"} & set(sys.argv)):
+                       "upload_docs", "bdist_wininst", "build_ext"} & set(sys.argv)):
         raise Exception("unable to interpret command line: " + str(sys.argv))
-        
-    must_build = False
-    for k in {'unittests', 'unittests_LONG', 'unittests_SKIP', 'unittests_GUI', 'build_sphinx'}:
-        if k in sys.argv:
-            must_build = True
-            break
-    if must_build:
-        exe = os.executable
-        setup = os.path.join(os.path.abspath(os.path.dirname(__file__)), "setup.py")
-        cmd = "{0} {1} build_ext --inplace".format(exe, setup)
-        from pyquickhelper.loghelper import run_cmd
-        out, err = run_cmd(cmd, wait)
-        if len(err) > 0:
-            raise Exeception(err)
-        print(out)
 else:
     r = False
 

@@ -3,7 +3,7 @@
              :height: 20
 
 cpyquickhelper
-=============
+==============
 
 .. image:: https://travis-ci.org/sdpython/cpyquickhelper.svg?branch=master
     :target: https://travis-ci.org/sdpython/cpyquickhelper
