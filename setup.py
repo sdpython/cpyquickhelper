@@ -180,7 +180,7 @@ if is_local():
     if must_build():
         out = run_build_ext(__file__)
         print(out)
-    
+
     from pyquickhelper.pycode import process_standard_options_for_setup
     r = process_standard_options_for_setup(
         sys.argv, __file__, project_var_name,

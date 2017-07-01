@@ -1,5 +1,6 @@
 """
-Main file for module *cpyquickhelper*.
+@file
+@brielf Shortcut to *io*.
 """
 
-__version__ = 0.1
+from .stdhelper import capture_output
