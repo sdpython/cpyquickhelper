@@ -205,15 +205,20 @@ if not r:
         from pyquickhelper.pycode import process_standard_options_for_setup_help
         process_standard_options_for_setup_help(sys.argv)
     root = os.path.abspath(os.path.dirname(__file__))
+    if sys.platform.startswith("win"):
+        extra_compile_args = None
+    else:
+        extra_compile_args = ['-std=c++11']
     setup(
         name=project_var_name,
         ext_modules=[
             Extension('src.cpyquickhelper.io.stdchelper',
                       [os.path.join(root, 'src/cpyquickhelper/io/stdchelper.cpp'),
-                       os.path.join(root, 'src/cpyquickhelper/io/stdcapture.cpp')])
+                       os.path.join(root, 'src/cpyquickhelper/io/stdcapture.cpp')],
+                      extra_compile_args=extra_compile_args)
         ],
         version='%s%s' % (sversion, subversion),
-        author='Xavier Dupr�',
+        author='Xavier Dupré',
         author_email='xavier.dupre@gmail.com',
         url="http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/index.html",
         download_url="https://github.com/sdpython/cpyquickhelper/",
