@@ -27,7 +27,7 @@ set_sphinx_variables(__file__, "cpyquickhelper", "Xavier Dupré", 2017,
                      "sphinx_rtd_theme", [
                          sphinx_rtd_theme.get_html_theme_path()],
                      locals(), extlinks=dict(
-                         issue=('https://github.com/sdpython/jyquickhelper/issues/%s', 'issue')),
+                         issue=('https://github.com/sdpython/cpyquickhelper/issues/%s', 'issue')),
                      title="cpyquickhelper", book=True)
 
 blog_root = "http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/"
