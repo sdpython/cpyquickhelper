@@ -214,9 +214,9 @@ if not r:
         ext_modules=[
             Extension('src.cpyquickhelper.io.stdchelper',
                       [os.path.join(root, 'src/cpyquickhelper/io/stdchelper.cpp'),
-                       os.path.join(root, 'src/cpyquickhelper/io/stdcapture.cpp'),
-                       os.path.join(root, 'src/cpyquickhelper/io/stdcapture.hpp')],
-                      extra_compile_args=extra_compile_args)
+                       os.path.join(root, 'src/cpyquickhelper/io/stdcapture.cpp')],
+                      extra_compile_args=extra_compile_args,
+                      include_dirs=[os.path.join(root, 'src/cpyquickhelper/io')])
         ],
         version='%s%s' % (sversion, subversion),
         author='Xavier Dupré',

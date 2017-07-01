@@ -44,10 +44,16 @@ C functions in Python.
 .. toctree::
     :maxdepth: 1
 
+    api/index
     i_index
     i_ex
     all_notebooks
     index_modules
+
+Links on how to use C in Python Extension:
+
+* `Extending Python with C or C++ <https://docs.python.org/3/extending/extending.html>`_
+* `Building C and C++ Extensions with distutils <https://docs.python.org/3/extending/building.html#building-c-and-c-extensions-with-distutils>`_
 
 **Links:** `github <https://github.com/sdpython/cpyquickhelper/>`_,
 `documentation <http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/index.html>`_,
