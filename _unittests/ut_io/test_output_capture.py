@@ -87,8 +87,11 @@ class TestOutputCapture(unittest.TestCase):
 
         out, err = capture_output(callf, lang="c")
         self.assertTrue(isinstance(out, bytes))
-        self.assertEqual(out, b'cout1\r\ntout2\r\n')
         self.assertEqual(err, None)
+        if __name__ == "__main__":
+            self.assertEqual(out, b'cout1\r\ntout2\r\n')
+        else:
+            self.assertTrue(out.endswith(b'cout1\r\ntout2\r\n'))
 
     def test_c_output_capture_py(self):
         fLOG(

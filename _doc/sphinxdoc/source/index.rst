@@ -9,7 +9,7 @@ cpyquickhelper
     :target: https://travis-ci.org/sdpython/cpyquickhelper
     :alt: Build status
 
-.. image:: https://ci.appveyor.com/api/projects/status/2tyc3or7snm6w4xl?svg=true
+.. image:: https://ci.appveyor.com/api/projects/status/sia7wxgjv8e1fi5a?svg=true
     :target: https://ci.appveyor.com/project/sdpython/cpyquickhelper
     :alt: Build Status Windows
 
