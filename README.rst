@@ -38,10 +38,11 @@ README
     :alt: Waffle
     :target: https://waffle.io/cpyquickhelper/cpyquickhelper
 
+*cpyquickhelper* is a template to create a module with
+C functions.
+
 **Links:**
 
 * `GitHub/cpyquickhelper <https://github.com/sdpython/cpyquickhelper/>`_
 * `documentation <http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/index.html>`_
 * `Blog <http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/blog/main_0000.html#ap-main-0>`_
-
-**cpyquickhelper**
