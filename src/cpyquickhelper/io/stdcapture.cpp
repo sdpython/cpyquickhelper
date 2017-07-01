@@ -1,6 +1,6 @@
 // http://stackoverflow.com/questions/5419356/redirect-stdout-stderr-to-a-string
 
-#include "StdCapture.hpp"
+#include "stdcapture.hpp"
 
 #include <thread>
 #include <errno.h>
