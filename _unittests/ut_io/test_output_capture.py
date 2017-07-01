@@ -54,7 +54,7 @@ class TestOutputCapture(unittest.TestCase):
             cprint("cout1")
             cprint("tout2")
 
-        out, err = capture_output(callf)
+        out, err = capture_output(callf, lang="c")
         self.assertTrue(isinstance(out, bytes))
         self.assertEqual(
             out, b'c\x00o\x00u\x00t\x001\x00t\x00o\x00u\x00t\x002\x00')

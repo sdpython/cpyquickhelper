@@ -63,7 +63,7 @@ def capture_output_py(function_to_call) -> Tuple[str, str]:
     return out.getvalue(), err.getvalue()
 
 
-def capture_output(function_to_call, lang="c"):
+def capture_output(function_to_call, lang="py"):
     """
     Catch standard output and error for function
     *function_to_call*. If lang is *'py'*, calls
