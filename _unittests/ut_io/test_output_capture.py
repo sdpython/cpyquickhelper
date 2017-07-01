@@ -56,8 +56,12 @@ class TestOutputCapture(unittest.TestCase):
 
         out, err = capture_output(callf, lang="c")
         self.assertTrue(isinstance(out, bytes))
-        self.assertEqual(
-            out, b'c\x00o\x00u\x00t\x001\x00t\x00o\x00u\x00t\x002\x00')
+        if sys.platform.startswith("win"):
+            self.assertEqual(
+                out, b'c\x00o\x00u\x00t\x001\x00t\x00o\x00u\x00t\x002\x00')
+        else:
+            self.assertEqual(
+                out, b'cout1tout2')
         self.assertEqual(err, None)
 
     def test_output_capture_py(self):
@@ -87,11 +91,18 @@ class TestOutputCapture(unittest.TestCase):
 
         out, err = capture_output(callf, lang="c")
         self.assertTrue(isinstance(out, bytes))
-        self.assertEqual(err, None)
-        if __name__ == "__main__":
-            self.assertEqual(out, b'cout1\r\ntout2\r\n')
+        if sys.platform.startswith("win"):
+            self.assertEqual(err, None)
+            if __name__ == "__main__":
+                self.assertEqual(out, b'cout1\r\ntout2\r\n')
+            else:
+                self.assertTrue(out.endswith(b'cout1\r\ntout2\r\n'))
         else:
-            self.assertTrue(out.endswith(b'cout1\r\ntout2\r\n'))
+            self.assertEqual(err, False)
+            if __name__ == "__main__":
+                self.assertEqual(out, b'cout1tout2')
+            else:
+                self.assertTrue(out.endswith(b'cout1tout2'))
 
     def test_c_output_capture_py(self):
         fLOG(
