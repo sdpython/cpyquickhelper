@@ -98,7 +98,7 @@ class TestOutputCapture(unittest.TestCase):
             else:
                 self.assertTrue(out.endswith(b'cout1\r\ntout2\r\n'))
         else:
-            self.assertEqual(err, False)
+            self.assertEqual(err, None)
             if __name__ == "__main__":
                 self.assertEqual(out, b'cout1tout2')
             else:
