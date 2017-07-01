@@ -6,8 +6,13 @@
 #include <errno.h>
 #include <stdio.h>
 
+#ifdef _MSC_VER
 #define STD_OUT_FD (_fileno(stdout))
 #define STD_ERR_FD (_fileno(stderr))
+#else
+#define STD_OUT_FD (fileno(stdout))
+#define STD_ERR_FD (fileno(stderr))
+#endif
 
 void StdCaptureStatic::InitNoLock()
 {
