@@ -102,8 +102,8 @@ class TestOutputCapture(unittest.TestCase):
             if __name__ == "__main__":
                 self.assertEqual(out, b'cout1tout2')
             else:
-                if not out.endswith(b'cout1tout2'):
-                    raise Exception(out)
+                if not out.endswith(b'cout1\ntout2\n'):
+                    raise Exception("###{0}###".format(out))
 
     def test_c_output_capture_py(self):
         fLOG(
