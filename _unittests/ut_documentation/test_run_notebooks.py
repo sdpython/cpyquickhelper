@@ -40,9 +40,10 @@ except ImportError:
 
 from pyquickhelper.loghelper import fLOG
 from pyquickhelper.pycode import get_temp_folder
-from pyquickhelper.ipythonhelper import execute_notebook_list
+from pyquickhelper.ipythonhelper import execute_notebook_list, execute_notebook_list_finalize_ut
 from pyquickhelper.pycode import compare_module_version
 from pyquickhelper.ipythonhelper import install_python_kernel_for_unittest
+import src.cpyquickhelper
 import IPython
 
 
@@ -92,6 +93,8 @@ class TestRunNotebooksPython(unittest.TestCase):
         addpaths = [os.path.normpath(os.path.join(
             os.path.abspath(os.path.dirname(__file__)), "..", "..", "src")),
             os.path.normpath(os.path.join(
+                os.path.abspath(os.path.dirname(__file__)), "..", "..", "..", "jyquickhelper", "src")),
+            os.path.normpath(os.path.join(
                 os.path.abspath(os.path.dirname(__file__)), "..", "..", "..", "pyquickhelper", "src"))
         ]
 
@@ -102,18 +105,8 @@ class TestRunNotebooksPython(unittest.TestCase):
         # run the notebooks
         res = execute_notebook_list(
             temp, keepnote, fLOG=fLOG, valid=valid, additional_path=addpaths, kernel_name=kernel_name)
-
-        # final checkings
-        self.assertTrue(len(res) > 0)
-        fails = [(os.path.split(k)[-1], v)
-                 for k, v in sorted(res.items()) if not v[0]]
-        for f in fails:
-            fLOG(f)
-        for k, v in sorted(res.items()):
-            name = os.path.split(k)[-1]
-            fLOG(name, v[0], v[1])
-        if len(fails) > 0:
-            raise fails[0][1][-1]
+        execute_notebook_list_finalize_ut(
+            res, fLOG=fLOG, dump=src.cpyquickhelper)
 
 
 if __name__ == "__main__":
