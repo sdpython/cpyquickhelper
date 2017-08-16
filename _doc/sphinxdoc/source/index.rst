@@ -39,6 +39,10 @@ cpyquickhelper
     :alt: Waffle
     :target: https://waffle.io/sdpython/cpyquickhelper
 
+.. image:: nbcov.png
+    :target: http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/all_notebooks_coverage.html
+    :alt: Notebook Coverage
+
 C functions in Python.
 
 .. toctree::

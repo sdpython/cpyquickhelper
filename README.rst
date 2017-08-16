@@ -38,6 +38,10 @@ README
     :alt: Waffle
     :target: https://waffle.io/cpyquickhelper/cpyquickhelper
 
+.. image:: http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/nbcov.png
+    :target: http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/all_notebooks_coverage.html
+    :alt: Notebook Coverage
+
 *cpyquickhelper* is a template to create a module with
 C functions.
 
