@@ -56,7 +56,7 @@ jobs:
           key: v1-dependencies-{{ checksum "requirements.txt" }}
         
       - run:
-          name: compite and build
+          name: compile and build
           command: |
             . venv/bin/activate
             python setup.py build_ext --inplace
