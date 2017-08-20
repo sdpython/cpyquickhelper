@@ -12,6 +12,9 @@ README
     :target: https://ci.appveyor.com/project/sdpython/cpyquickhelper
     :alt: Build Status Windows
 
+.. image:: https://circleci.com/gh/sdpython/cpyquickhelper/tree/master.svg?style=svg
+    :target: https://circleci.com/gh/sdpython/cpyquickhelper/tree/master
+
 .. image:: https://badge.fury.io/py/cpyquickhelper.svg
     :target: http://badge.fury.io/py/cpyquickhelper
 
