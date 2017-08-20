@@ -181,6 +181,12 @@ if is_local():
         out = run_build_ext(__file__)
         print(out)
 
+    if "build_sphinx" in sys.argv and not sys.platform.startswith("win"):
+        # There is an issue with matplotlib and notebook gallery on linux
+        # _tkinter.TclError: no display name and no $DISPLAY environment variable
+        import matplotlib
+        matplotlib.use('agg')
+
     from pyquickhelper.pycode import process_standard_options_for_setup
     r = process_standard_options_for_setup(
         sys.argv, __file__, project_var_name,
