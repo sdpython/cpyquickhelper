@@ -61,6 +61,7 @@ Links on how to use C in Python Extension:
 
 * `Extending Python with C or C++ <https://docs.python.org/3/extending/extending.html>`_
 * `Building C and C++ Extensions with distutils <https://docs.python.org/3/extending/building.html#building-c-and-c-extensions-with-distutils>`_
+* `Building Extensions For Python 3.5 <http://stevedower.id.au/blog/building-for-python-3-5/>`_
 
 **Links:** `github <https://github.com/sdpython/cpyquickhelper/>`_,
 `documentation <http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/index.html>`_,
