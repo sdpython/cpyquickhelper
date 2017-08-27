@@ -55,6 +55,7 @@ C functions in Python.
     i_index
     i_ex
     all_notebooks
+    blog/blogindex
     index_modules
 
 Links on how to use C in Python Extension:
