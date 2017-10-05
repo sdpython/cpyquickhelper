@@ -1,7 +1,8 @@
 #-*- coding: utf-8 -*-
 """
 @file
-@brief Main file for module *cpyquickhelper*.
+@brief Module *cpyquickhelper*.
+:epkg:`Python` + C.
 """
 
 __version__ = "0.1"
