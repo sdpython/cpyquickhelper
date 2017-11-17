@@ -52,8 +52,8 @@ def df2arrays(df, sep=",", check=True):
         from pandas import DataFrame
         from cpyquickhelper.fastdata import df2arrays
 
-        df = pandas.DataFrame([dict(a=3.4, b=5.6, c="e"),
-                               dict(a=3.5, b=5.7, c="r")])
+        df = DataFrame([dict(a=3.4, b=5.6, c="e"),
+                        dict(a=3.5, b=5.7, c="r")])
         arr = df2arrays(df)
         print(arr)
 
