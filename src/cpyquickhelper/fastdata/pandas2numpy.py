@@ -21,6 +21,8 @@ def df2array(df, check=True):
 
     See `data member <https://pandas.pydata.org/pandas-docs/stable/search.html?q=pointer&check_keywords=yes&area=default>`_,
     `_data <https://github.com/pandas-dev/pandas/blob/master/pandas/core/frame.py#L322>`_.
+
+    .. seealso:: @see fn df2array
     """
     if check:
         if not isinstance(df, pandas.DataFrame):
@@ -33,7 +35,8 @@ def df2array(df, check=True):
 
 def df2arrays(df, sep=",", check=True):
     """
-    Converts a dataframe into a dictionary of :epkg:`numpy:array`
+    Converts a dataframe into a list of
+    a list of tuple *(column name, :epkg:`numpy:array`)*
     without copying. :epkg:`pandas` is merging
     consecutive columns sharing the same type
     into one memory block. That's what the function extracts
@@ -58,7 +61,7 @@ def df2arrays(df, sep=",", check=True):
         print(arr)
 
 
-    .. seealso:: df2array
+    .. seealso:: @see fn df2array
     """
     if check:
         if not isinstance(df, pandas.DataFrame):
