@@ -70,12 +70,12 @@ static PyObject* cprint(PyObject *self, PyObject* unicode)
 
 const char * module_name = "stdchelper" ;
 
-static int sample_module_traverse(PyObject *m, visitproc visit, void *arg) {
+static int stdchelper_module_traverse(PyObject *m, visitproc visit, void *arg) {
     Py_VISIT(GETSTATE(m)->error);
     return 0;
 }
 
-static int sample_module_clear(PyObject *m) {
+static int stdchelper_module_clear(PyObject *m) {
     Py_CLEAR(GETSTATE(m)->error);
     return 0;
 }
@@ -95,8 +95,8 @@ static struct PyModuleDef moduledef = {
         sizeof(struct module_state),
         fonctions,
         NULL,
-        sample_module_traverse,
-        sample_module_clear,
+        stdchelper_module_traverse,
+        stdchelper_module_clear,
         NULL
 };
 

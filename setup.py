@@ -217,19 +217,35 @@ if not r:
         from pyquickhelper.pycode import process_standard_options_for_setup_help
         process_standard_options_for_setup_help(sys.argv)
     root = os.path.abspath(os.path.dirname(__file__))
+
     if sys.platform.startswith("win"):
         extra_compile_args = None
+        ext_thread = Extension('src.cpyquickhelper.parallel.threader',
+                               [os.path.join(root, 'src/cpyquickhelper/parallel/threaderc.cpp'),
+                                os.path.join(root, 'src/cpyquickhelper/parallel/threader.cpp')],
+                               extra_compile_args=extra_compile_args,
+                               include_dirs=[os.path.join(
+                                   root, 'src/cpyquickhelper/parallel')],
+                               library_dirs=[os.path.join(
+                                   root, 'src/cpyquickhelper/parallel')],
+                               libraries=['pthreadVC2'])
     else:
         extra_compile_args = ['-std=c++11']
+        ext_thread = Extension('src.cpyquickhelper.parallel.threader',
+                               [os.path.join(root, 'src/cpyquickhelper/parallel/threaderc.cpp'),
+                                os.path.join(root, 'src/cpyquickhelper/parallel/threader.cpp')],
+                               extra_compile_args=extra_compile_args,
+                               include_dirs=[os.path.join(root, 'src/cpyquickhelper/parallel')])
+
+    ext_stdhelper = Extension('src.cpyquickhelper.io.stdchelper',
+                              [os.path.join(root, 'src/cpyquickhelper/io/stdchelper.cpp'),
+                               os.path.join(root, 'src/cpyquickhelper/io/stdcapture.cpp')],
+                              extra_compile_args=extra_compile_args,
+                              include_dirs=[os.path.join(root, 'src/cpyquickhelper/io')])
+
     setup(
         name=project_var_name,
-        ext_modules=[
-            Extension('src.cpyquickhelper.io.stdchelper',
-                      [os.path.join(root, 'src/cpyquickhelper/io/stdchelper.cpp'),
-                       os.path.join(root, 'src/cpyquickhelper/io/stdcapture.cpp')],
-                      extra_compile_args=extra_compile_args,
-                      include_dirs=[os.path.join(root, 'src/cpyquickhelper/io')])
-        ],
+        ext_modules=[ext_thread, ext_stdhelper],
         version='%s%s' % (sversion, subversion),
         author='Xavier Dupré',
         author_email='xavier.dupre@gmail.com',
