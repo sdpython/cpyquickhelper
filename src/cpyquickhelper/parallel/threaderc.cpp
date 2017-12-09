@@ -7,7 +7,7 @@
 // Source taken from: ftp://sourceware.org/pub/pthreads-win32/dll-latest/
 // See http://web.cs.du.edu/~sturtevant/pthread.html
 #define _TIMESPEC_DEFINED
-#include "pthread.h"
+#include "win32/pthread.h"
 #endif
 
 

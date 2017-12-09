@@ -225,13 +225,13 @@ if not r:
                                [os.path.join(root, 'src/cpyquickhelper/parallel/threaderc.cpp'),
                                 os.path.join(root, 'src/cpyquickhelper/parallel/threader.cpp')],
                                extra_compile_args=extra_compile_args,
-                               include_dirs=[os.path.join(
-                                   root, 'src/cpyquickhelper/parallel')],
-                               library_dirs=[os.path.join(
-                                   root, 'src/cpyquickhelper/parallel')],
+                               include_dirs=[os.path.join(root, 'src/cpyquickhelper/parallel'),
+                                             os.path.join(root, 'src/cpyquickhelper/parallel/win32')],
+                               library_dirs=[os.path.join(root, 'src/cpyquickhelper/parallel'),
+                                             os.path.join(root, 'src/cpyquickhelper/parallel/win32')],
                                libraries=['pthreadVC2'])
     else:
-        extra_compile_args = ['-std=c++11', '-lpthread']
+        extra_compile_args = ['-std=c++11', '-pthread']
         ext_thread = Extension('src.cpyquickhelper.parallel.threader',
                                [os.path.join(root, 'src/cpyquickhelper/parallel/threaderc.cpp'),
                                 os.path.join(root, 'src/cpyquickhelper/parallel/threader.cpp')],
