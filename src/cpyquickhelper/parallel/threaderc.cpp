@@ -2,12 +2,12 @@
 #include "threader.hpp"
 
 #ifdef _MSC_VER
-#include <pthread.h>
+#define _TIMESPEC_DEFINED
+#include "win32/pthread.h"
 #else
 // Source taken from: ftp://sourceware.org/pub/pthreads-win32/dll-latest/
 // See http://web.cs.du.edu/~sturtevant/pthread.html
-#define _TIMESPEC_DEFINED
-#include "win32/pthread.h"
+#include <pthread.h>
 #endif
 
 
