@@ -231,7 +231,7 @@ if not r:
                                              os.path.join(root, 'src/cpyquickhelper/parallel/win32')],
                                libraries=['pthreadVC2'])
     else:
-        extra_compile_args = None #['-lpthread']
+        extra_compile_args = ['-lpthread', '-lrt']
         ext_thread = Extension('src.cpyquickhelper.parallel.threader',
                                [os.path.join(root, 'src/cpyquickhelper/parallel/threaderc.cpp'),
                                 os.path.join(root, 'src/cpyquickhelper/parallel/threader.cpp')],
