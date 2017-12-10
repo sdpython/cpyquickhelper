@@ -54,6 +54,7 @@ class TestParallel(unittest.TestCase):
             sleep(2)
 
         th = KThread(target=sleep_forever)
+        self.assertTrue(th is not None)
 
         # It does not work on Windows neither on Linux.
         return
