@@ -15,14 +15,14 @@ struct module_state {
 
 static PyObject* kill_thread(PyObject* self, PyObject* arg) 
 {
-	int id = 0;
-	if (arg == NULL || !PyArg_ParseTuple(arg, "i", &id)) {
+    unsigned long uid = 0;
+	if (arg == NULL || !PyArg_ParseTuple(arg, "k", &uid)) {
         struct module_state *st = GETSTATE(self);
         PyErr_SetString(st->error, "Null pointer is not allowed.");    
         return 0;     
     }
     
-    int succeeded = threader_kill_thread(id);
+    int succeeded = threader_kill_thread(uid); 
 	return Py_BuildValue("i", succeeded);
 }
 

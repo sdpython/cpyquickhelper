@@ -3,7 +3,7 @@
 @brielf Shortcut to *parallel*.
 """
 from threading import Thread
-from .thread import kill_thread
+from .threader import kill_thread
 
 
 class KThread(Thread):
@@ -15,6 +15,8 @@ class KThread(Thread):
         """
         Kills the thread if not alreayd finished.
         Source: `Python-Kill-Thread-Extension <https://github.com/munawarb/Python-Kill-Thread-Extension>`_.
+        The function still does not work. The found example
+        is not really working.
 
         @return     None if not alive, exit code otherwise.
         """

@@ -40,7 +40,6 @@ packages = find_packages('src', exclude='src')
 package_dir = {k: "src/" + k.replace(".", "/") for k in packages}
 package_data = {
     project_var_name + ".js": ["*.js", "*.css"],
-    project_var_name + ".parallel": ["*.txt"],
 }
 
 ############
@@ -225,11 +224,9 @@ if not r:
                                [os.path.join(root, 'src/cpyquickhelper/parallel/threaderc.cpp'),
                                 os.path.join(root, 'src/cpyquickhelper/parallel/threader.cpp')],
                                extra_compile_args=extra_compile_args,
-                               include_dirs=[os.path.join(root, 'src/cpyquickhelper/parallel'),
-                                             os.path.join(root, 'src/cpyquickhelper/parallel/win32')],
-                               library_dirs=[os.path.join(root, 'src/cpyquickhelper/parallel'),
-                                             os.path.join(root, 'src/cpyquickhelper/parallel/win32')],
-                               libraries=['pthreadVC2'])
+                               include_dirs=[os.path.join(
+                                   root, 'src/cpyquickhelper/parallel')],
+                               libraries=['kernel32'])
     else:
         extra_compile_args = ['-lpthread', '-std=c++11']
         ext_thread = Extension('src.cpyquickhelper.parallel.threader',
