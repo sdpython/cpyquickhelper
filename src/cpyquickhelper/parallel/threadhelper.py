@@ -16,7 +16,8 @@ class KThread(Thread):
         Kills the thread if not alreayd finished.
         Source: `Python-Kill-Thread-Extension <https://github.com/munawarb/Python-Kill-Thread-Extension>`_.
         The function still does not work. The found example
-        is not really working.
+        is not really working and it is not safe anyway as it will
+        leave the garbage collector in an unstable state.
 
         @return     None if not alive, exit code otherwise.
         """
