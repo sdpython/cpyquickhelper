@@ -3,7 +3,7 @@ Cython
 jupyter
 jyquickhelper
 numpy>=1.11.1
-pyquickhelper>=1.7.2438
+pyquickhelper>=1.7.2508
 sphinx-rtd-theme
 sphinxjp.themes.sphinxjp
 wheel
