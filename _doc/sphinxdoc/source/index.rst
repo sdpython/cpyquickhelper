@@ -17,7 +17,7 @@ cpyquickhelper
     :target: https://circleci.com/gh/sdpython/cpyquickhelper/tree/master
 
 .. image:: https://badge.fury.io/py/cpyquickhelper.svg
-    :target: http://badge.fury.io/py/cpyquickhelper
+    :target: https://pypi.org/project/cpyquickhelper/
 
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg
     :alt: MIT License

@@ -38,11 +38,12 @@ except ImportError:
     import src
 
 from pyquickhelper.loghelper import fLOG
+from pyquickhelper.pycode import ExtTestCase
 from src.cpyquickhelper.io.stdhelper import capture_output
 from src.cpyquickhelper.io.stdchelper import cprint
 
 
-class TestOutputCapture(unittest.TestCase):
+class TestOutputCapture(ExtTestCase):
 
     def test_output_capture(self):
         fLOG(
@@ -119,6 +120,45 @@ class TestOutputCapture(unittest.TestCase):
         self.assertTrue(isinstance(out, str))
         self.assertEqual(out, '')
         self.assertEqual(err, '')
+
+    def test_c_output_capture_py_error(self):
+        fLOG(
+            __file__,
+            self._testMethodName,
+            OutputPrint=__name__ == "__main__")
+
+        callf = 4
+
+        self.assertRaise(lambda: capture_output(callf, lang="py"), TypeError)
+
+    def test_c_output_capture_py_tuple(self):
+        fLOG(
+            __file__,
+            self._testMethodName,
+            OutputPrint=__name__ == "__main__")
+
+        def callf():
+            cprint("cout1")
+            cprint("tout2")
+            return (4, 5)
+
+        out, err = capture_output(callf, lang="py")
+        self.assertTrue(isinstance(out, str))
+        self.assertEqual(out, '')
+        self.assertEqual(err, '')
+
+    def test_c_output_capture_py_error2(self):
+        fLOG(
+            __file__,
+            self._testMethodName,
+            OutputPrint=__name__ == "__main__")
+
+        def callf():
+            cprint("cout1")
+            cprint("tout2")
+            return (4, 5)
+
+        self.assertRaise(lambda: capture_output(callf, lang="h"), ValueError)
 
 
 if __name__ == "__main__":
