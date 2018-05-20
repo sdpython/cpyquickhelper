@@ -127,7 +127,6 @@ PyInit_stdchelper(void)
 }
 
 
-
 #ifdef __cplusplus
 }
 #endif
