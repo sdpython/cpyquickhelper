@@ -41,7 +41,6 @@ class TestParallel(unittest.TestCase):
         self.assertTrue(th is not None)
 
         # It does not work on Windows neither on Linux.
-        return
 
         # th.start()
         # sleep(0.1)
