@@ -3,8 +3,9 @@ Cython
 jupyter
 jyquickhelper
 numpy>=1.11.1
-pillow
+pybind11
 pylint
+pillow
 pyquickhelper>=1.8
 sphinx-rtd-theme
 sphinxjp.themes.sphinxjp
