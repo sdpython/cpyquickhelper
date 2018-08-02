@@ -190,7 +190,7 @@ if not r:
     else:
         libraries_thread = None
         extra_compile_args_thread = ['-lpthread', '-std=c++11']
-        extra_compile_args_numbers = ['-lpthread', '-std=c++11']
+        extra_compile_args_numbers = ['-std=c++11']
 
     ext_thread = Extension('src.cpyquickhelper.parallel.threader',
                            [os.path.join(root, 'src/cpyquickhelper/parallel/threaderc.cpp'),
