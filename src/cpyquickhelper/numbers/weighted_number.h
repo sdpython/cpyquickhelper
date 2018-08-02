@@ -9,6 +9,11 @@
 #include <string>
 
 
+const char * get_weighted_class_name(double x);
+const char * get_weighted_class_name(float x);
+const char * get_weighted_class_name(int x);
+
+
 template <typename T> class WeightedNumber
 {
 public:
@@ -192,10 +197,6 @@ public:
 		return value * n.weight <= weight * n.value;
 	}
 };
-
-const char * get_weighted_class_name(double x);
-const char * get_weighted_class_name(float x);
-const char * get_weighted_class_name(int x);
 
 
 #define WeightedDouble WeightedNumber<double>
