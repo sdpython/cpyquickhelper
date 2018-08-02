@@ -42,7 +42,7 @@ cpyquickhelper
     :target: http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
 
-C functions in Python.
+:epkg:|`C` or :epkg:`C++` functions in :epkg:`Python`.
 
 .. toctree::
     :maxdepth: 1
@@ -54,11 +54,18 @@ C functions in Python.
     blog/blogindex
     index_modules
 
-Links on how to use C in Python Extension:
+Links on how to use :epkg:`C` in :epkg:`Python` Extension:
 
 * `Extending Python with C or C++ <https://docs.python.org/3/extending/extending.html>`_
 * `Building C and C++ Extensions with distutils <https://docs.python.org/3/extending/building.html#building-c-and-c-extensions-with-distutils>`_
 * `Building Extensions For Python 3.5 <http://stevedower.id.au/blog/building-for-python-3-5/>`_
+
+The produced code might be quite verbose.
+One possible option is :epkg:`pybind11` which
+speeds up the writing of functions binding :epkg:`C` objects
+with :epkg:`Python` objects. The interface also speeds up
+the development of functions taking array and matrices
+from :epkg:`numpy` as inputs or outputs.
 
 **Links:** `github <https://github.com/sdpython/cpyquickhelper/>`_,
 `documentation <http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/index.html>`_,

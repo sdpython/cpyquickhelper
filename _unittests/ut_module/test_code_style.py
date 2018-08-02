@@ -37,6 +37,8 @@ class TestCodeStyle(ExtTestCase):
                                   'W0212'),
                    skip=["No name 'kill_thread' in module 'src.cpyquickhelper.parallel.threader'",
                          "capture' in module 'src.cpyquickhelper.io.stdchelper'",
+                         "No name 'WeightedDouble' in module 'src.cpyquickhelper.numbers.weighted_number'",
+                         "No name 'WeightedFloat' in module 'src.cpyquickhelper.numbers.weighted_number'",
                          ])
 
     def test_style_test(self):

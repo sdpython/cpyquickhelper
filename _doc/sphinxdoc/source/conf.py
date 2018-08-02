@@ -57,3 +57,9 @@ custom_preamble = """\n
 imgmath_latex_preamble += custom_preamble
 latex_elements['preamble'] += custom_preamble
 mathdef_link_only = True
+
+epkg_dictionary.update({
+    'C': 'https://en.wikipedia.org/wiki/C_(programming_language)',
+    'C++': 'https://en.wikipedia.org/wiki/C%2B%2B',
+    'pybind11': 'https://github.com/pybind/pybind11',
+})

@@ -6,16 +6,20 @@ cd %root%
 @echo Compile
 @echo running %root%\setup.py build_ext --inplace
 @echo ##################
-set pythonexe=C:\Python363_x64
-if not exist %pythonexe% set pythonexe=C:\Python36_x64
-%pythonexe%\python %root%\setup.py build_ext --inplace
+set pythonexe="c:\Python370_x64\python.exe"
+if not exist %pythonexe% set pythonexe="c:\Python366_x64\python.exe"
+if not exist %pythonexe% set pythonexe="c:\Python365_x64\python.exe"
+if not exist %pythonexe% set pythonexe="c:\Python364_x64\python.exe"
+if not exist %pythonexe% set pythonexe="c:\Python363_x64\python.exe"
+if not exist %pythonexe% set pythonexe="c:\Python36_x64\python.exe"
+%pythonexe% %root%\setup.py build_ext --inplace
 if %errorlevel% neq 0 exit /b %errorlevel%
 @echo Done Compile.
 @echo ##################
 @echo Build
 @echo running %root%\setup.py bdist_wheel
 @echo ##################
-%pythonexe%\python %root%\setup.py bdist_wheel
+%pythonexe% %root%\setup.py bdist_wheel
 if %errorlevel% neq 0 exit /b %errorlevel%
 @echo Done Build.
 cd %current%

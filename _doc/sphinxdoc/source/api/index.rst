@@ -6,3 +6,4 @@ API
 
     fastdata
     io
+    numbers

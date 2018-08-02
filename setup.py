@@ -93,6 +93,28 @@ if "upload" in sys.argv and not subversion and not ask_help():
     raise Exception(
         "Git version is empty, cannot upload, is_local()={0}".format(is_local()))
 
+########
+# pybind11
+########
+
+
+class get_pybind_include(object):
+    """
+    Helper class to determine the pybind11 include path
+    The purpose of this class is to postpone importing pybind11
+    until it is actually installed, so that the ``get_include()``
+    method can be invoked.
+    `Source <https://github.com/pybind/python_example/blob/master/setup.py>`_.
+    """
+
+    def __init__(self, user=False):
+        self.user = user
+
+    def __str__(self):
+        import pybind11
+        return pybind11.get_include(self.user)
+
+
 ##############
 # common part
 ##############
@@ -156,31 +178,50 @@ if not r:
     root = os.path.abspath(os.path.dirname(__file__))
 
     if sys.platform.startswith("win"):
-        extra_compile_args = None
-        ext_thread = Extension('src.cpyquickhelper.parallel.threader',
-                               [os.path.join(root, 'src/cpyquickhelper/parallel/threaderc.cpp'),
-                                os.path.join(root, 'src/cpyquickhelper/parallel/threader.cpp')],
-                               extra_compile_args=extra_compile_args,
-                               include_dirs=[os.path.join(
-                                   root, 'src/cpyquickhelper/parallel')],
-                               libraries=['kernel32'])
+        libraries_thread = ['kernel32']
+        extra_compile_args_thread = None
+        extra_compile_args_numbers = ['/EHsc', '-std=c++11']
+    elif sys.platform.startswith("darwin"):
+        libraries_thread = None
+        extra_compile_args_thread = [
+            '-stdlib=libc++', '-mmacosx-version-min=10.7']
+        extra_compile_args_numbers = [
+            '-stdlib=libc++', '-mmacosx-version-min=10.7']
     else:
-        extra_compile_args = ['-lpthread', '-std=c++11']
-        ext_thread = Extension('src.cpyquickhelper.parallel.threader',
-                               [os.path.join(root, 'src/cpyquickhelper/parallel/threaderc.cpp'),
-                                os.path.join(root, 'src/cpyquickhelper/parallel/threader.cpp')],
-                               extra_compile_args=extra_compile_args,
-                               include_dirs=[os.path.join(root, 'src/cpyquickhelper/parallel')])
+        libraries_thread = None
+        extra_compile_args_thread = ['-lpthread', '-std=c++11']
+        extra_compile_args_numbers = ['-lpthread', '-std=c++11']
+
+    ext_thread = Extension('src.cpyquickhelper.parallel.threader',
+                           [os.path.join(root, 'src/cpyquickhelper/parallel/threaderc.cpp'),
+                            os.path.join(root, 'src/cpyquickhelper/parallel/threader.cpp')],
+                           extra_compile_args=extra_compile_args_thread,
+                           include_dirs=[os.path.join(
+                               root, 'src/cpyquickhelper/parallel')],
+                           libraries=libraries_thread)
 
     ext_stdhelper = Extension('src.cpyquickhelper.io.stdchelper',
                               [os.path.join(root, 'src/cpyquickhelper/io/stdchelper.cpp'),
                                os.path.join(root, 'src/cpyquickhelper/io/stdcapture.cpp')],
-                              extra_compile_args=extra_compile_args,
+                              extra_compile_args=extra_compile_args_thread,
                               include_dirs=[os.path.join(root, 'src/cpyquickhelper/io')])
+
+    ext_numbers = Extension('src.cpyquickhelper.numbers.weighted_number',
+                            [os.path.join(root, 'src/cpyquickhelper/numbers/weighted_number.cpp'),
+                             os.path.join(root, 'src/cpyquickhelper/numbers/weighted_number_python.cpp')],
+                            extra_compile_args=extra_compile_args_numbers,
+                            include_dirs=[
+                                # Path to pybind11 headers
+                                get_pybind_include(),
+                                get_pybind_include(user=True),
+                                os.path.join(
+                                    root, 'src/cpyquickhelper/numbers')
+                            ],
+                            language='c++')
 
     setup(
         name=project_var_name,
-        ext_modules=[ext_thread, ext_stdhelper],
+        ext_modules=[ext_thread, ext_stdhelper, ext_numbers],
         version='%s%s' % (sversion, subversion),
         author='Xavier Dupré',
         author_email='xavier.dupre@gmail.com',
@@ -194,7 +235,9 @@ if not r:
         packages=packages,
         package_dir=package_dir,
         package_data=package_data,
-        #data_files              = data_files,
-        #install_requires                = [  'numpy', 'ipython'],
-        #include_package_data    = True,
+        install_requires=["pybind11"],
+        # See https://setuptools.readthedocs.io/en/latest/setuptools.html#setting-the-zip-safe-flag
+        # zip_safe = False,
+        # data_files = data_files,
+        # include_package_data = True,
     )
