@@ -1,6 +1,6 @@
 """
 @file
-@brielf Shortcut to *numbers*.
+@brief Shortcut to *numbers*.
 """
 
 from .weighted_number import WeightedDouble, WeightedFloat

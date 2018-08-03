@@ -42,7 +42,7 @@ cpyquickhelper
     :target: http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
 
-:epkg:|`C` or :epkg:`C++` functions in :epkg:`Python`.
+:epkg:`C` or :epkg:`C++` functions in :epkg:`Python`.
 
 .. toctree::
     :maxdepth: 1
@@ -54,7 +54,7 @@ cpyquickhelper
     blog/blogindex
     index_modules
 
-Links on how to use :epkg:`C` in :epkg:`Python` Extension:
+Links on how to use :epkg:`C` in :epkg:`Python` extension:
 
 * `Extending Python with C or C++ <https://docs.python.org/3/extending/extending.html>`_
 * `Building C and C++ Extensions with distutils <https://docs.python.org/3/extending/building.html#building-c-and-c-extensions-with-distutils>`_

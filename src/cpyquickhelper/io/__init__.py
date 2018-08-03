@@ -1,6 +1,6 @@
 """
 @file
-@brielf Shortcut to *io*.
+@brief Shortcut to *io*.
 """
 
 from .stdhelper import capture_output

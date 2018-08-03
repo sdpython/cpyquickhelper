@@ -1,6 +1,6 @@
 """
 @file
-@brielf Shortcut to *parallel*.
+@brief Shortcut to *parallel*.
 """
 
 from .threader import kill_thread
