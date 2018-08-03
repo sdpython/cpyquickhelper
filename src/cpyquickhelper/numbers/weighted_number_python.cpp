@@ -6,7 +6,9 @@ namespace py = pybind11;
 
 
 PYBIND11_MODULE(weighted_number, m) {
-	m.doc() = "Implements operation on weighted numbers";
+	m.doc() = R"pbdoc(
+				Implements operations on weighted numbers.
+				)pbdoc";
 
 	py::class_<WeightedDouble>(m, "WeightedDouble",
 			R"pbdoc(
@@ -21,10 +23,10 @@ PYBIND11_MODULE(weighted_number, m) {
 		.def("__repr__", &WeightedDouble::__repr__, "usual")
 		.def_readwrite("value", &WeightedDouble::value, "unweighted numeric value (counter)")
 		.def_readwrite("weight", &WeightedDouble::weight, "weight")
-		.def(py::self + py::self)
-		.def(py::self - py::self)
-		.def(py::self * py::self)
-		.def(py::self / py::self)
+		.def(py::self + py::self, R"pbdoc(operator +)pbdoc")
+		.def(py::self - py::self, "operator -")
+		.def(py::self * py::self, "operator *")
+		.def(py::self / py::self, "operator -")
 		.def(py::self += py::self)
 		.def(py::self -= py::self)
 		.def(py::self *= py::self)
@@ -50,9 +52,11 @@ PYBIND11_MODULE(weighted_number, m) {
 		R"pbdoc(
 			Implements a weighted float used to speed up computation with aggregation.
 			It contains two attributes:
+
 			* value: unweighted value
 			* weight: weight associated to the value, it should be positive,
               but that's not enforced
+
 			)pbdoc")
 		.def(py::init<float, float>(), py::arg("value"), py::arg("weight") = 1.)
 		.def("__str__", &WeightedFloat::__str__, "usual")

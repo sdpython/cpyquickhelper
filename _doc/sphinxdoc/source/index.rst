@@ -42,17 +42,24 @@ cpyquickhelper
     :target: http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
 
+**Links:** `github <https://github.com/sdpython/cpyquickhelper/>`_,
+`documentation <http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/index.html>`_,
+:ref:`l-README`,
+:ref:`blog <ap-main-0>`,
+:ref:`l-issues-todolist`
+
+This library explores various technics to use
 :epkg:`C` or :epkg:`C++` functions in :epkg:`Python`.
+.
 
 .. toctree::
     :maxdepth: 1
 
     api/index
-    i_index
     i_ex
     all_notebooks
     blog/blogindex
-    index_modules
+    i_index
 
 Links on how to use :epkg:`C` in :epkg:`Python` extension:
 
@@ -67,16 +74,10 @@ with :epkg:`Python` objects. The interface also speeds up
 the development of functions taking array and matrices
 from :epkg:`numpy` as inputs or outputs.
 
-**Links:** `github <https://github.com/sdpython/cpyquickhelper/>`_,
-`documentation <http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/index.html>`_,
-:ref:`l-README`,
-:ref:`blog <ap-main-0>`,
-:ref:`l-issues-todolist`
-
 +----------------------+---------------------+---------------------+--------------------+------------------------+------------------------------------------------+
 | :ref:`l-modules`     |  :ref:`l-functions` | :ref:`l-classes`    | :ref:`l-methods`   | :ref:`l-staticmethods` | :ref:`l-properties`                            |
 +----------------------+---------------------+---------------------+--------------------+------------------------+------------------------------------------------+
 | :ref:`modindex`      |  :ref:`l-EX2`       | :ref:`search`       | :ref:`l-license`   | :ref:`l-changes`       | :ref:`l-README`                                |
 +----------------------+---------------------+---------------------+--------------------+------------------------+------------------------------------------------+
-| :ref:`genindex`      |  :ref:`l-FAQ2`      | :ref:`l-notebooks`  |                    | :ref:`l-statcode`      | `Unit Test Coverage <coverage/index.html>`_    |
+| :ref:`genindex`      |  :ref:`l-FAQ2`      | :ref:`l-notebooks`  | :ref:`l-HISTORY`   | :ref:`l-statcode`      | `Unit Test Coverage <coverage/index.html>`_    |
 +----------------------+---------------------+---------------------+--------------------+------------------------+------------------------------------------------+

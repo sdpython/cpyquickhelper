@@ -7,8 +7,9 @@ import sys
 import os
 import unittest
 import numpy
-from pandas import DataFrame
+from pandas import DataFrame, Series, concat
 from pandas.core.dtypes.base import ExtensionDtype
+from pandas.errors import AbstractMethodError
 from pyquickhelper.pycode import ExtTestCase
 
 
@@ -25,7 +26,7 @@ except ImportError:
         sys.path.append(path)
     import src
 
-from src.cpyquickhelper.numbers import WeightedDouble, WeightedSeries
+from src.cpyquickhelper.numbers import WeightedDouble, WeightedSeries, WeightedArray
 from src.cpyquickhelper.numbers.weighted_dataframe import WeightedSeriesDtype
 
 
@@ -34,7 +35,7 @@ class TestWeightedSeries(ExtTestCase):
     def test_inheritance(self):
         self.assertIsInstance(WeightedSeriesDtype(), ExtensionDtype)
 
-    def test_series1(self):
+    def test_series_0(self):
         npdtype = numpy.dtype(WeightedDouble)
         self.assertEqual(npdtype.kind, 'O')
         n1 = WeightedDouble(1, 1)
@@ -45,6 +46,46 @@ class TestWeightedSeries(ExtTestCase):
         self.assertEqual(ser.values[1], n2)
         self.assertEqual(list(ser.value), [1, 3])
         self.assertEqual(list(ser.weight), [1, 2])
+
+    def test_series0(self):
+        npdtype = numpy.dtype(WeightedDouble)
+        self.assertEqual(npdtype.kind, 'O')
+        n1 = WeightedDouble(1, 1)
+        n2 = WeightedDouble(3, 2)
+        ser = Series([n1, n2])
+        self.assertEqual(list(ser.values), [n1, n2])
+        self.assertEqual(ser.values[0], n1)
+        self.assertEqual(ser.values[1], n2)
+        self.assertEqual(list(ser.wdouble.value), [1, 3])
+        self.assertEqual(list(ser.wdouble.weight), [1, 2])
+
+    def test_series1(self):
+        npdtype = numpy.dtype(WeightedDouble)
+        self.assertEqual(npdtype.kind, 'O')
+        n1 = WeightedDouble(1, 1)
+        n2 = WeightedDouble(3, 2)
+        ser = WeightedSeries([n1, n2])
+        self.assertEqual(list(ser.values), [n1, n2])
+        self.assertEqual(ser.values[0], n1)
+        self.assertEqual(ser.values[1], n2)
+        self.assertEqual(list(ser.wdouble.value), [1, 3])
+        self.assertEqual(list(ser.wdouble.weight), [1, 2])
+
+    def test_series2(self):
+        npdtype = numpy.dtype(WeightedDouble)
+        self.assertEqual(npdtype.kind, 'O')
+        n1 = WeightedDouble(1, 1)
+        n2 = WeightedDouble(3, 2)
+        ser = WeightedSeries([n1, n2])
+        self.assertEqual(ser.dtype.name, "object")
+        df = DataFrame(data=dict(ser=ser))
+        ser = df.ser
+        self.assertEqual(list(ser.values), [n1, n2])
+        self.assertEqual(ser.values[0], n1)
+        self.assertEqual(ser.values[1], n2)
+        self.assertEqual(list(ser.wdouble.value), [1, 3])
+        self.assertEqual(list(ser.wdouble.weight), [1, 2])
+        self.assertEqual(list(ser.wdouble.isnan()), [False, False])
 
     def test_dataframe(self):
         n1 = WeightedDouble(1, 1)
@@ -64,8 +105,39 @@ class TestWeightedSeries(ExtTestCase):
         n1 = WeightedDouble(1, 1)
         n2 = WeightedDouble(numpy.nan, 2)
         ser = WeightedSeries([n1, n2])
-        na1 = ser.isnan()
+        na1 = ser.wdouble.isnan()
         self.assertEqual(list(na1), [False, True])
+
+    def test_weighted_array(self):
+        n1 = WeightedDouble(1, 1)
+        n2 = WeightedDouble(3, 2)
+        ser = WeightedArray([n1, n2])
+        self.assertEqual(ser.dtype.name, "WeightedDouble")
+        df = DataFrame(data=dict(wd=ser, x=[6., 7.]))
+        s = str(df).replace("\n", " ").replace(" ", "_")
+        self.assertEqual(
+            s, "_____________wd____x_0__1.000000_(1)__6.0_1__3.000000_(2)__7.0")
+        self.assertEqual(df.shape, (2, 2))
+        df["A"] = df.wd + df.x
+        e1 = WeightedDouble(7, 2)
+        e2 = WeightedDouble(10, 3)
+        self.assertEqual(list(df["A"]), [e1, e2])
+        self.assertEqual(df.wd.dtype.name, "WeightedDouble")
+        self.assertEqual(df.A.dtype.name, "WeightedDouble")
+
+        df["A1"] = df.wd + df.x
+        df["A2"] = df.wd - df.x
+        df["A3"] = df.wd * df.x
+        df["A4"] = df.wd / df.x
+        for c in ['A%d' % i for i in range(1, 5)]:
+            self.assertEqual(df[c].dtype.name, "WeightedDouble")
+
+        df["A4"] += df.x
+        self.assertEqual(df["A4"].dtype.name, "WeightedDouble")
+
+        df2 = concat([df, df])
+        self.assertEqual(df2["A4"].dtype.name, "WeightedDouble")
+        self.assertRaise(lambda: df.wd % df.x, AbstractMethodError)
 
 
 if __name__ == "__main__":

@@ -61,5 +61,8 @@ mathdef_link_only = True
 epkg_dictionary.update({
     'C': 'https://en.wikipedia.org/wiki/C_(programming_language)',
     'C++': 'https://en.wikipedia.org/wiki/C%2B%2B',
+    'DataFrame': 'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html',
+    'ExtensionArray': 'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.api.extensions.ExtensionArray.html',
     'pybind11': 'https://github.com/pybind/pybind11',
+    'Series': 'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html',
 })

@@ -16,3 +16,4 @@ Index
     README
     license
     blog/blogindex
+    HISTORY
