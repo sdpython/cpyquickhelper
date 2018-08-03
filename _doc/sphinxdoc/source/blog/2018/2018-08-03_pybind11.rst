@@ -1,0 +1,31 @@
+
+.. blogpost::
+    :title: Exploration with pybind11
+    :keywords: pybind11, C++
+    :date: 2018-08-03
+    :categories: C++
+
+    I tried the version of :epkg:`pybind11`
+    to expose a dummy C++ object
+    :class:`WeightedDouble <cpyquickhelper.numbers.weighted.number.WeightedDouble>`,
+    to implement a couple of operators and to see
+    how it behaves into a dataframe.
+
+    .. runpython::
+        :showcode:
+
+        from pandas import DataFrame
+        from cpyquickhelper.numbers import WeightedDouble, WeightedSeries
+
+        n1 = WeightedDouble(1, 1)
+        n2 = WeightedDouble(3, 2)
+        ser = WeightedSeries([n1, n2])
+        df = DataFrame(data=dict(wd=ser, x=[6., 7.]))
+        df["A"] = df.wd + df.x
+        print(df)
+
+    I still need to explore how to define efficient
+    operator on an array of elements of a custom type
+    which is what the latest version of :epkg:`pandas`
+    (0.23). It could be more efficient than using the
+    default generic object representation.
