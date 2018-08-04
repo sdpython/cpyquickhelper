@@ -6,18 +6,14 @@ namespace py = pybind11;
 
 
 PYBIND11_MODULE(weighted_number, m) {
-	m.doc() = R"pbdoc(
-				Implements operations on weighted numbers.
-				)pbdoc";
+	m.doc() = R"pbdoc(Implements operations on weighted numbers.)pbdoc";
 
-	py::class_<WeightedDouble>(m, "WeightedDouble",
-			R"pbdoc(
-			Implements a weighted double used to speed up computation with aggregation.
-			It contains two attributes:
-			* value: unweighted value
-			* weight: weight associated to the value, it should be positive,
-              but that's not enforced
-			)pbdoc")
+	py::class_<WeightedDouble>(m, "WeightedDouble", R"pbdoc(
+Implements a weighted double used to speed up computation with aggregation.
+It contains two attributes:
+* value: unweighted value
+* weight: weight associated to the value, it should be positive,
+  but that's not enforced)pbdoc")
 		.def(py::init<double, double>(), py::arg("value"), py::arg("weight") = 1.)
 		.def("__str__", &WeightedDouble::__str__, "usual")
 		.def("__repr__", &WeightedDouble::__repr__, "usual")
@@ -48,16 +44,12 @@ PYBIND11_MODULE(weighted_number, m) {
 		.def(py::self >= py::self)
 		;
 
-	py::class_<WeightedFloat>(m, "WeightedFloat",
-		R"pbdoc(
-			Implements a weighted float used to speed up computation with aggregation.
-			It contains two attributes:
-
-			* value: unweighted value
-			* weight: weight associated to the value, it should be positive,
-              but that's not enforced
-
-			)pbdoc")
+	py::class_<WeightedFloat>(m, "WeightedFloat", R"pbdoc(
+Implements a weighted float used to speed up computation with aggregation.
+It contains two attributes:
+* value: unweighted value
+* weight: weight associated to the value, it should be positive,
+  but that's not enforced)pbdoc")
 		.def(py::init<float, float>(), py::arg("value"), py::arg("weight") = 1.)
 		.def("__str__", &WeightedFloat::__str__, "usual")
 		.def("__repr__", &WeightedFloat::__repr__, "usual")

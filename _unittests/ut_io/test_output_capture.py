@@ -6,8 +6,11 @@
 import sys
 import os
 import unittest
-from pyquickhelper.loghelper import fLOG
+from inspect import signature, isbuiltin, isfunction, _signature_fromstr, Signature
 from pyquickhelper.pycode import ExtTestCase
+from pyquickhelper.helpgen import rst2html
+from pyquickhelper.sphinxext.import_object_helper import import_any_object
+from pyquickhelper.sphinxext.import_object_helper import import_object
 
 
 try:
@@ -30,11 +33,6 @@ from src.cpyquickhelper.io.stdchelper import cprint
 class TestOutputCapture(ExtTestCase):
 
     def test_output_capture(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         def callf():
             cprint("cout1")
             cprint("tout2")
@@ -50,11 +48,6 @@ class TestOutputCapture(ExtTestCase):
         self.assertEqual(err, None)
 
     def test_output_capture_py(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         def callf():
             print("cout1")
             print("tout2")
@@ -65,11 +58,6 @@ class TestOutputCapture(ExtTestCase):
         self.assertEqual(err, '')
 
     def test_py_output_capture_c(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         def callf():
             print("cout1")
             print("tout2")
@@ -91,11 +79,6 @@ class TestOutputCapture(ExtTestCase):
                     raise Exception("###{0}###".format(out))
 
     def test_c_output_capture_py(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         def callf():
             cprint("cout1")
             cprint("tout2")
@@ -106,21 +89,11 @@ class TestOutputCapture(ExtTestCase):
         self.assertEqual(err, '')
 
     def test_c_output_capture_py_error(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         callf = 4
 
         self.assertRaise(lambda: capture_output(callf, lang="py"), TypeError)
 
     def test_c_output_capture_py_tuple(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         def callf():
             cprint("cout1")
             cprint("tout2")
@@ -132,17 +105,34 @@ class TestOutputCapture(ExtTestCase):
         self.assertEqual(err, '')
 
     def test_c_output_capture_py_error2(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         def callf():
             cprint("cout1")
             cprint("tout2")
             return (4, 5)
 
         self.assertRaise(lambda: capture_output(callf, lang="h"), ValueError)
+
+    def test_signature(self):
+        self.assertRaise(lambda: signature(cprint), ValueError)
+        self.assertTrue(isbuiltin(cprint))
+        self.assertFalse(isfunction(cprint))
+        sig = "cprint(*args)"
+        res = _signature_fromstr(Signature, cprint, sig)
+        docname = "src.cpyquickhelper.io.stdchelper.cprint"
+        obj, _ = import_object(docname, "function", use_init=False)
+        self.assertNotEmpty(obj)
+        obj, _, kind = import_any_object(docname, use_init=False)
+        self.assertNotEmpty(obj)
+        self.assertEqual(kind, "function")
+        self.assertNotEmpty(res)
+        newstring = [
+            ".. autosignature:: src.cpyquickhelper.io.stdchelper.cprint"]
+        newstring = "\n".join(newstring)
+        res = rst2html(newstring, writer="rst", layout="sphinx")
+        self.assertIn(
+            "src.cpyquickhelper.io.stdchelper.cprint", res)
+        self.assertIn("Display a string on the standard output", res)
+        self.assertIn("Signature", res)
 
 
 if __name__ == "__main__":
