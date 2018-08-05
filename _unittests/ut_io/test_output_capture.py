@@ -131,7 +131,7 @@ class TestOutputCapture(ExtTestCase):
         res = rst2html(newstring, writer="rst", layout="sphinx")
         self.assertIn(
             "cpyquickhelper.io.stdchelper.cprint", res)
-        self.assertIn("Display a string on the standard output", res)
+        self.assertIn("Displays a string on the standard output", res)
         self.assertIn("Signature", res)
 
 
