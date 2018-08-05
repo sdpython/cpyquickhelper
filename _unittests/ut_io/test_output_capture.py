@@ -130,7 +130,7 @@ class TestOutputCapture(ExtTestCase):
         self.assertEqual(kind, "function")
         self.assertNotEmpty(res)
         newstring = [
-            ".. autosignature:: src.cpyquickhelper.io.stdchelper.cprint\n    :debug:"]
+            ".. autosignature:: cpyquickhelper.io.stdchelper.cprint\n    :debug:"]
         newstring = "\n".join(newstring)
         res = rst2html(newstring, writer="rst", layout="sphinx")
         self.assertIn(
