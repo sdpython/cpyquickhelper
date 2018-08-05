@@ -128,22 +128,23 @@ class TestOutputCapture(ExtTestCase):
         self.assertNotEmpty(obj)
         self.assertEqual(kind, "function")
         self.assertNotEmpty(res)
+        dirname = os.path.abspath(os.path.dirname(src.__file__))
         excs = []
         for name in ['src.cpyquickhelper.io.stdchelper.cprint',
                      'cpyquickhelper.io.stdchelper.cprint']:
-            newstring = ".. autosignature:: {0}\n    :debug:".format(name)
+            newstring = ".. autosignature:: {0}\n    :debug:\n    :syspath: {1}".format(name, dirname)
             try:
                 res = rst2html(newstring, writer="rst", layout="sphinx")
                 break
             except Exception as e:
-                excs.append(e)
+                excs.append((name, e))
 
         if len(excs) == 2:
             mes = [str(e) for e in excs]
             raise Exception("Unable to run autosignature:\n{0}".format("\n----\n".join(mes)))
         else:
             if len(excs) == 1:
-                warnings.warn("Caught an exception:\n" + str(excs[0]))
+                res = str(excs[0]) + "\n---\n" + res
             self.assertIn(
                 "cpyquickhelper.io.stdchelper.cprint", res)
             self.assertIn("Displays a string on the standard output", res)
