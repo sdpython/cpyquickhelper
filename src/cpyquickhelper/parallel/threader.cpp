@@ -32,7 +32,7 @@ static PyObject* kill_thread(PyObject* self, PyObject* arg)
 //////////// module definition /////////////////////
 ////////////////////////////////////////////////////
 
-const char * module_name = "threader" ;
+const char * module_name = "cpyquickhelper.parallel.threader" ;
 
 static int threader_module_traverse(PyObject *m, visitproc visit, void *arg) {
     Py_VISIT(GETSTATE(m)->error);

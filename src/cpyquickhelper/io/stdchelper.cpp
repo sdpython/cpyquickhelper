@@ -68,7 +68,7 @@ static PyObject* cprint(PyObject *self, PyObject* unicode)
 //////////// module definition /////////////////////
 ////////////////////////////////////////////////////
 
-const char * module_name = "stdchelper" ;
+const char * module_name = "cpyquickhelper.io.stdchelper" ;
 
 static int stdchelper_module_traverse(PyObject *m, visitproc visit, void *arg) {
     Py_VISIT(GETSTATE(m)->error);
