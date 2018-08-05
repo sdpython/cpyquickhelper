@@ -6,7 +6,7 @@ numpy>=1.11.1
 pybind11
 pylint
 pillow
-pyquickhelper>=1.8.2704
+pyquickhelper>=1.8.2705
 sphinx-rtd-theme
 sphinxjp.themes.sphinxjp
 wheel
