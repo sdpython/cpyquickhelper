@@ -1,11 +1,10 @@
 """
 @brief      test log(time=28s)
 """
-
-
 import sys
 import os
 import unittest
+import warnings
 from inspect import signature, isbuiltin, isfunction, _signature_fromstr, Signature
 from pyquickhelper.pycode import ExtTestCase
 from pyquickhelper.helpgen import rst2html
@@ -141,8 +140,10 @@ class TestOutputCapture(ExtTestCase):
 
         if len(excs) == 2:
             mes = [str(e) for e in excs]
-            raise Exception("Unable to run autosignature:\n{0}".format("\n".join(mes)))
+            raise Exception("Unable to run autosignature:\n{0}".format("\n----\n".join(mes)))
         else:
+            if len(excs) == 1:
+                warnings.warn("Caught an exception:\n" + str(excs[0]))
             self.assertIn(
                 "cpyquickhelper.io.stdchelper.cprint", res)
             self.assertIn("Displays a string on the standard output", res)
