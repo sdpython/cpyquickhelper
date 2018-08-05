@@ -63,6 +63,11 @@ epkg_dictionary.update({
     'C++': 'https://en.wikipedia.org/wiki/C%2B%2B',
     'DataFrame': 'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html',
     'ExtensionArray': 'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.api.extensions.ExtensionArray.html',
+    'JIT': 'https://en.wikipedia.org/wiki/Just-in-time_compilation',
+    'llvmlite': 'https://llvmlite.readthedocs.io/en/latest/index.html',
+    'nuitka': 'http://nuitka.net/',
+    'numba': 'https://numba.pydata.org/',
     'pybind11': 'https://github.com/pybind/pybind11',
+    'pythran': 'https://pythran.readthedocs.io/en/latest/',
     'Series': 'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html',
 })
