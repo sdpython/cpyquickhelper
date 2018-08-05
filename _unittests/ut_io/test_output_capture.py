@@ -6,7 +6,6 @@
 import sys
 import os
 import unittest
-import warnings
 from inspect import signature, isbuiltin, isfunction, _signature_fromstr, Signature
 from pyquickhelper.pycode import ExtTestCase
 from pyquickhelper.helpgen import rst2html
@@ -114,7 +113,8 @@ class TestOutputCapture(ExtTestCase):
         self.assertRaise(lambda: capture_output(callf, lang="h"), ValueError)
 
     def test_doc(self):
-        self.assertIn("Displays a string on the standard output", cprint.__doc__)
+        self.assertIn("Displays a string on the standard output",
+                      cprint.__doc__)
 
     def test_signature(self):
         self.assertRaise(lambda: signature(cprint), ValueError)
@@ -130,15 +130,14 @@ class TestOutputCapture(ExtTestCase):
         self.assertEqual(kind, "function")
         self.assertNotEmpty(res)
         newstring = [
-            ".. autosignature:: cpyquickhelper.io.stdchelper.cprint"]
+            ".. autosignature:: src.cpyquickhelper.io.stdchelper.cprint\n    :debug:"]
         newstring = "\n".join(newstring)
         res = rst2html(newstring, writer="rst", layout="sphinx")
         self.assertIn(
             "cpyquickhelper.io.stdchelper.cprint", res)
-        if "Displays a string on the standard output" not in res:
-            warnings.warn("Substring 'Displays a string on the standard output' not found in\n{0}".format(res))
-        if "Signature" not in res:
-            warnings.warn("Substring 'Signature' not found in\n{0}".format(res))
+        self.assertIn("Displays a string on the standard output", res)
+        self.assertIn("Signature", res)
+        self.assertIn("name='cprint'", res)
 
 
 if __name__ == "__main__":
