@@ -4,7 +4,6 @@
 import sys
 import os
 import unittest
-import warnings
 from inspect import signature, isbuiltin, isfunction, _signature_fromstr, Signature
 from pyquickhelper.pycode import ExtTestCase
 from pyquickhelper.helpgen import rst2html
