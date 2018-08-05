@@ -126,11 +126,11 @@ class TestOutputCapture(ExtTestCase):
         self.assertEqual(kind, "function")
         self.assertNotEmpty(res)
         newstring = [
-            ".. autosignature:: src.cpyquickhelper.io.stdchelper.cprint"]
+            ".. autosignature:: cpyquickhelper.io.stdchelper.cprint"]
         newstring = "\n".join(newstring)
         res = rst2html(newstring, writer="rst", layout="sphinx")
         self.assertIn(
-            "src.cpyquickhelper.io.stdchelper.cprint", res)
+            "cpyquickhelper.io.stdchelper.cprint", res)
         self.assertIn("Display a string on the standard output", res)
         self.assertIn("Signature", res)
 
