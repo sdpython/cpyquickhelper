@@ -129,15 +129,25 @@ class TestOutputCapture(ExtTestCase):
         self.assertNotEmpty(obj)
         self.assertEqual(kind, "function")
         self.assertNotEmpty(res)
-        newstring = [
-            ".. autosignature:: cpyquickhelper.io.stdchelper.cprint\n    :debug:"]
-        newstring = "\n".join(newstring)
-        res = rst2html(newstring, writer="rst", layout="sphinx")
-        self.assertIn(
-            "cpyquickhelper.io.stdchelper.cprint", res)
-        self.assertIn("Displays a string on the standard output", res)
-        self.assertIn("Signature", res)
-        self.assertIn("name='cprint'", res)
+        excs = []
+        for name in ['src.cpyquickhelper.io.stdchelper.cprint',
+                     'cpyquickhelper.io.stdchelper.cprint']:
+            newstring = ".. autosignature:: {0}\n    :debug:".format(name)
+            try:
+                res = rst2html(newstring, writer="rst", layout="sphinx")
+                break
+            except Exception as e:
+                excs.append(e)
+
+        if len(excs) == 2:
+            mes = [str(e) for e in excs]
+            raise Exception("Unable to run autosignature:\n{0}".format("\n".join(mes)))
+        else:
+            self.assertIn(
+                "cpyquickhelper.io.stdchelper.cprint", res)
+            self.assertIn("Displays a string on the standard output", res)
+            self.assertIn("Signature", res)
+            self.assertIn("name='cprint'", res)
 
 
 if __name__ == "__main__":
