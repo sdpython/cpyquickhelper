@@ -122,11 +122,10 @@ class WeightedDoubleAccessor:
     def _new_series(self, fct):
         if len(self) == 0:
             raise ValueError("Series cannot be empty.")
-        v1 = self.obj[0]
-        if isinstance(v1, WeightedDouble):
-            return Series([fct(s) for s in self.obj], index=self.obj.index, dtype=float)
+        if isinstance(self.obj, WeightedArray) or isinstance(self.obj[0], WeightedDouble):
+            return WeightedArray([fct(s) for s in self.obj], index=self.obj.index, dtype=float)
         else:
-            raise TypeError("Unexpected type '{0}'".format(type(v1)))
+            raise TypeError("Unexpected type, array is '{0}', first element is '{1}'".format(type(self.obj), type(self.obj[0])))
 
 
 class WeightedSeries(Series):
