@@ -235,9 +235,6 @@ if not r:
         packages=packages,
         package_dir=package_dir,
         package_data=package_data,
+        setup_requires=["pyquickhelper"],
         install_requires=["pybind11"],
-        # See https://setuptools.readthedocs.io/en/latest/setuptools.html#setting-the-zip-safe-flag
-        # zip_safe = False,
-        # data_files = data_files,
-        # include_package_data = True,
     )
