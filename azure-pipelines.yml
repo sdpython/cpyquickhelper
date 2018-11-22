@@ -54,27 +54,8 @@ jobs:
     inputs:
       versionSpec: '$(python.version)'
       architecture: 'x64'
-  - script: curl -O https://distfiles.macports.org/MacPorts/MacPorts-2.5.4.tar.bz2
-    displayName: 'Download macport'
-  - script: |
-          tar xf MacPorts-2.5.4.tar.bz2
-          cd MacPorts-2.5.4/
-          ./configure --enable-readline
-          make
-          sudo make install
-          cd ..
-    displayName: 'Install macport'
-  - script: |
-          echo 'export PATH=/opt/local/bin:/opt/local/sbin:$PATH' >> ~/.profile
-          source ~/.profile
-          export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-    displayName: 'Set up macport'
   - script: brew install p7zip
     displayName: 'brew p7zip'
-  - script: |
-          export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-          sudo port install p7zip          
-    displayName: 'Install p7zip'
   - script: python -m pip install --upgrade pip setuptools wheel
     displayName: 'Install tools'
   - script: pip install -r requirements.txt
