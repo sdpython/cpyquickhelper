@@ -62,9 +62,10 @@ jobs:
           ./configure --enable-readline
           make
           sudo make install
+          cd ..
           echo 'export PATH=/opt/local/bin:/opt/local/sbin:$PATH' >> ~/.profile
           source ~/.profile
-          cd ..
+          export PATH=/opt/local/bin:/opt/local/sbin:$PATH
   - script: sudo port install -y p7zip
     displayName: 'Install p7zip'
   - script: python -m pip install --upgrade pip setuptools wheel
