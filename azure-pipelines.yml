@@ -70,8 +70,11 @@ jobs:
           export PATH=/opt/local/bin:/opt/local/sbin:$PATH
     displayName: 'Set up macport'
   - script: |
+          brew
+    displayName: 'brew?'
+  - script: |
           export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-          sudo port install -y p7zip          
+          sudo port install p7zip          
     displayName: 'Install p7zip'
   - script: python -m pip install --upgrade pip setuptools wheel
     displayName: 'Install tools'
