@@ -54,14 +54,14 @@ jobs:
     inputs:
       versionSpec: '$(python.version)'
       architecture: 'x64'
-  - script: curl -O https://distfiles.macports.org/MacPorts/MacPorts-2.4.1.tar.gz
+  - script: curl -O https://distfiles.macports.org/MacPorts/MacPorts-2.5.4.tar.bz2
     displayName: 'Download macport'
   - script: |
-          tar -xzvf MacPorts-2.4.1.tar.gz
-          cd MacPorts-2.4.1
+          tar xf MacPorts-2.5.4.tar.bz2
+          cd MacPorts-2.5.4/
           ./configure --enable-readline
           make
-          make install
+          sudo make install
           echo 'export PATH=/opt/local/bin:/opt/local/sbin:$PATH' >> ~/.profile
           source ~/.profile
           cd ..
