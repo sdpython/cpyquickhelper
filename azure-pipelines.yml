@@ -69,9 +69,8 @@ jobs:
           source ~/.profile
           export PATH=/opt/local/bin:/opt/local/sbin:$PATH
     displayName: 'Set up macport'
-  - script: |
-          brew
-    displayName: 'brew?'
+  - script: brew install p7zip
+    displayName: 'brew p7zip'
   - script: |
           export PATH=/opt/local/bin:/opt/local/sbin:$PATH
           sudo port install p7zip          
