@@ -63,11 +63,12 @@ jobs:
           make
           sudo make install
           cd ..
+    displayName: 'Install macport'
+  - script: |
           echo 'export PATH=/opt/local/bin:/opt/local/sbin:$PATH' >> ~/.profile
           source ~/.profile
           export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-          port --help
-    displayName: 'Install macport'
+    displayName: 'Set up macport'
   - script: |
           export PATH=/opt/local/bin:/opt/local/sbin:$PATH
           sudo port install -y p7zip          
