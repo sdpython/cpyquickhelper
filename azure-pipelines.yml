@@ -66,7 +66,11 @@ jobs:
           echo 'export PATH=/opt/local/bin:/opt/local/sbin:$PATH' >> ~/.profile
           source ~/.profile
           export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-  - script: sudo port install -y p7zip
+          port --help
+    displayName: 'Install macport'
+  - script: |
+          export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+          sudo port install -y p7zip          
     displayName: 'Install p7zip'
   - script: python -m pip install --upgrade pip setuptools wheel
     displayName: 'Install tools'
