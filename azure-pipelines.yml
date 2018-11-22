@@ -54,6 +54,19 @@ jobs:
     inputs:
       versionSpec: '$(python.version)'
       architecture: 'x64'
+  - script: curl -O https://distfiles.macports.org/MacPorts/MacPorts-2.4.1.tar.gz
+    displayName: 'Download macport'
+  - script: |
+          tar -xzvf MacPorts-2.4.1.tar.gz
+          cd MacPorts-2.4.1
+          ./configure --enable-readline
+          make
+          make install
+          echo 'export PATH=/opt/local/bin:/opt/local/sbin:$PATH' >> ~/.profile
+          source ~/.profile
+          cd ..
+  - script: sudo port install -y p7zip
+    displayName: 'Install p7zip'
   - script: python -m pip install --upgrade pip setuptools wheel
     displayName: 'Install tools'
   - script: pip install -r requirements.txt

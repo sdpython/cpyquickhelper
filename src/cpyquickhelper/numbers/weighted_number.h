@@ -159,7 +159,7 @@ public:
 		if (weight == (int)weight)
 			sprintf(buffer, "Weighted%s(%f, %d)", class_name, value, (int)weight);
 		else
-			sprintf(buffer, "Weighted%s(%f, %d)", class_name, value, weight);
+			sprintf(buffer, "Weighted%s(%f, %f)", class_name, value, weight);
 		return buffer;
 	}
 
