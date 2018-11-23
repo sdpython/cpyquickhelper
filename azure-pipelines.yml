@@ -66,16 +66,14 @@ jobs:
     displayName: 'gcc version'
   - script: sudo apt-get update
     displayName: 'AptGet Update'
-  - script: sudo apt-get install -y inkscape
-    displayName: 'Install Inkscape'
-  - script: sudo apt-get install -y pandoc
+  - script: brew install p7zip
+    displayName: 'Install p7zip'
+  - script: brew install pandoc
     displayName: 'Install Pandoc'
-  - script: sudo apt-get install -y texlive texlive-latex-extra texlive-xetex dvipng
-    displayName: 'Install Latex'
-  - script: sudo apt-get install -y p7zip-full
-    displayName: 'Install 7z, rar'
-  - script: sudo apt-get install -y graphviz
+  - script: brew install graphviz
     displayName: 'Install Graphviz'
+  - script: brew cask install mactex
+    displayName: 'Install latex'
   - script: |
           which pdflatex
           which dot
