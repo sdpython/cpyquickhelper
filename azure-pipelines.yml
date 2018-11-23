@@ -64,8 +64,6 @@ jobs:
     displayName: 'brew update'
   - script: gcc --version
     displayName: 'gcc version'
-  - script: sudo apt-get update
-    displayName: 'AptGet Update'
   - script: brew install p7zip
     displayName: 'Install p7zip'
   - script: brew install pandoc
