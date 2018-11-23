@@ -78,10 +78,10 @@ jobs:
     displayName: 'check'
   - script: python -m pip install --upgrade pip setuptools wheel
     displayName: 'Install tools'
+  - script: brew install pybind11
+    displayName: 'Install pybind11'
   - script: pip install -r requirements.txt
     displayName: 'Install Requirements'
-  - script: python -m pip install scikit-learn
-    displayName: 'Install scipy scikit-learn'
   - script: python setup.py build_ext --inplace
     displayName: 'Build package'
   - script: python -u setup.py unittests
