@@ -81,22 +81,14 @@ static int stdchelper_module_clear(PyObject *m) {
 }
 
 static PyMethodDef fonctions [] = {
-  {"begin_capture", begin_capture, METH_VARARGS, R"pbdoc(
-                        Starts capturing the standard output.
-                        Signature: *def begin_capture():*.
-                        )pbdoc"},
-  {"end_capture",  end_capture, METH_VARARGS, R"pbdoc(
-                        Stops capturing the standard output.
-                        Signature: *def end_capture():*.
-                        )pbdoc"},
-  {"get_capture",  get_capture, METH_VARARGS, R"pbdoc(
-                        Gets the captured output.
-                        Signature: *def get_capture() -> (str, str):*.
-                        )pbdoc"},
-  {"cprint",  cprint, METH_VARARGS, R"pbdoc(
-                        Displays a string on the standard output in C++.
-                        Signature: *def cprint(*args):*.
-                        )pbdoc"},
+  {"begin_capture", begin_capture, METH_VARARGS, 
+    "Starts capturing the standard output. Signature: *def begin_capture():*."},
+  {"end_capture",  end_capture, METH_VARARGS,
+    "Stops capturing the standard output. Signature: *def end_capture():*."},
+  {"get_capture",  get_capture, METH_VARARGS,
+    "Gets the captured output. Signature: *def get_capture() -> (str, str):*."},
+  {"cprint",  cprint, METH_VARARGS,
+    "Displays a string on the standard output in C++. Signature: *def cprint(*args):*."},
   {NULL, NULL}
 } ;
 

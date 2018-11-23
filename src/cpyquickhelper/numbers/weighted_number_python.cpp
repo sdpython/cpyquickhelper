@@ -9,7 +9,7 @@ PYBIND11_MODULE(weighted_number, m) {
 	m.doc() = "Implements operations on weighted numbers.";
 
 	py::class_<WeightedDouble>(m, "WeightedDouble", 
-    #ifdef __APPLE__ 
+    #if defined(__APPLE__)
     "Implements a weighted double used to speed up computation with aggregation."
     #else
     R"pbdoc(
@@ -51,7 +51,7 @@ It contains two attributes:
 		;
 
 	py::class_<WeightedFloat>(m, "WeightedFloat", 
-    #ifdef __APPLE__ 
+    #if defined(__APPLE__)
     "Implements a weighted float used to speed up computation with aggregation."
     #else
     R"pbdoc(
