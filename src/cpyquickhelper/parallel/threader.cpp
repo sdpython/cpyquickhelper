@@ -45,10 +45,7 @@ static int threader_module_clear(PyObject *m) {
 }
 
 static PyMethodDef fonctions [] = {
-  {"kill_thread", kill_thread, METH_VARARGS, R"pbdoc(
-                                Terminates a thread.
-                                Signature: *def kill_thread(int thread_id):*.
-                                )pbdoc"},
+  {"kill_thread", kill_thread, METH_VARARGS, "Terminates a thread. Signature: *def kill_thread(int thread_id):*."},
   {NULL, NULL}
 } ;
 
