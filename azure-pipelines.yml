@@ -54,6 +54,14 @@ jobs:
     inputs:
       versionSpec: '$(python.version)'
       architecture: 'x64'
+  - script: gcc --version
+    displayName: 'gcc version'
+  - script: brew install gcc49
+    displayName: 'install gcc49'
+  - script: |
+          cd /usr/local/bin
+          ln -s  gcc-4.9  gcc
+    displayName: 'set up path to gcc49'
   - script: brew install p7zip
     displayName: 'brew p7zip'
   - script: python -m pip install --upgrade pip setuptools wheel
