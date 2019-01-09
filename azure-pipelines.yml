@@ -31,6 +31,8 @@ jobs:
     displayName: 'Install Requirements'
   - script: python setup.py build_ext --inplace
     displayName: 'Build package'
+  - script: export
+    displayName: 'export'
   - script: python -u setup.py unittests
     displayName: 'Runs Unit Tests'
   - script: python -u setup.py bdist_wheel
@@ -62,6 +64,8 @@ jobs:
           brew update
           brew upgrade
     displayName: 'brew update'
+  - script: export
+    displayName: 'export'
   - script: gcc --version
     displayName: 'gcc version'
   - script: brew install p7zip
