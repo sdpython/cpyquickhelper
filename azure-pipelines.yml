@@ -63,9 +63,9 @@ jobs:
   - script: |
           brew update
     displayName: 'brew update'
-  - script: |
-          brew upgrade
-    displayName: 'brew upgrade'
+  #- script: |
+  #        brew upgrade
+  #  displayName: 'brew upgrade'
     # /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   - script: export
     displayName: 'export'
