@@ -132,7 +132,8 @@ class TestOutputCapture(ExtTestCase):
         excs = []
         for name in ['src.cpyquickhelper.io.stdchelper.cprint',
                      'cpyquickhelper.io.stdchelper.cprint']:
-            newstring = ".. autosignature:: {0}\n    :debug:\n    :syspath: {1}".format(name, dirname)
+            newstring = ".. autosignature:: {0}\n    :debug:\n    :syspath: {1}".format(
+                name, dirname)
             try:
                 res = rst2html(newstring, writer="rst", layout="sphinx")
                 break
@@ -141,7 +142,8 @@ class TestOutputCapture(ExtTestCase):
 
         if len(excs) == 2:
             mes = [str(e) for e in excs]
-            raise Exception("Unable to run autosignature:\n{0}".format("\n----\n".join(mes)))
+            raise Exception(
+                "Unable to run autosignature:\n{0}".format("\n----\n".join(mes)))
         else:
             if len(excs) == 1:
                 res = str(excs[0]) + "\n---\n" + res

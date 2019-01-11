@@ -24,7 +24,7 @@ except ImportError:
         sys.path.append(path)
     import src
 
-from src.cpyquickhelper.numbers import WeightedDouble, WeightedFloat
+from src.cpyquickhelper.numbers import WeightedDouble, WeightedFloat, WeightedSeriesDtype
 
 
 class TestWeightedDouble(ExtTestCase):
@@ -75,6 +75,10 @@ class TestWeightedDouble(ExtTestCase):
         n = WeightedDouble(4, 5)
         self.assertEqual(n.value, 4)
         self.assertEqual(n.weight, 5)
+
+    def test_construct_from_string(self):
+        res = WeightedSeriesDtype.construct_from_string("WD(1, 1)")
+        self.assertEqual(WeightedDouble(1, 1), res)
 
 
 if __name__ == "__main__":

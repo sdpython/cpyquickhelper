@@ -75,7 +75,7 @@ class WeightedSeriesDtype(ExtensionDtype):
         """
         if not string.startswith("WD"):
             raise TypeError("Unable to parse '{0}'".format(string))
-        val = string[:2].strip('(', ')').split(",")
+        val = string[2:].strip('() ').split(",")
         if len(val) == 1:
             val = float(val)
         elif len(val) == 2:
@@ -125,7 +125,8 @@ class WeightedDoubleAccessor:
         if isinstance(self.obj, WeightedArray) or isinstance(self.obj[0], WeightedDouble):
             return WeightedArray([fct(s) for s in self.obj], index=self.obj.index, dtype=float)
         else:
-            raise TypeError("Unexpected type, array is '{0}', first element is '{1}'".format(type(self.obj), type(self.obj[0])))
+            raise TypeError("Unexpected type, array is '{0}', first element is '{1}'".format(
+                type(self.obj), type(self.obj[0])))
 
 
 class WeightedSeries(Series):
