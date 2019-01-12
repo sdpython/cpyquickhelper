@@ -79,9 +79,6 @@ jobs:
     displayName: 'Install Graphviz'
   - script: brew cask install mactex
     displayName: 'Install latex'
-  - script: |
-          which pdflatex
-    displayName: 'check'
   - script: python -m pip install --upgrade pip setuptools wheel
     displayName: 'Install tools'
   - script: brew install pybind11
