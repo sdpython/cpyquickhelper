@@ -184,7 +184,7 @@ if not r:
     elif sys.platform.startswith("darwin"):
         libraries_thread = None
         extra_compile_args_thread = [
-            '-stdlib=libc++', '-mmacosx-version-min=10.7']
+            '-lpthread', '-stdlib=libc++', '-mmacosx-version-min=10.7']
         extra_compile_args_numbers = [
             '-stdlib=libc++', '-mmacosx-version-min=10.7']
     else:

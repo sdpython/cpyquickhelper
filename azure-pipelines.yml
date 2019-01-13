@@ -71,6 +71,8 @@ jobs:
     displayName: 'export'
   - script: gcc --version
     displayName: 'gcc version'
+  - script: brew install python3-dev
+    displayName: 'install python3-dev'    
   - script: brew install p7zip
     displayName: 'Install p7zip'
   - script: brew install pandoc
