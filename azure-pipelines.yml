@@ -63,16 +63,12 @@ jobs:
   - script: |
           brew update
     displayName: 'brew update'
-  #- script: |
-  #        brew upgrade
-  #  displayName: 'brew upgrade'
-    # /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   - script: export
     displayName: 'export'
   - script: gcc --version
     displayName: 'gcc version'
-  - script: brew install python3-dev
-    displayName: 'install python3-dev'    
+  - script: brew install llvm
+    displayName: 'install llvm'
   - script: brew install p7zip
     displayName: 'Install p7zip'
   - script: brew install pandoc
@@ -87,7 +83,9 @@ jobs:
     displayName: 'Install pybind11'
   - script: pip install -r requirements.txt
     displayName: 'Install Requirements'
-  - script: python setup.py build_ext --inplace
+  - script: |
+          export MACOSX_DEPLOYMENT_TARGET=10.13
+          python setup.py build_ext --inplace
     displayName: 'Build package'
   - script: python -u setup.py unittests
     displayName: 'Runs Unit Tests'
