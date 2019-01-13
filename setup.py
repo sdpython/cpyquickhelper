@@ -183,10 +183,10 @@ if not r:
         extra_compile_args_numbers = ['/EHsc', '-std=c++11']
     elif sys.platform.startswith("darwin"):
         libraries_thread = None
-        extra_compile_args_thread = [
-            '-lpthread', '-stdlib=libc++', '-mmacosx-version-min=10.7']
-        extra_compile_args_numbers = [
-            '-stdlib=libc++', '-mmacosx-version-min=10.7']
+        extra_compile_args_thread = ['-lpthread', '-stdlib=libc++', '-std=c++11',
+                                     '-mmacosx-version-min=10.7']
+        extra_compile_args_numbers = ['-stdlib=libc++', '-mmacosx-version-min=10.7',
+                                      '-std=c++11']
     else:
         libraries_thread = None
         extra_compile_args_thread = ['-lpthread', '-std=c++11']
