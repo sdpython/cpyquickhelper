@@ -203,7 +203,7 @@ class FunctionMeasureVectorCountJ : FunctionMeasureVectorCount<DTYPE>
 
 
 
-
+#if defined(_MSC_VER)
 #define STRING_CONCAT(A, B) A ## B
 #define CBENCHMARK_ADDFUNC(suf, C)\
     m.def(STRING_CONCAT("measure_scenario_", #suf), \
@@ -217,6 +217,20 @@ class FunctionMeasureVectorCountJ : FunctionMeasureVectorCount<DTYPE>
             py::arg("values"), py::arg("th"), \
             py::arg("repeat")=10, py::arg("number")=100, \
             py::arg("verbose")=false);
+#else
+#define CBENCHMARK_ADDFUNC(suf, C)\
+    m.def(measure_scenario_ ##suf), \
+            [](const std::vector<int> &values, int th, int repeat=100, int number=1000, bool verbose=false) -> ExecutionStat { \
+                ExecutionStat res; \
+                FunctionMeasureVectorCount##suf<int> fct(values, th); \
+                repeat_execution<FunctionMeasureVectorCount##suf<int>>(fct, repeat, number, res, verbose); \
+                return res; \
+            }, \
+            C, \
+            py::arg("values"), py::arg("th"), \
+            py::arg("repeat")=10, py::arg("number")=100, \
+            py::arg("verbose")=false);
+#endif
 
 
 PYBIND11_MODULE(cbenchmark, m) {

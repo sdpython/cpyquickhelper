@@ -36,7 +36,7 @@ class TestCBenchmark(ExtTestCase):
     funcs = [(k, v) for k, v in globals().copy().items()
              if k.startswith("measure_scenario")]
 
-    def _test_benchmark(self, label, values, th, repeat=10, number=20):
+    def a_test_benchmark(self, label, values, th, repeat=10, number=20):
         rows = []
         for _, v in TestCBenchmark.funcs:
             exe = v(values, th, repeat, number)
@@ -50,14 +50,14 @@ class TestCBenchmark(ExtTestCase):
     def test_vector_count(self):
         li = list(range(300000))
         random.shuffle(li)
-        rows = self._test_benchmark("shuffled", li, len(li) // 2)
+        rows = self.a_test_benchmark("shuffled", li, len(li) // 2)
         df = pandas.DataFrame(rows)
         self.assertEqual(df.shape[1], 8)
         self.assertGreater(df.shape[0], 1)
 
     def test_vector_count_sorted(self):
         li = list(range(300000))
-        rows = self._test_benchmark("sorted", li, len(li) // 2)
+        rows = self.a_test_benchmark("sorted", li, len(li) // 2)
         df = pandas.DataFrame(rows)
         self.assertEqual(df.shape[1], 8)
         self.assertGreater(df.shape[0], 1)
