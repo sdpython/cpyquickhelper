@@ -6,7 +6,7 @@
 #define undef__CRT_SECURE_NO_WARNINGS 1
 #endif
 
-/** 
+/**
 * Pointer on a function which takes nothing and returns nothing.
 */
 typedef void *void_function_void(void *);
@@ -43,7 +43,7 @@ class FunctionMeasure
 *                   the function measures the average time
 *                   for *repeat* execution
 * @param    number  number of executions
-* @param    verbose diplay information on each execution 
+* @param    verbose diplay information on each execution
 * @param    report  results
 */
 template <typename FCTTYPE>
@@ -58,7 +58,7 @@ void repeat_execution(FCTTYPE& fct, int repeat, int number, ExecutionStat& repor
         for(int i = 0; i < repeat; ++i)
             r = fct.run(i);
         end = std::chrono::high_resolution_clock::now();
-        *it = std::chrono::duration<double>(end - start).count();        
+        *it = std::chrono::duration<double>(end - start).count();
         if (verbose)
             std::cout << "[repeat_execution] "
                       << (std::distance(exec.begin(), it) + 1)

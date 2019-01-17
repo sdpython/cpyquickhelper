@@ -13,15 +13,15 @@ template<typename DTYPE>
 class FunctionMeasureVectorCount : FunctionMeasure
 {
     protected:
-        
+
     std::vector<DTYPE> values;
     DTYPE th;
-    
+
     public:
-        
+
     FunctionMeasureVectorCount(const std::vector<DTYPE> &v, DTYPE t) : values(v), th(t)
-    { 
-        if (values.size() == 0)
+    {
+        if (this->values.size() == 0)
             throw std::runtime_error("Array to process must not be empty.");
     }
 };
@@ -35,10 +35,10 @@ class FunctionMeasureVectorCountSleep : FunctionMeasureVectorCount<DTYPE>
         FunctionMeasureVectorCount<DTYPE>(v, t) { }
     int run(int i)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(th));
+        std::this_thread::sleep_for(std::chrono::milliseconds(this->th));
         return 0;
     }
-}; 
+};
 
 #define REPEAT_INST(INST) {\
     INST INST INST INST INST\
@@ -57,8 +57,8 @@ class FunctionMeasureVectorCountA : FunctionMeasureVectorCount<DTYPE>
         int nb = x % 1; // == 0 but otherwise the compiler detects the
                         // the code does not change depending on x
                         // and it caches the results.
-        for(int i = 0; i < values.size(); ++i)
-            REPEAT_INST(if (values[i] >= th) ++nb;)
+        for(int i = 0; i < this->values.size(); ++i)
+            REPEAT_INST(if (this->values[i] >= this->th) ++nb;)
         return nb;
     }
 };
@@ -69,12 +69,12 @@ class FunctionMeasureVectorCountB : FunctionMeasureVectorCount<DTYPE>
 {
     public:
     FunctionMeasureVectorCountB(const std::vector<DTYPE> &v, DTYPE t) :
-        FunctionMeasureVectorCount<DTYPE>(v, t) { }        
+        FunctionMeasureVectorCount<DTYPE>(v, t) { }
     int run(int x)
     {
         int nb = x % 1;
-        for(auto it = values.begin(); it != values.end(); ++it)
-            REPEAT_INST(if (*it >= th) ++nb;)
+        for(auto it = this->values.begin(); it != this->values.end(); ++it)
+            REPEAT_INST(if (*it >= this->th) ++nb;)
         return nb;
     }
 };
@@ -84,12 +84,12 @@ class FunctionMeasureVectorCountC : FunctionMeasureVectorCount<DTYPE>
 {
     public:
     FunctionMeasureVectorCountC(const std::vector<DTYPE> &v, DTYPE t) :
-        FunctionMeasureVectorCount<DTYPE>(v, t) { }        
+        FunctionMeasureVectorCount<DTYPE>(v, t) { }
     int run(int x)
     {
         int nb = x % 1;
-        for(auto it = values.begin(); it != values.end(); ++it)
-            REPEAT_INST(if (*it >= th) nb++;)
+        for(auto it = this->values.begin(); it != this->values.end(); ++it)
+            REPEAT_INST(if (*it >= this->th) nb++;)
         return nb;
     }
 };
@@ -99,12 +99,12 @@ class FunctionMeasureVectorCountD : FunctionMeasureVectorCount<DTYPE>
 {
     public:
     FunctionMeasureVectorCountD(const std::vector<DTYPE> &v, DTYPE t) :
-        FunctionMeasureVectorCount<DTYPE>(v, t) { }        
+        FunctionMeasureVectorCount<DTYPE>(v, t) { }
     int run(int x)
     {
         int nb = x % 1;
-        for(auto it = values.begin(); it != values.end(); ++it)
-            REPEAT_INST(nb += *it >= th ? 1 : 0;)
+        for(auto it = this->values.begin(); it != this->values.end(); ++it)
+            REPEAT_INST(nb += *it >= this->th ? 1 : 0;)
         return nb;
     }
 };
@@ -114,12 +114,12 @@ class FunctionMeasureVectorCountE : FunctionMeasureVectorCount<DTYPE>
 {
     public:
     FunctionMeasureVectorCountE(const std::vector<DTYPE> &v, DTYPE t) :
-        FunctionMeasureVectorCount<DTYPE>(v, t) { }        
+        FunctionMeasureVectorCount<DTYPE>(v, t) { }
     int run(int x)
     {
         int nb = x % 1;
-        for(auto it = values.begin(); it != values.end(); ++it)
-            REPEAT_INST(if (*it >= th) nb += 1;)
+        for(auto it = this->values.begin(); it != this->values.end(); ++it)
+            REPEAT_INST(if (*it >= this->th) nb += 1;)
         return nb;
     }
 };
@@ -129,12 +129,12 @@ class FunctionMeasureVectorCountF : FunctionMeasureVectorCount<DTYPE>
 {
     public:
     FunctionMeasureVectorCountF(const std::vector<DTYPE> &v, DTYPE t) :
-        FunctionMeasureVectorCount<DTYPE>(v, t) { }        
+        FunctionMeasureVectorCount<DTYPE>(v, t) { }
     int run(int x)
     {
         int nb = x % 1;
-        for(auto it = values.begin(); it != values.end(); ++it)
-            REPEAT_INST(nb += (*it - th) >= 0 ? 1 : 0;)
+        for(auto it = this->values.begin(); it != this->values.end(); ++it)
+            REPEAT_INST(nb += (*it - this->th) >= 0 ? 1 : 0;)
         return nb;
     }
 };
@@ -144,13 +144,13 @@ class FunctionMeasureVectorCountG : FunctionMeasureVectorCount<DTYPE>
 {
     public:
     FunctionMeasureVectorCountG(const std::vector<DTYPE> &v, DTYPE t) :
-        FunctionMeasureVectorCount<DTYPE>(v, t) { }        
+        FunctionMeasureVectorCount<DTYPE>(v, t) { }
     int run(int x)
     {
         int nb = x % 1;
-        for(auto it = values.begin(); it != values.end(); ++it)
-            REPEAT_INST(nb += (*it - th) < 0 ? 1 : 0;)
-        return (int)std::distance(values.begin(), values.end()) - nb;
+        for(auto it = this->values.begin(); it != this->values.end(); ++it)
+            REPEAT_INST(nb += (*it - this->th) < 0 ? 1 : 0;)
+        return (int)std::distance(this->values.begin(), this->values.end()) - nb;
     }
 };
 
@@ -159,13 +159,13 @@ class FunctionMeasureVectorCountH : FunctionMeasureVectorCount<DTYPE>
 {
     public:
     FunctionMeasureVectorCountH(const std::vector<DTYPE> &v, DTYPE t) :
-        FunctionMeasureVectorCount<DTYPE>(v, t) { }        
+        FunctionMeasureVectorCount<DTYPE>(v, t) { }
     int run(int x)
     {
         int nb = x % 1;
-        for(auto it = values.begin(); it != values.end(); ++it)
-            REPEAT_INST(nb += *it < th ? 1 : 0;)
-        return (int)std::distance(values.begin(), values.end()) - nb;
+        for(auto it = this->values.begin(); it != this->values.end(); ++it)
+            REPEAT_INST(nb += *it < this->th ? 1 : 0;)
+        return (int)std::distance(this->values.begin(), this->values.end()) - nb;
     }
 };
 
@@ -174,12 +174,12 @@ class FunctionMeasureVectorCountI : FunctionMeasureVectorCount<DTYPE>
 {
     public:
     FunctionMeasureVectorCountI(const std::vector<DTYPE> &v, DTYPE t) :
-        FunctionMeasureVectorCount<DTYPE>(v, t) { }        
+        FunctionMeasureVectorCount<DTYPE>(v, t) { }
     int run(int x)
     {
         int nb = x % 1;
-        for(auto it = values.begin(); it != values.end(); ++it)
-            REPEAT_INST(nb += 1 ^ ((unsigned int)(*it) >> (sizeof(int) * CHAR_BIT - 1));)
+        for(auto it = this->values.begin(); it != this->values.end(); ++it)
+            REPEAT_INST(nb += 1 ^ ((unsigned int)(*it - this->th) >> (sizeof(int) * CHAR_BIT - 1));)
         return nb;
     }
 };
@@ -195,8 +195,8 @@ class FunctionMeasureVectorCountJ : FunctionMeasureVectorCount<DTYPE>
         int nb = x % 1; // == 0 but otherwise the compiler detects the
                         // the code does not change depending on x
                         // and it caches the results.
-        for(int i = 0; i < values.size(); ++i)
-            REPEAT_INST(nb += values[i] >= th ? 1 : 0;)
+        for(int i = 0; i < this->values.size(); ++i)
+            REPEAT_INST(nb += this->values[i] >= this->th ? 1 : 0;)
         return nb;
     }
 };
@@ -218,8 +218,9 @@ class FunctionMeasureVectorCountJ : FunctionMeasureVectorCount<DTYPE>
             py::arg("repeat")=10, py::arg("number")=100, \
             py::arg("verbose")=false);
 #else
+#define STRING_CONCAT_GCC(A, B) #A #B
 #define CBENCHMARK_ADDFUNC(suf, C)\
-    m.def("measure_scenario_" ##suf), \
+    m.def(STRING_CONCAT_GCC(measure_scenario_, suf), \
             [](const std::vector<int> &values, int th, int repeat=100, int number=1000, bool verbose=false) -> ExecutionStat { \
                 ExecutionStat res; \
                 FunctionMeasureVectorCount##suf<int> fct(values, th); \
@@ -234,7 +235,7 @@ class FunctionMeasureVectorCountJ : FunctionMeasureVectorCount<DTYPE>
 
 
 PYBIND11_MODULE(cbenchmark, m) {
-	m.doc() =     
+	m.doc() =
     #if defined(__APPLE__)
     "Measures the execution time of functions implemented in C."
     #else
@@ -242,7 +243,7 @@ PYBIND11_MODULE(cbenchmark, m) {
 also implemented in C.)pbdoc"
     #endif
     ;
-    
+
     py::class_<ExecutionStat>(m, "ExecutionStat", 
         "Holds results to compare execution time of functions.")
         .def(py::init<>())
@@ -272,7 +273,7 @@ also implemented in C.)pbdoc"
             return res;
         }, "Converts the structure into a dictionary.")
         ;
-            
+
     CBENCHMARK_ADDFUNC(A, "Measure C++ implementation. Loop on ``if (values[i] >= th) ++nb;``");
     CBENCHMARK_ADDFUNC(B, "Measure C++ implementation. Loop on ``if (*it >= th) ++nb;``");
     CBENCHMARK_ADDFUNC(C, "Measure C++ implementation. Loop on ``if (*it >= th) nb++;``");
@@ -282,6 +283,6 @@ also implemented in C.)pbdoc"
     CBENCHMARK_ADDFUNC(G, "Measure C++ implementation. Loop on ``nb += (*it - th) < 0 ? 1 : 0;``");
     CBENCHMARK_ADDFUNC(H, "Measure C++ implementation. Loop on ``nb += *it < th ? 1 : 0;``");
     CBENCHMARK_ADDFUNC(I, "Measure C++ implementation. Loop on ``nb += 1 ^ ((unsigned int)(*it) >> (sizeof(int) * CHAR_BIT - 1));``");
-    CBENCHMARK_ADDFUNC(J, "Measure C++ implementation. Loop on ``nb += values[i] >= th ? 1 : 0;``");        
-    CBENCHMARK_ADDFUNC(Sleep, "Measure C++ implementation. Loop on ``sleep``");        
+    CBENCHMARK_ADDFUNC(J, "Measure C++ implementation. Loop on ``nb += values[i] >= th ? 1 : 0;``");
+    CBENCHMARK_ADDFUNC(Sleep, "Measure C++ implementation. Loop on ``sleep``");
 }
