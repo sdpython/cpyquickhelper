@@ -219,7 +219,7 @@ class FunctionMeasureVectorCountJ : FunctionMeasureVectorCount<DTYPE>
             py::arg("verbose")=false);
 #else
 #define CBENCHMARK_ADDFUNC(suf, C)\
-    m.def(measure_scenario_ ##suf), \
+    m.def("measure_scenario_" ##suf), \
             [](const std::vector<int> &values, int th, int repeat=100, int number=1000, bool verbose=false) -> ExecutionStat { \
                 ExecutionStat res; \
                 FunctionMeasureVectorCount##suf<int> fct(values, th); \
