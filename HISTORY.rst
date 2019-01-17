@@ -5,7 +5,12 @@
 History
 =======
 
-current - 2018-08-05 - 0.00Mb
+current - 2019-01-17 - 0.00Mb
+=============================
+
+* `9`: add benchmark for branching (2019-01-17)
+
+0.1.105 - 2018-08-07 - 0.09Mb
 =============================
 
 * `1`: [REMOVED] prepare an example with C# (2018-08-05)

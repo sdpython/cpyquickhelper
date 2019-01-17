@@ -6,6 +6,7 @@
 import sys
 import os
 import unittest
+from io import StringIO
 import numpy
 from pandas import DataFrame, Series, concat
 from pandas.core.dtypes.base import ExtensionDtype
@@ -86,6 +87,10 @@ class TestWeightedSeries(ExtTestCase):
         self.assertEqual(list(ser.wdouble.value), [1, 3])
         self.assertEqual(list(ser.wdouble.weight), [1, 2])
         self.assertEqual(list(ser.wdouble.isnan()), [False, False])
+        st = StringIO()
+        df.to_csv(st)
+        val = st.getvalue()
+        self.assertIn("(", val)
 
     def test_dataframe(self):
         n1 = WeightedDouble(1, 1)

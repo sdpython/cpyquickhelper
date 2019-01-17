@@ -219,9 +219,22 @@ if not r:
                             ],
                             language='c++')
 
+    ext_benchmark = Extension('src.cpyquickhelper.numbers.cbenchmark',
+                              [os.path.join(
+                                  root, 'src/cpyquickhelper/numbers/cbenchmark.cpp')],
+                              extra_compile_args=extra_compile_args_numbers,
+                              include_dirs=[
+                                  # Path to pybind11 headers
+                                  get_pybind_include(),
+                                  get_pybind_include(user=True),
+                                  os.path.join(
+                                      root, 'src/cpyquickhelper/numbers')
+                              ],
+                              language='c++')
+
     setup(
         name=project_var_name,
-        ext_modules=[ext_thread, ext_stdhelper, ext_numbers],
+        ext_modules=[ext_thread, ext_stdhelper, ext_numbers, ext_benchmark],
         version='%s%s' % (sversion, subversion),
         author='Xavier Dupré',
         author_email='xavier.dupre@gmail.com',
