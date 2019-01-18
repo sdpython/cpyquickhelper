@@ -192,7 +192,7 @@ if not r:
         extra_compile_args_thread = ['-lpthread', '-std=c++11']
         # option -mavx512f enable AVX 512 instructions
         # see https://blog.qiqitori.com/?p=390
-        extra_compile_args_numbers = ['-std=c++11', '-mavx512f']
+        extra_compile_args_numbers = ['-std=c++11'] # , '-mavx512f']
 
     ext_thread = Extension('src.cpyquickhelper.parallel.threader',
                            [os.path.join(root, 'src/cpyquickhelper/parallel/threaderc.cpp'),

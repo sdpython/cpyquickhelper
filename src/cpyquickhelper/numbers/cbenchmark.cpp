@@ -316,8 +316,6 @@ float vector_dot_product16(py::array_t<float> v1, py::array_t<float> v2)
 
 float vector_dot_product_pointer16_sse(const float *p1, const float *p2)
 {
-    float sum = 0;
-    
     __m128 c1 = _mm_load_ps(p1);
     __m128 c2 = _mm_load_ps(p2);
     __m128 r1 = _mm_mul_ps(c1, c2);
@@ -400,7 +398,7 @@ float vector_dot_product_pointer16_avx512(const float *p1, const float *p2)
 float vector_dot_product_pointer16_avx512(const float *p1, const float *p2, size_t size)
 {
     float sum = 0;
-    int i = 0;
+    size_t i = 0;
     if (size >= BYN) {
         size_t size_ = size - BYN;
         for(; i < size_; i += BYN, p1 += BYN, p2 += BYN)

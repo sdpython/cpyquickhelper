@@ -51,7 +51,7 @@ void repeat_execution(FCTTYPE& fct, int repeat, int number, ExecutionStat& repor
 {
     std::chrono::high_resolution_clock::time_point start, end;
     std::vector<double> exec(repeat);
-    int r;
+    int r = -1;
     for(auto it = exec.begin(); it != exec.end(); ++it)
     {
         start = std::chrono::high_resolution_clock::now();
