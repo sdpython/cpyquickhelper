@@ -59,6 +59,7 @@ latex_elements['preamble'] += custom_preamble
 mathdef_link_only = True
 
 epkg_dictionary.update({
+    'AVX': 'https://en.wikipedia.org/wiki/Advanced_Vector_Extensions',
     'C': 'https://en.wikipedia.org/wiki/C_(programming_language)',
     'C++': 'https://en.wikipedia.org/wiki/C%2B%2B',
     'DataFrame': 'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html',

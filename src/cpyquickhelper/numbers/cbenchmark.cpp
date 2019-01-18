@@ -1,6 +1,7 @@
 #include <pybind11/iostream.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/numpy.h>
 //#include <numpy/arrayobject.h>
 #include <vector>
 #include <thread>
@@ -215,7 +216,7 @@ class FunctionMeasureVectorCountJ : FunctionMeasureVectorCount<DTYPE>
             }, \
             C, \
             py::arg("values"), py::arg("th"), \
-            py::arg("repeat")=10, py::arg("number")=100, \
+            py::arg("repeat")=100, py::arg("number")=10, \
             py::arg("verbose")=false);
 #else
 #define STRING_CONCAT_GCC(A, B) #A #B
@@ -229,9 +230,188 @@ class FunctionMeasureVectorCountJ : FunctionMeasureVectorCount<DTYPE>
             }, \
             C, \
             py::arg("values"), py::arg("th"), \
-            py::arg("repeat")=10, py::arg("number")=100, \
+            py::arg("repeat")=100, py::arg("number")=10, \
             py::arg("verbose")=false);
 #endif
+
+
+float vector_dot_product_pointer(const float *p1, const float *p2, int size)
+{
+    float sum = 0;
+    const float * end1 = p1 + size;
+    for(; p1 != end1; ++p1, ++p2)
+        sum += *p1 * *p2;
+    return sum;
+}
+
+
+float vector_dot_product(py::array_t<float> v1, py::array_t<float> v2)
+{
+    if (v1.ndim() != v2.ndim())
+        throw std::runtime_error("Vector v1 and v2 must have the same dimension.");
+    if (v1.ndim() != 1)
+        throw std::runtime_error("Vector v1 and v2 must be vectors.");
+    return vector_dot_product_pointer(v1.data(0), v2.data(0), v1.shape(0));
+}
+
+
+float empty_vector_dot_product(py::array_t<float> v1, py::array_t<float> v2)
+{
+    return 0;
+}
+
+
+float vector_dot_product_pointer16(const float *p1, const float *p2)
+{
+    float sum = 0;
+    
+    sum += *(p1++) * *(p2++);
+    sum += *(p1++) * *(p2++);
+    sum += *(p1++) * *(p2++);
+    sum += *(p1++) * *(p2++);
+    sum += *(p1++) * *(p2++);
+    sum += *(p1++) * *(p2++);
+    sum += *(p1++) * *(p2++);
+    sum += *(p1++) * *(p2++);
+
+    sum += *(p1++) * *(p2++);
+    sum += *(p1++) * *(p2++);
+    sum += *(p1++) * *(p2++);
+    sum += *(p1++) * *(p2++);
+    sum += *(p1++) * *(p2++);
+    sum += *(p1++) * *(p2++);
+    sum += *(p1++) * *(p2++);
+    sum += *(p1++) * *(p2++);
+
+    return sum;
+}
+
+#define BYN 16
+
+float vector_dot_product_pointer16(const float *p1, const float *p2, int size)
+{
+    float sum = 0;
+    int i = 0;
+    int size_ = size - BYN;
+    for(; i < size_; i += BYN, p1 += BYN, p2 += BYN)
+        sum += vector_dot_product_pointer16(p1, p2);
+    for(; i < size; ++p1, ++p2, ++i)
+        sum += *p1 * *p2;
+    return sum;
+}
+
+float vector_dot_product16(py::array_t<float> v1, py::array_t<float> v2)
+{
+    if (v1.ndim() != v2.ndim())
+        throw std::runtime_error("Vector v1 and v2 must have the same dimension.");
+    if (v1.ndim() != 1)
+        throw std::runtime_error("Vector v1 and v2 must be vectors.");
+    return vector_dot_product_pointer16(v1.data(0), v2.data(0), v1.shape(0));
+}
+
+#include <xmmintrin.h>
+
+float vector_dot_product_pointer16_avx(const float *p1, const float *p2)
+{
+    float sum = 0;
+    
+    __m128 c1 = _mm_load_ps(p1);
+    __m128 c2 = _mm_load_ps(p2);
+    __m128 r1 = _mm_mul_ps(c1, c2);
+    
+    p1 += 4;
+    p2 += 4;
+    
+    c1 = _mm_load_ps(p1);
+    c2 = _mm_load_ps(p2);
+    r1 = _mm_add_ps(r1, _mm_mul_ps(c1, c2));
+    
+    p1 += 4;
+    p2 += 4;
+    
+    c1 = _mm_load_ps(p1);
+    c2 = _mm_load_ps(p2);
+    r1 = _mm_add_ps(r1, _mm_mul_ps(c1, c2));
+    
+    p1 += 4;
+    p2 += 4;
+    
+    c1 = _mm_load_ps(p1);
+    c2 = _mm_load_ps(p2);
+    r1 = _mm_add_ps(r1, _mm_mul_ps(c1, c2));
+
+    float r[4];
+    _mm_store_ps(r, r1);
+
+    return r[0] + r[1] + r[2] + r[3];
+}
+
+#define BYN 16
+
+float vector_dot_product_pointer16_avx(const float *p1, const float *p2, int size)
+{
+    float sum = 0;
+    int i = 0;
+    int size_ = size - BYN;
+    for(; i < size_; i += BYN, p1 += BYN, p2 += BYN)
+        sum += vector_dot_product_pointer16_avx(p1, p2);
+    for(; i < size; ++p1, ++p2, ++i)
+        sum += *p1 * *p2;
+    return sum;
+}
+
+float vector_dot_product16_avx(py::array_t<float> v1, py::array_t<float> v2)
+{
+    if (v1.ndim() != v2.ndim())
+        throw std::runtime_error("Vector v1 and v2 must have the same dimension.");
+    if (v1.ndim() != 1)
+        throw std::runtime_error("Vector v1 and v2 must be vectors.");
+    return vector_dot_product_pointer16_avx(v1.data(0), v2.data(0), v1.shape(0));
+}
+
+#include <immintrin.h>
+
+float vector_dot_product_pointer16_avx512(const float *p1, const float *p2)
+{
+    float sum = 0;
+    
+    __m512 c1 = _mm512_load_ps(p1);
+    __m512 c2 = _mm512_load_ps(p2);
+    __m512 r1 = _mm512_mul_ps(c1, c2);
+    
+    float r[16];
+    _mm512_store_ps(r, r1);
+
+    return r[0] + r[1] + r[2] + r[3] + 
+           r[4] + r[5] + r[6] + r[7] +
+           r[8] + r[9] + r[10] + r[11] + 
+           r[12] + r[13] + r[14] + r[15]; 
+}
+
+#define BYN 16
+
+float vector_dot_product_pointer16_avx512(const float *p1, const float *p2, int size)
+{
+    float sum = 0;
+    int i = 0;
+    int size_ = size - BYN;
+    for(; i < size_; i += BYN, p1 += BYN, p2 += BYN)
+        sum += vector_dot_product_pointer16_avx512(p1, p2);
+    for(; i < size; ++p1, ++p2, ++i)
+        sum += *p1 * *p2;
+    return sum;
+}
+
+float vector_dot_product16_avx512(py::array_t<float> v1, py::array_t<float> v2)
+{
+    if (v1.ndim() != v2.ndim())
+        throw std::runtime_error("Vector v1 and v2 must have the same dimension.");
+    if (v1.ndim() != 1)
+        throw std::runtime_error("Vector v1 and v2 must be vectors.");
+    return vector_dot_product_pointer16_avx512(v1.data(0), v2.data(0), v1.shape(0));
+}
+
+
 
 
 PYBIND11_MODULE(cbenchmark, m) {
@@ -247,8 +427,8 @@ also implemented in C.)pbdoc"
     py::class_<ExecutionStat>(m, "ExecutionStat", 
         "Holds results to compare execution time of functions.")
         .def(py::init<>())
-        .def_readwrite("number", &ExecutionStat::number, "number of execution")
-        .def_readwrite("repeat", &ExecutionStat::repeat, "number of calls per executions")
+        .def_readwrite("number", &ExecutionStat::number, "number of executions being measured")
+        .def_readwrite("repeat", &ExecutionStat::repeat, "number of times the experiment is repeated")
         .def_readwrite("average", &ExecutionStat::average, "average processing time")
         .def_readwrite("deviation", &ExecutionStat::deviation, "standard deviation")
         .def_readwrite("min_exec", &ExecutionStat::min_exec, "minimum execution time")
@@ -285,4 +465,15 @@ also implemented in C.)pbdoc"
     CBENCHMARK_ADDFUNC(I, "Measure C++ implementation. Loop on ``nb += 1 ^ ((unsigned int)(*it) >> (sizeof(int) * CHAR_BIT - 1));``");
     CBENCHMARK_ADDFUNC(J, "Measure C++ implementation. Loop on ``nb += values[i] >= th ? 1 : 0;``");
     CBENCHMARK_ADDFUNC(Sleep, "Measure C++ implementation. Loop on ``sleep``");
+        
+    m.def("vector_dot_product", &vector_dot_product,
+          "Computes a dot product in C++ with vectors of floats.");
+    m.def("empty_vector_dot_product", &empty_vector_dot_product,
+          "Empty measure to have an idea about the processing due to python binding.");
+    m.def("vector_dot_product16", &vector_dot_product16,
+          "Computes a dot product in C++ with vectors of floats. Goes 16 by 16.");
+    m.def("vector_dot_product16_avx", &vector_dot_product16_avx,
+          "Computes a dot product in C++ with vectors of floats. Goes 16 by 16. Use AVX instructions.");
+    m.def("vector_dot_product16_avx512", &vector_dot_product16_avx512,
+          "Computes a dot product in C++ with vectors of floats. Goes 16 by 16. Use AVX 512 instructions.");
 }

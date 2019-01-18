@@ -50,12 +50,12 @@ template <typename FCTTYPE>
 void repeat_execution(FCTTYPE& fct, int repeat, int number, ExecutionStat& report, bool verbose=false)
 {
     std::chrono::high_resolution_clock::time_point start, end;
-    std::vector<double> exec(number);
+    std::vector<double> exec(repeat);
     int r;
     for(auto it = exec.begin(); it != exec.end(); ++it)
     {
         start = std::chrono::high_resolution_clock::now();
-        for(int i = 0; i < repeat; ++i)
+        for(int i = 0; i < number; ++i)
             r = fct.run(i);
         end = std::chrono::high_resolution_clock::now();
         *it = std::chrono::duration<double>(end - start).count();
