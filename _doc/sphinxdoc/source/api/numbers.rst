@@ -79,10 +79,10 @@ it calls a function which does the 16 product in one sequence.
 
 .. autosignature:: cpyquickhelper.numbers.vector_dot_product16
 
-The following use :epkg:`AVX` instructions.
+The following use :epkg:`SSE` instructions.
 See documentation on `Intel website <https://software.intel.com/sites/landingpage/IntrinsicsGuide/#expand=4895,152,3895,3886,3877,5554,5559,5554,152,127,3895,127&text=_mm_add_ps>`_.
 
-.. autosignature:: cpyquickhelper.numbers.vector_dot_product16_avx
+.. autosignature:: cpyquickhelper.numbers.vector_dot_product16_sse
 
 The next one is using AVX instruction with 512 bits.
 

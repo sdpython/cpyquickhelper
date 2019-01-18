@@ -10,6 +10,7 @@
 
 namespace py = pybind11;
 
+
 template<typename DTYPE>
 class FunctionMeasureVectorCount : FunctionMeasure
 {
@@ -235,7 +236,7 @@ class FunctionMeasureVectorCountJ : FunctionMeasureVectorCount<DTYPE>
 #endif
 
 
-float vector_dot_product_pointer(const float *p1, const float *p2, int size)
+float vector_dot_product_pointer(const float *p1, const float *p2, size_t size)
 {
     float sum = 0;
     const float * end1 = p1 + size;
@@ -288,13 +289,15 @@ float vector_dot_product_pointer16(const float *p1, const float *p2)
 
 #define BYN 16
 
-float vector_dot_product_pointer16(const float *p1, const float *p2, int size)
+float vector_dot_product_pointer16(const float *p1, const float *p2, size_t size)
 {
     float sum = 0;
-    int i = 0;
-    int size_ = size - BYN;
-    for(; i < size_; i += BYN, p1 += BYN, p2 += BYN)
-        sum += vector_dot_product_pointer16(p1, p2);
+    size_t i = 0;
+    if (size >= BYN) {
+        size_t size_ = size - BYN;
+        for(; i < size_; i += BYN, p1 += BYN, p2 += BYN)
+            sum += vector_dot_product_pointer16(p1, p2);
+    }
     for(; i < size; ++p1, ++p2, ++i)
         sum += *p1 * *p2;
     return sum;
@@ -311,7 +314,7 @@ float vector_dot_product16(py::array_t<float> v1, py::array_t<float> v2)
 
 #include <xmmintrin.h>
 
-float vector_dot_product_pointer16_avx(const float *p1, const float *p2)
+float vector_dot_product_pointer16_sse(const float *p1, const float *p2)
 {
     float sum = 0;
     
@@ -348,28 +351,32 @@ float vector_dot_product_pointer16_avx(const float *p1, const float *p2)
 
 #define BYN 16
 
-float vector_dot_product_pointer16_avx(const float *p1, const float *p2, int size)
+float vector_dot_product_pointer16_sse(const float *p1, const float *p2, size_t size)
 {
     float sum = 0;
-    int i = 0;
-    int size_ = size - BYN;
-    for(; i < size_; i += BYN, p1 += BYN, p2 += BYN)
-        sum += vector_dot_product_pointer16_avx(p1, p2);
+    size_t i = 0;
+    if (size >= BYN) {
+        size_t size_ = size - BYN;
+        for(; i < size_; i += BYN, p1 += BYN, p2 += BYN)
+            sum += vector_dot_product_pointer16_sse(p1, p2);
+    }
     for(; i < size; ++p1, ++p2, ++i)
         sum += *p1 * *p2;
     return sum;
 }
 
-float vector_dot_product16_avx(py::array_t<float> v1, py::array_t<float> v2)
+float vector_dot_product16_sse(py::array_t<float> v1, py::array_t<float> v2)
 {
     if (v1.ndim() != v2.ndim())
         throw std::runtime_error("Vector v1 and v2 must have the same dimension.");
     if (v1.ndim() != 1)
         throw std::runtime_error("Vector v1 and v2 must be vectors.");
-    return vector_dot_product_pointer16_avx(v1.data(0), v2.data(0), v1.shape(0));
+    return vector_dot_product_pointer16_sse(v1.data(0), v2.data(0), v1.shape(0));
 }
 
 #include <immintrin.h>
+
+#if defined(__AVX512F__)
 
 float vector_dot_product_pointer16_avx512(const float *p1, const float *p2)
 {
@@ -390,13 +397,15 @@ float vector_dot_product_pointer16_avx512(const float *p1, const float *p2)
 
 #define BYN 16
 
-float vector_dot_product_pointer16_avx512(const float *p1, const float *p2, int size)
+float vector_dot_product_pointer16_avx512(const float *p1, const float *p2, size_t size)
 {
     float sum = 0;
     int i = 0;
-    int size_ = size - BYN;
-    for(; i < size_; i += BYN, p1 += BYN, p2 += BYN)
-        sum += vector_dot_product_pointer16_avx512(p1, p2);
+    if (size >= BYN) {
+        size_t size_ = size - BYN;
+        for(; i < size_; i += BYN, p1 += BYN, p2 += BYN)
+            sum += vector_dot_product_pointer16_avx512(p1, p2);
+    }
     for(; i < size; ++p1, ++p2, ++i)
         sum += *p1 * *p2;
     return sum;
@@ -411,7 +420,73 @@ float vector_dot_product16_avx512(py::array_t<float> v1, py::array_t<float> v2)
     return vector_dot_product_pointer16_avx512(v1.data(0), v2.data(0), v1.shape(0));
 }
 
+#endif
 
+
+std::string get_simd_available_option()
+{
+    std::string message = "";
+    
+#if defined(__SSE__) || (defined(_MSC_VER) && !defined(_M_CEE_PURE))
+    // __SSE__ not defined by Visual Studio.
+    message += " __SSE__";
+#endif
+#if defined(__SSE2__) || (defined(_MSC_VER) && !defined(_M_CEE_PURE))
+    // __SSE2__ not defined by Visual Studio.
+    message += " __SSE2__";
+#endif
+#if defined(__SSE3__) || (defined(_MSC_VER) && !defined(_M_CEE_PURE))
+    // __SSE3__ not defined by Visual Studio.
+    message += " __SSE3__";
+#endif
+#if defined(__SSE4_1__) || (defined(_MSC_VER) && !defined(_M_CEE_PURE))
+    // __SSE4_1__ not defined by Visual Studio.
+    message += " __SSE4_1__";
+#endif
+#if defined(__AVX__)
+    message += " __AVX__";
+#endif
+#if defined(__AVX2__)
+    message += " __AVX2__";
+#endif
+#if defined(__AVX512F__)
+    message += " __AVX512F__";
+#endif
+#if defined(__AVX512DQ__)
+    message += " __AVX512DQ__";
+#endif
+#if defined(__AVX512PF__)
+    message += " __AVX512PF__";
+#endif
+#if defined(__AVX512ER__)
+    message += " __AVX512ER__";
+#endif
+#if defined(__AVX512CD__)
+    message += " __AVX512CD__";
+#endif
+#if defined(__AVX512BW__)
+    message += " __AVX512BW__";
+#endif
+#if defined(__AVX512VL__)
+    message += " __AVX512VL__";
+#endif
+#if defined(__FMA__)
+    message += " __FMA__";
+#endif
+#if defined(__AVX512IFMA__)
+    message += " __AVX512IFMA__";
+#endif
+#if defined(__F16C__)
+    message += " __F16C__";
+#endif
+#if defined(__ARM_NEON__)
+    message += " __ARM_NEON__";
+#endif
+
+    return message.empty() 
+                ? "No available options." 
+                : (std::string("Available options: ") + message);
+}
 
 
 PYBIND11_MODULE(cbenchmark, m) {
@@ -472,8 +547,31 @@ also implemented in C.)pbdoc"
           "Empty measure to have an idea about the processing due to python binding.");
     m.def("vector_dot_product16", &vector_dot_product16,
           "Computes a dot product in C++ with vectors of floats. Goes 16 by 16.");
-    m.def("vector_dot_product16_avx", &vector_dot_product16_avx,
-          "Computes a dot product in C++ with vectors of floats. Goes 16 by 16. Use AVX instructions.");
+    m.def("vector_dot_product16_sse", &vector_dot_product16_sse,
+          "Computes a dot product in C++ with vectors of floats. Goes 16 by 16. Use SSE instructions.");
+
+#if defined(__AVX512F__)          
     m.def("vector_dot_product16_avx512", &vector_dot_product16_avx512,
-          "Computes a dot product in C++ with vectors of floats. Goes 16 by 16. Use AVX 512 instructions.");
+          "Computes a dot product in C++ with vectors of floats. Goes 16 by 16. Use AVX 512 instructions because ``__AVX512F__`` is defined.");
+#else
+    m.def("vector_dot_product16_avx512", &vector_dot_product16_sse,
+          "Computes a dot product in C++ with vectors of floats. Goes 16 by 16. Use SSE instructions because ``__AVX512F__`` is not defined.");
+#endif
+
+    m.def ("get_simd_available_option", &get_simd_available_option,
+        #if defined(__APPLE__)
+           "Returns the available compilation options for SIMD."
+        #else
+            R"pbdoc(Returns the available compilation options for SIMD.
+It can simply be called with the following example:
+
+.. runpython::
+    :showcode:
+    
+    from cpyquickhelper.numbers.cbenchmark.get_simd_available_option
+    print(get_simd_available_option())
+)pbdoc"
+        #endif
+    );
+
 }

@@ -31,7 +31,8 @@ from src.cpyquickhelper.numbers.cbenchmark import measure_scenario_E, measure_sc
 from src.cpyquickhelper.numbers.cbenchmark import measure_scenario_G, measure_scenario_H  # pylint: disable=W0611, E0611
 from src.cpyquickhelper.numbers.cbenchmark import measure_scenario_I, measure_scenario_J  # pylint: disable=W0611, E0611
 from src.cpyquickhelper.numbers.cbenchmark import vector_dot_product, empty_vector_dot_product  # pylint: disable=W0611, E0611
-from src.cpyquickhelper.numbers.cbenchmark import vector_dot_product16, vector_dot_product16_avx  # pylint: disable=W0611, E0611
+from src.cpyquickhelper.numbers.cbenchmark import vector_dot_product16, vector_dot_product16_sse  # pylint: disable=W0611, E0611
+from src.cpyquickhelper.numbers.cbenchmark import vector_dot_product16_avx512, get_simd_available_option  # pylint: disable=W0611, E0611
 
 
 class TestCBenchmark(ExtTestCase):
@@ -78,14 +79,15 @@ class TestCBenchmark(ExtTestCase):
         d1 = numpy.dot(a, b)
         d2 = vector_dot_product(a, b)
         d3 = vector_dot_product16(a, b)
-        d4 = vector_dot_product16_avx(a, b)
-        d5 = empty_vector_dot_product(a, b)
-        self.assertEqual(d5, 0)
-        res = [d1, d2, d3, d4]
+        d4 = vector_dot_product16_sse(a, b)
+        d5 = vector_dot_product16_avx512(a, b)
+        d6 = empty_vector_dot_product(a, b)
+        self.assertEqual(d6, 0)
+        res = [d1, d2, d3, d4, d5]
         self.assertEqual(d1, d2)
         self.assertEqual(d1, d3)
         self.assertEqual(d1, d4)
-        self.assertEqual(len(res), 4)
+        self.assertEqual(len(res), 5)
 
     def test_vector_dot_product18(self):
         a = numpy.array([3, 4, 5] * 6, dtype=numpy.float32)
@@ -93,14 +95,21 @@ class TestCBenchmark(ExtTestCase):
         d1 = numpy.dot(a, b)
         d2 = vector_dot_product(a, b)
         d3 = vector_dot_product16(a, b)
-        d4 = vector_dot_product16_avx(a, b)
-        d5 = empty_vector_dot_product(a, b)
-        self.assertEqual(d5, 0)
-        res = [d1, d2, d3, d4]
+        d4 = vector_dot_product16_sse(a, b)
+        d5 = vector_dot_product16_avx512(a, b)
+        d6 = empty_vector_dot_product(a, b)
+        self.assertEqual(d6, 0)
+        res = [d1, d2, d3, d4, d5]
         self.assertAlmostEqual(d1, d2, places=4)
         self.assertAlmostEqual(d1, d3, places=4)
         self.assertAlmostEqual(d1, d4, places=4)
-        self.assertEqual(len(res), 4)
+        self.assertAlmostEqual(d1, d5, places=4)
+        self.assertEqual(len(res), 5)
+
+    def test_get_simd_available_option(self):
+        vers = get_simd_available_option()
+        self.assertIn("options", vers)
+        self.assertIn("__SSE__", vers)
 
 
 if __name__ == "__main__":

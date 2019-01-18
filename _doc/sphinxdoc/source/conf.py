@@ -71,4 +71,5 @@ epkg_dictionary.update({
     'pybind11': 'https://github.com/pybind/pybind11',
     'pythran': 'https://pythran.readthedocs.io/en/latest/',
     'Series': 'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html',
+    'SSE': 'https://fr.wikipedia.org/wiki/Streaming_SIMD_Extensions',
 })
