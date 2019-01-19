@@ -50,6 +50,7 @@ def _fcts():
     import numpy
     from .cbenchmark import vector_dot_product  # pylint: disable=E0611
     from .cbenchmark import vector_dot_product16  # pylint: disable=E0611
+    from .cbenchmark import vector_dot_product16_nofcall  # pylint: disable=E0611
     from .cbenchmark import vector_dot_product16_sse  # pylint: disable=E0611
 
     def simple_dot(values):
@@ -60,6 +61,9 @@ def _fcts():
 
     def c11_dot16(vect):
         return vector_dot_product16(vect, vect)
+
+    def c11_dot16_nofcall(vect):
+        return vector_dot_product16_nofcall(vect, vect)
 
     def c11_dot16_sse(vect):
         return vector_dot_product16_sse(vect, vect)
