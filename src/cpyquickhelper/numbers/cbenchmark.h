@@ -6,6 +6,8 @@
 #define undef__CRT_SECURE_NO_WARNINGS 1
 #endif
 
+#include <vector>
+
 float vector_dot_product_pointer(const float *p1, const float *p2, size_t size);
 float vector_dot_product_pointer16(const float *p1, const float *p2, size_t size);
 float vector_dot_product_pointer16_nofcall(const float *p1, const float *p2, size_t size);

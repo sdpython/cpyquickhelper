@@ -8,6 +8,7 @@
 #include <chrono>
 #include <exception>
 #include <vector>
+#include <cmath>
 
 /**
 * Pointer on a function which takes nothing and returns nothing.
