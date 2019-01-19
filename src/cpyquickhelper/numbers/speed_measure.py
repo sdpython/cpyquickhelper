@@ -81,7 +81,8 @@ def check_speed(dims=[100000], repeat=10, number=50, fLOG=print):  # pylint: dis
         for fct in fcts:
             ct = {fct.__name__: fct}
             ct['values'] = values
-            t = measure_time(fct.__name__, repeat=repeat, number=number, context=ct)
+            t = measure_time("{0}(values)".format(fct.__name__),
+                             repeat=repeat, number=number, context=ct)
             t['name'] = fct.__name__
             if fLOG:
                 fLOG(t)
