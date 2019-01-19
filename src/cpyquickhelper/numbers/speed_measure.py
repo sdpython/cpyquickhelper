@@ -68,7 +68,7 @@ def _fcts():
     def c11_dot16_sse(vect):
         return vector_dot_product16_sse(vect, vect)
 
-    return [simple_dot, c11_dot, c11_dot16, c11_dot16_sse]
+    return [simple_dot, c11_dot, c11_dot16, c11_dot16_nofcall, c11_dot16_sse]
 
 
 def check_speed(dims=[100000], repeat=10, number=50, fLOG=print):  # pylint: disable=W0102
