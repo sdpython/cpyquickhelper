@@ -2,6 +2,7 @@
 @file
 @brief Measures speed.
 """
+import sys
 from timeit import Timer
 
 
@@ -30,9 +31,16 @@ def measure_time(stmt, context, repeat=10, number=50):
     mean = numpy.mean(res)
     dev = numpy.mean(res ** 2)
     dev = (dev - mean**2) ** 0.5
-    return dict(average=mean, deviation=dev, min_exec=numpy.min(res),
-                max_exec=numpy.max(res), repeat=repeat, number=number,
-                size=context['values'].shape[0])
+    mes = dict(average=mean, deviation=dev, min_exec=numpy.min(res),
+               max_exec=numpy.max(res), repeat=repeat, number=number)
+    if 'values' in context:
+        if hasattr(context['values'], 'shape'):
+            mes['size'] = context['values'].shape[0]
+        else:
+            mes['size'] = len(context['values'])
+    else:
+        mes['context_size'] = sys.getsizeof(context)
+    return mes
 
 
 def _fcts():
