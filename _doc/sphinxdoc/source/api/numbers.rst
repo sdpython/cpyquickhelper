@@ -71,18 +71,18 @@ The last implemented is taken from
 The other function implements different *dot* products between two
 vectors:
 
-.. autosignature:: cpyquickhelper.numbers.vector_dot_product
+.. autosignature:: cpyquickhelper.numbers.cbenchmark.vector_dot_product
 
 The second function does the same dot product but while computing
 the dot product, if the remaining size is more than 16,
 it calls a function which does the 16 product in one sequence.
 
-.. autosignature:: cpyquickhelper.numbers.vector_dot_product16
+.. autosignature:: cpyquickhelper.numbers.cbenchmark.vector_dot_product16
 
 The following use :epkg:`SSE` instructions.
 See documentation on `Intel website <https://software.intel.com/sites/landingpage/IntrinsicsGuide/#expand=4895,152,3895,3886,3877,5554,5559,5554,152,127,3895,127&text=_mm_add_ps>`_.
 
-.. autosignature:: cpyquickhelper.numbers.vector_dot_product16_sse
+.. autosignature:: cpyquickhelper.numbers.cbenchmark.vector_dot_product16_sse
 
 The next one is using AVX instruction with 512 bits.
 
@@ -91,4 +91,4 @@ The next one is using AVX instruction with 512 bits.
 The last function is used to measure the time spent in the python
 binding, it is the same signature as the dot product but does nothing.
 
-.. autosignature:: cpyquickhelper.numbers.empty_vector_dot_product
+.. autosignature:: cpyquickhelper.numbers.cbenchmark.empty_vector_dot_product

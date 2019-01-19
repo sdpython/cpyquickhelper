@@ -180,19 +180,19 @@ if not r:
     if sys.platform.startswith("win"):
         libraries_thread = ['kernel32']
         extra_compile_args_thread = None
-        extra_compile_args_numbers = ['/EHsc']
+        extra_compile_args_numbers = ['/EHsc', '/O2', '/Gy']
     elif sys.platform.startswith("darwin"):
         libraries_thread = None
         extra_compile_args_thread = ['-lpthread', '-stdlib=libc++', '-std=c++11',
                                      '-mmacosx-version-min=10.7']
         extra_compile_args_numbers = ['-stdlib=libc++', '-mmacosx-version-min=10.7',
-                                      '-std=c++11']
+                                      '-std=c++11', '-ofast']
     else:
         libraries_thread = None
         extra_compile_args_thread = ['-lpthread', '-std=c++11']
         # option -mavx512f enable AVX 512 instructions
         # see https://blog.qiqitori.com/?p=390
-        extra_compile_args_numbers = ['-std=c++11'] # , '-mavx512f']
+        extra_compile_args_numbers = ['-std=c++11', '-ofast']  # , '-mavx512f']
 
     ext_thread = Extension('src.cpyquickhelper.parallel.threader',
                            [os.path.join(root, 'src/cpyquickhelper/parallel/threaderc.cpp'),
