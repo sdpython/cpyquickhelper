@@ -68,12 +68,11 @@ def check_speed(dims=[100000], repeat=10, number=50, fLOG=print):  # pylint: dis
     @param      repeat      average over *repeat* experiment
     @param      number      number of execution in one row
     @param      fLOG        logging function
-    @return                 res
+    @return                 iterator on results
     """
     import numpy
     fcts = _fcts()
     mx = max(dims)
-    res = []
     for fct in fcts:
         context = {fct.__name__: fct}
         vect = numpy.ones((mx,))
@@ -87,5 +86,4 @@ def check_speed(dims=[100000], repeat=10, number=50, fLOG=print):  # pylint: dis
             t['name'] = fct.__name__
             if fLOG:
                 fLOG(t)
-        res.append(t)
-    return res
+            yield t
