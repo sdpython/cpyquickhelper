@@ -5,12 +5,22 @@ cpyquickhelper.numbers
 This class uses :epkg:`pybind11` to created a :epkg:`Python`
 from a :epkg:`C++` class. This is heavily inspired from
 the example `python_example <https://github.com/pybind/python_example>`_.
+
+.. contents::
+    :local:
+
+C++ classes
++++++++++++
+
 The first classes are an example which exposes two C++
 classes.
 
 .. autosignature:: cpyquickhelper.numbers.weighted_number.WeightedDouble
 
 .. autosignature:: cpyquickhelper.numbers.weighted_number.WeightedFloat
+
+Benchmark dot product
++++++++++++++++++++++
 
 The second example exposes a function doing a benchmark comparing
 the execution time of a couple of C++ function. The difficulty is
@@ -92,3 +102,13 @@ The last function is used to measure the time spent in the python
 binding, it is the same signature as the dot product but does nothing.
 
 .. autosignature:: cpyquickhelper.numbers.cbenchmark.empty_vector_dot_product
+
+Speed measure
++++++++++++++
+
+Next functions makes it easier to measure processing time
+once the module was compiled.
+
+.. autosignature:: cpyquickhelper.numbers.speed_measure.check_speed
+
+.. autosignature:: cpyquickhelper.numbers.speed_measure.measure_time

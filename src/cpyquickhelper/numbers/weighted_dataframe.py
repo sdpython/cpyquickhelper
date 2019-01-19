@@ -1,6 +1,6 @@
 """
 @file
-@brief Shortcut to *numbers*.
+@brief Addition for :epkg:`pandas`.
 """
 from itertools import chain
 from numpy import isnan, dtype, nan

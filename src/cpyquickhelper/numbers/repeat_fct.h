@@ -1,10 +1,13 @@
 #pragma once
-#include <chrono>
 
 #if !defined(_CRT_SECURE_NO_WARNINGS)
 #define _CRT_SECURE_NO_WARNINGS
 #define undef__CRT_SECURE_NO_WARNINGS 1
 #endif
+
+#include <chrono>
+#include <exception>
+#include <vector>
 
 /**
 * Pointer on a function which takes nothing and returns nothing.
@@ -86,7 +89,7 @@ void repeat_execution(FCTTYPE& fct, int repeat, int number, ExecutionStat& repor
     report.average /= number;
     report.deviation /= number;
     report.deviation -= report.average * report.average;
-    report.deviation = sqrt(report.deviation);
+    report.deviation = sqrt(report.deviation > 0 ? report.deviation : 0);
 }
 
 #if defined(undef_CRT_SECURE_NO_WARNINGS)

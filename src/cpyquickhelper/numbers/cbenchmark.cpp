@@ -1,14 +1,23 @@
-#include <pybind11/iostream.h>
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include <pybind11/numpy.h>
+#include "cbenchmark.h"
+
+#if !defined(_CRT_SECURE_NO_WARNINGS)
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include <vector>
 #include <thread>
 #include <iterator>
 #include "repeat_fct.h"
+
+#ifndef SKIP_PYTHON
+#include <pybind11/iostream.h>
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pybind11/numpy.h>
 //#include <numpy/arrayobject.h>
 
 namespace py = pybind11;
+#endif
 
 
 template<typename DTYPE>
@@ -204,6 +213,9 @@ class FunctionMeasureVectorCountJ : FunctionMeasureVectorCount<DTYPE>
 };
 
 
+/////////////////////////
+// dot product
+/////////////////////////
 
 #if defined(_MSC_VER)
 #define STRING_CONCAT(A, B) A ## B
@@ -235,6 +247,9 @@ class FunctionMeasureVectorCountJ : FunctionMeasureVectorCount<DTYPE>
             py::arg("verbose")=false);
 #endif
 
+/////////////////////
+// vector_dot_product
+/////////////////////
 
 float vector_dot_product_pointer(const float *p1, const float *p2, size_t size)
 {
@@ -246,6 +261,8 @@ float vector_dot_product_pointer(const float *p1, const float *p2, size_t size)
 }
 
 
+#ifndef SKIP_PYTHON
+
 float vector_dot_product(py::array_t<float> v1, py::array_t<float> v2)
 {
     if (v1.ndim() != v2.ndim())
@@ -255,12 +272,23 @@ float vector_dot_product(py::array_t<float> v1, py::array_t<float> v2)
     return vector_dot_product_pointer(v1.data(0), v2.data(0), v1.shape(0));
 }
 
+#endif
+
+
+// empty_vector_dot_product
+
+#ifndef SKIP_PYTHON
 
 float empty_vector_dot_product(py::array_t<float> v1, py::array_t<float> v2)
 {
     return 0;
 }
 
+#endif
+
+/////////////////////
+// vector_dot_product16
+/////////////////////
 
 float vector_dot_product_pointer16(const float *p1, const float *p2)
 {
@@ -303,6 +331,8 @@ float vector_dot_product_pointer16(const float *p1, const float *p2, size_t size
     return sum;
 }
 
+#ifndef SKIP_PYTHON
+
 float vector_dot_product16(py::array_t<float> v1, py::array_t<float> v2)
 {
     if (v1.ndim() != v2.ndim())
@@ -311,6 +341,70 @@ float vector_dot_product16(py::array_t<float> v1, py::array_t<float> v2)
         throw std::runtime_error("Vector v1 and v2 must be vectors.");
     return vector_dot_product_pointer16(v1.data(0), v2.data(0), v1.shape(0));
 }
+
+#endif
+
+/////////////////////
+// vector_dot_product16_nofcall
+/////////////////////
+
+float vector_dot_product_pointer16_nofcall(const float *p1, const float *p2, size_t size)
+{
+    float sum = 0;    
+    const float * end = p1 + size;
+    if (size >= BYN) {
+        #if(BYN != 16)
+            #error "BYN must be equal to 16";
+        #endif
+        unsigned int size_ = (unsigned int) size;
+        size_ = size_ >> 4;  // division by 16=2^4
+        size_ = size_ << 4;  // multiplication by 16=2^4
+        const float * end_ = p1 + size_;
+        for(; p1 != end_;)
+        {
+            sum += *p1 * *p2; ++p1, ++p2;
+            sum += *p1 * *p2; ++p1, ++p2;
+            sum += *p1 * *p2; ++p1, ++p2;
+            sum += *p1 * *p2; ++p1, ++p2;
+            
+            sum += *p1 * *p2; ++p1, ++p2;
+            sum += *p1 * *p2; ++p1, ++p2;
+            sum += *p1 * *p2; ++p1, ++p2;
+            sum += *p1 * *p2; ++p1, ++p2;
+
+            sum += *p1 * *p2; ++p1, ++p2;
+            sum += *p1 * *p2; ++p1, ++p2;
+            sum += *p1 * *p2; ++p1, ++p2;
+            sum += *p1 * *p2; ++p1, ++p2;
+            
+            sum += *p1 * *p2; ++p1, ++p2;
+            sum += *p1 * *p2; ++p1, ++p2;
+            sum += *p1 * *p2; ++p1, ++p2;
+            sum += *p1 * *p2; ++p1, ++p2;
+        }
+    }
+    for(; p1 != end; ++p1, ++p2)
+        sum += *p1 * *p2;
+    return sum;
+}
+
+
+#ifndef SKIP_PYTHON
+
+float vector_dot_product16_nofcall(py::array_t<float> v1, py::array_t<float> v2)
+{
+    if (v1.ndim() != v2.ndim())
+        throw std::runtime_error("Vector v1 and v2 must have the same dimension.");
+    if (v1.ndim() != 1)
+        throw std::runtime_error("Vector v1 and v2 must be vectors.");
+    return vector_dot_product_pointer16_nofcall(v1.data(0), v2.data(0), v1.shape(0));
+}
+
+#endif
+
+/////////////////////
+// vector_dot_product_16_sse
+/////////////////////
 
 #include <xmmintrin.h>
 
@@ -363,6 +457,8 @@ float vector_dot_product_pointer16_sse(const float *p1, const float *p2, size_t 
     return sum;
 }
 
+#ifndef SKIP_PYTHON
+
 float vector_dot_product16_sse(py::array_t<float> v1, py::array_t<float> v2)
 {
     if (v1.ndim() != v2.ndim())
@@ -371,6 +467,12 @@ float vector_dot_product16_sse(py::array_t<float> v1, py::array_t<float> v2)
         throw std::runtime_error("Vector v1 and v2 must be vectors.");
     return vector_dot_product_pointer16_sse(v1.data(0), v2.data(0), v1.shape(0));
 }
+
+#endif
+
+/////////////////////
+// vector_dot_product16_avx512
+/////////////////////
 
 #include <immintrin.h>
 
@@ -409,6 +511,8 @@ float vector_dot_product_pointer16_avx512(const float *p1, const float *p2, size
     return sum;
 }
 
+#ifndef SKIP_PYTHON
+
 float vector_dot_product16_avx512(py::array_t<float> v1, py::array_t<float> v2)
 {
     if (v1.ndim() != v2.ndim())
@@ -420,6 +524,11 @@ float vector_dot_product16_avx512(py::array_t<float> v1, py::array_t<float> v2)
 
 #endif
 
+#endif
+
+/////////////////////
+// get_simd_available_option
+/////////////////////
 
 std::string get_simd_available_option()
 {
@@ -487,6 +596,8 @@ std::string get_simd_available_option()
 }
 
 
+#ifndef SKIP_PYTHON
+
 PYBIND11_MODULE(cbenchmark, m) {
 	m.doc() =
     #if defined(__APPLE__)
@@ -545,6 +656,8 @@ also implemented in C.)pbdoc"
           "Empty measure to have an idea about the processing due to python binding.");
     m.def("vector_dot_product16", &vector_dot_product16,
           "Computes a dot product in C++ with vectors of floats. Goes 16 by 16.");
+    m.def("vector_dot_product16_nofcall", &vector_dot_product16_nofcall,
+          "Computes a dot product in C++ with vectors of floats. Goes 16 by 16. Do not call intermediate functions.");
     m.def("vector_dot_product16_sse", &vector_dot_product16_sse,
           "Computes a dot product in C++ with vectors of floats. Goes 16 by 16. Use SSE instructions.");
 
@@ -573,3 +686,5 @@ It can simply be called with the following example:
     );
 
 }
+
+#endif

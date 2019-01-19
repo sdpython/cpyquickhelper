@@ -1,5 +1,5 @@
 """
-@brief      test log(time=8s)
+@brief      test log(time=3s)
 """
 
 
@@ -10,6 +10,7 @@ import random
 import numpy
 import pandas
 from pyquickhelper.pycode import ExtTestCase
+from pyquickhelper.loghelper import noLOG
 
 
 try:
@@ -25,6 +26,7 @@ except ImportError:
         sys.path.append(path)
     import src
 
+from src.cpyquickhelper.numbers import check_speed
 from src.cpyquickhelper.numbers.cbenchmark import measure_scenario_A, measure_scenario_B  # pylint: disable=W0611, E0611
 from src.cpyquickhelper.numbers.cbenchmark import measure_scenario_C, measure_scenario_D  # pylint: disable=W0611, E0611
 from src.cpyquickhelper.numbers.cbenchmark import measure_scenario_E, measure_scenario_F  # pylint: disable=W0611, E0611
@@ -32,6 +34,7 @@ from src.cpyquickhelper.numbers.cbenchmark import measure_scenario_G, measure_sc
 from src.cpyquickhelper.numbers.cbenchmark import measure_scenario_I, measure_scenario_J  # pylint: disable=W0611, E0611
 from src.cpyquickhelper.numbers.cbenchmark import vector_dot_product, empty_vector_dot_product  # pylint: disable=W0611, E0611
 from src.cpyquickhelper.numbers.cbenchmark import vector_dot_product16, vector_dot_product16_sse  # pylint: disable=W0611, E0611
+from src.cpyquickhelper.numbers.cbenchmark import vector_dot_product16_nofcall  # pylint: disable=W0611, E0611
 from src.cpyquickhelper.numbers.cbenchmark import vector_dot_product16_avx512, get_simd_available_option  # pylint: disable=W0611, E0611
 
 
@@ -40,7 +43,7 @@ class TestCBenchmark(ExtTestCase):
     funcs = [(k, v) for k, v in globals().copy().items()
              if k.startswith("measure_scenario")]
 
-    def a_test_benchmark(self, label, values, th, repeat=10, number=20):
+    def a_test_benchmark(self, label, values, th, repeat=5, number=10):
         rows = []
         for _, v in TestCBenchmark.funcs:
             exe = v(values, th, repeat, number)
@@ -81,15 +84,18 @@ class TestCBenchmark(ExtTestCase):
         d3 = vector_dot_product16(a, b)
         d4 = vector_dot_product16_sse(a, b)
         d5 = vector_dot_product16_avx512(a, b)
-        d6 = empty_vector_dot_product(a, b)
-        self.assertEqual(d6, 0)
-        res = [d1, d2, d3, d4, d5]
+        d6 = vector_dot_product16_nofcall(a, b)
+        dE = empty_vector_dot_product(a, b)
+        self.assertEqual(dE, 0)
+        res = [d1, d2, d3, d4, d5, d6]
         self.assertEqual(d1, d2)
         self.assertEqual(d1, d3)
         self.assertEqual(d1, d4)
-        self.assertEqual(len(res), 5)
+        self.assertEqual(d1, d5)
+        self.assertEqual(d1, d6)
+        self.assertEqual(len(res), 6)
 
-    def test_vector_dot_product18(self):
+    def test_vector_dot_product16(self):
         a = numpy.array([3, 4, 5] * 6, dtype=numpy.float32)
         b = numpy.array([3.1, 4.1, 5.1] * 6, dtype=numpy.float32)
         d1 = numpy.dot(a, b)
@@ -97,19 +103,25 @@ class TestCBenchmark(ExtTestCase):
         d3 = vector_dot_product16(a, b)
         d4 = vector_dot_product16_sse(a, b)
         d5 = vector_dot_product16_avx512(a, b)
-        d6 = empty_vector_dot_product(a, b)
-        self.assertEqual(d6, 0)
-        res = [d1, d2, d3, d4, d5]
+        d6 = vector_dot_product16_nofcall(a, b)
+        res = [d1, d2, d3, d4, d5, d6]
         self.assertAlmostEqual(d1, d2, places=4)
         self.assertAlmostEqual(d1, d3, places=4)
         self.assertAlmostEqual(d1, d4, places=4)
         self.assertAlmostEqual(d1, d5, places=4)
-        self.assertEqual(len(res), 5)
+        self.assertAlmostEqual(d1, d6, places=4)
+        self.assertEqual(len(res), 6)
 
     def test_get_simd_available_option(self):
         vers = get_simd_available_option()
         self.assertIn("options", vers)
         self.assertIn("__SSE__", vers)
+
+    def test_measure_speed(self):
+        res = check_speed([100], fLOG=noLOG)
+        self.assertIsInstance(res, list)
+        self.assertIsInstance(res[0], dict)
+        self.assertIn('average', res[0])
 
 
 if __name__ == "__main__":

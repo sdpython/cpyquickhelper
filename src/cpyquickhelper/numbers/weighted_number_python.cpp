@@ -1,6 +1,8 @@
+#include "weighted_number.h"
+
+#ifndef SKIP_PYTHON
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
-#include "weighted_number.h"
 
 namespace py = pybind11;
 
@@ -92,3 +94,5 @@ It contains two attributes:
 		.def(py::self >= py::self)
 		;
 }
+
+#endif
