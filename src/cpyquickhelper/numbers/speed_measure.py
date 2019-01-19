@@ -21,7 +21,7 @@ def measure_time(stmt, context, repeat=10, number=50):
         from cpyquickhelper.numbers import measure_time
         from math import cos
 
-        res = measure_time("cos(x, y)", context=dict(cos=cos, x=5., y=.7))
+        res = measure_time("cos(x)", context=dict(cos=cos, x=5.))
         print(res)
     """
     import numpy
@@ -73,14 +73,13 @@ def check_speed(dims=[100000], repeat=10, number=50, fLOG=print):  # pylint: dis
     import numpy
     fcts = _fcts()
     mx = max(dims)
-    for fct in fcts:
-        context = {fct.__name__: fct}
-        vect = numpy.ones((mx,))
-        for i in range(0, vect.shape[0]):
-            vect[i] = i
-        for i in dims:
-            values = vect[:i].copy()
-            ct = context.copy()
+    vect = numpy.ones((mx,))
+    for i in range(0, vect.shape[0]):
+        vect[i] = i
+    for i in dims:
+        values = vect[:i].copy()
+        for fct in fcts:
+            ct = {fct.__name__: fct}
             ct['values'] = values
             t = measure_time(fct.__name__, repeat=repeat, number=number, context=ct)
             t['name'] = fct.__name__
