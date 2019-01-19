@@ -7,6 +7,7 @@
 #endif
 
 #include <vector>
+#include <iostream>
 
 float vector_dot_product_pointer(const float *p1, const float *p2, size_t size);
 float vector_dot_product_pointer16(const float *p1, const float *p2, size_t size);

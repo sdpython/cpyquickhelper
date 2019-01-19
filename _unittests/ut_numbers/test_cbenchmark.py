@@ -118,7 +118,7 @@ class TestCBenchmark(ExtTestCase):
         self.assertIn("__SSE__", vers)
 
     def test_measure_speed(self):
-        res = check_speed([100], fLOG=noLOG)
+        res = check_speed([100], fLOG=noLOG, number=10)
         self.assertIsInstance(res, list)
         self.assertIsInstance(res[0], dict)
         self.assertIn('average', res[0])

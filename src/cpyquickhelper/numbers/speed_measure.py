@@ -59,12 +59,14 @@ def _fcts():
     return [simple_dot, c11_dot, c11_dot16, c11_dot16_sse]
 
 
-def check_speed(dims=[100000], fLOG=print):  # pylint: disable=W0102
+def check_speed(dims=[100000], repeat=10, number=50, fLOG=print):  # pylint: disable=W0102
     """
     Prints out some information about speed computation
     of this laptop. See :ref:`cbenchmarkbranchingrst` to compare.
 
     @param      n           sets of dimensions to try
+    @param      repeat      average over *repeat* experiment
+    @param      number      number of execution in one row
     @param      fLOG        logging function
     @return                 res
     """
@@ -81,7 +83,7 @@ def check_speed(dims=[100000], fLOG=print):  # pylint: disable=W0102
             values = vect[:i].copy()
             ct = context.copy()
             ct['values'] = values
-            t = measure_time(fct.__name__, repeat=10, number=10, context=ct)
+            t = measure_time(fct.__name__, repeat=repeat, number=number, context=ct)
             t['name'] = fct.__name__
             if fLOG:
                 fLOG(t)
