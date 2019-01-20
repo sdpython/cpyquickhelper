@@ -81,6 +81,15 @@ def check_speed(dims=[100000], repeat=10, number=50, fLOG=print):  # pylint: dis
     @param      number      number of execution in one row
     @param      fLOG        logging function
     @return                 iterator on results
+
+    :epkg:`numpy` is multithreaded. For an accurate comparison,
+    this needs to be disabled. This can be done by setting environment variable
+    ``MKL_NUM_THREADS=1`` or by running:
+
+    ::
+
+        import mkl
+        mkl.set_num_threads(1)
     """
     import numpy
     fcts = _fcts()
