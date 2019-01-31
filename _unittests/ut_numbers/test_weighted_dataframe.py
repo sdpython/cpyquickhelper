@@ -10,7 +10,6 @@ from io import StringIO
 import numpy
 from pandas import DataFrame, Series, concat
 from pandas.core.dtypes.base import ExtensionDtype
-from pandas.errors import AbstractMethodError
 from pyquickhelper.pycode import ExtTestCase
 
 
@@ -127,22 +126,22 @@ class TestWeightedSeries(ExtTestCase):
         e1 = WeightedDouble(7, 2)
         e2 = WeightedDouble(10, 3)
         self.assertEqual(list(df["A"]), [e1, e2])
-        self.assertEqual(df.wd.dtype.name, "WeightedDouble")
-        self.assertEqual(df.A.dtype.name, "WeightedDouble")
+        self.assertEqual(df.wd.dtype.name, "object")
+        self.assertEqual(df.A.dtype.name, "object")
 
         df["A1"] = df.wd + df.x
         df["A2"] = df.wd - df.x
         df["A3"] = df.wd * df.x
         df["A4"] = df.wd / df.x
         for c in ['A%d' % i for i in range(1, 5)]:
-            self.assertEqual(df[c].dtype.name, "WeightedDouble")
+            self.assertEqual(df[c].dtype.name, "object")
 
         df["A4"] += df.x
-        self.assertEqual(df["A4"].dtype.name, "WeightedDouble")
+        self.assertEqual(df["A4"].dtype.name, "object")
 
         df2 = concat([df, df])
-        self.assertEqual(df2["A4"].dtype.name, "WeightedDouble")
-        self.assertRaise(lambda: df.wd % df.x, AbstractMethodError)
+        self.assertEqual(df2["A4"].dtype.name, "object")
+        self.assertRaise(lambda: df.wd % df.x, TypeError)
 
 
 if __name__ == "__main__":

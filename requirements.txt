@@ -2,7 +2,8 @@ coverage
 Cython
 jupyter
 jyquickhelper
-numpy>=1.11.1
+numpy>=1.14
+pandas>=0.24
 pybind11
 pylint
 pillow

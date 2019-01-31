@@ -3,20 +3,26 @@
 @brief Addition for :epkg:`pandas`.
 """
 from itertools import chain
-from numpy import isnan, dtype, nan
+from numpy import isnan, dtype, nan, array
 from pandas import Series
-from pandas.core.dtypes.base import ExtensionDtype
 from pandas.api.extensions import register_series_accessor
-from pandas.api.extensions import ExtensionArray
+from pandas.arrays import PandasArray
+from pandas.core.arrays.numpy_ import PandasDtype
 from .weighted_number import WeightedDouble
 
 
-class WeightedSeriesDtype(ExtensionDtype):
+class WeightedSeriesDtype(PandasDtype):
     """
     Defines a custom type for a @see cl WeightedSeries.
     """
 
     dtype = dtype(WeightedDouble)
+
+    def __init__(self):
+        """
+        Initializes dtype.
+        """
+        PandasDtype.__init__(self, dtype=dtype('c16'))
 
     def __str__(self):
         """
@@ -153,28 +159,32 @@ class WeightedSeries(Series):
         elif hasattr(WeightedDoubleAccessor, attr):
             obj = WeightedDoubleAccessor(self)
             return getattr(obj, attr)
+        elif attr == '_ndarray':
+            return array(self)
         else:
             raise AttributeError("Unkown attribute '{0}'".format(attr))
 
 
-class WeightedArray(ExtensionArray):
+class WeightedArray(PandasArray):
     """
     Implements an array holding @see WeightedDouble numbers.
-    This leverages a new concept introduced in :epkg:`pandas` 0.23
-    implemented in class :epkg:`ExtensionArray`. It can be used
+    This leverages a new concept introduced in :epkg:`pandas` 0.24
+    implemented in class :epkg:`PandasArray`. It can be used
     to define a new column type in a dataframe.
     """
 
     def __init__(self, *args, **kwargs):
         """
         Overwrites the constructor to force
-        dtype to be @see cl WeightedSeriesDtype.
+        *dtype* to be @see cl WeightedSeriesDtype.
         """
         if "data" in kwargs and isinstance(kwargs["data"], WeightedSeries):
-            self._data = kwargs["data"]
+            serie = kwargs["data"]
         else:
-            self._data = WeightedSeries(*args, **kwargs)
+            serie = WeightedSeries(*args, **kwargs)
+        PandasArray.__init__(self, serie._ndarray)
         self._dtype = kwargs.get("dtype", WeightedSeriesDtype())
+        self._data = serie
 
     @property
     def dtype(self):
@@ -254,7 +264,7 @@ class WeightedArray(ExtensionArray):
         ----------
         key : int, ndarray, or slice
             When called from, e.g. ``Series.__setitem__``, ``key`` will be
-            one of
+            one of:
 
             * scalar int
             * ndarray of integers.
@@ -282,6 +292,10 @@ class WeightedArray(ExtensionArray):
     def __truediv__(self, other):
         "Division"
         return WeightedArray([a / b for a, b in zip(self, other)])
+
+    def isna(self):
+        "is nan?"
+        return array([isnan(s.value) for s in self])
 
     @classmethod
     def _concat_same_type(cls, to_concat):
