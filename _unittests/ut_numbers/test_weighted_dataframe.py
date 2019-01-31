@@ -116,7 +116,7 @@ class TestWeightedSeries(ExtTestCase):
         n1 = WeightedDouble(1, 1)
         n2 = WeightedDouble(3, 2)
         ser = WeightedArray([n1, n2])
-        self.assertEqual(ser.dtype.name, "WeightedDouble")
+        self.assertEqual(ser.dtype.name, "object")
         df = DataFrame(data=dict(wd=ser, x=[6., 7.]))
         s = str(df).replace("\n", " ").replace(" ", "_")
         self.assertEqual(

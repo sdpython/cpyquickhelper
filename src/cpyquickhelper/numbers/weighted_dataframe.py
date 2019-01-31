@@ -183,8 +183,6 @@ class WeightedArray(PandasArray):
         else:
             serie = WeightedSeries(*args, **kwargs)
         PandasArray.__init__(self, serie._ndarray)
-        self._dtype = kwargs.get("dtype", WeightedSeriesDtype())
-        self._data = serie
 
     @property
     def dtype(self):
@@ -192,90 +190,6 @@ class WeightedArray(PandasArray):
         Returns @see cl WeightedSeriesDtype.
         """
         return self._dtype
-
-    def __len__(self):
-        "Returns the length of the series."
-        return len(self._data)
-
-    def __getattr__(self, attr):
-        """
-        Forward
-        """
-        if hasattr(WeightedArray, attr):
-            return self.__dict__[attr]
-        else:
-            return getattr(self._data, attr)
-
-    def copy(self, deep=False):
-        # type: (bool) -> ExtensionArray
-        """Return a copy of the array.
-
-        Parameters
-        ----------
-        deep : bool, default False
-            Also copy the underlying data backing this array.
-
-        Returns
-        -------
-        @see cl WeightedArray
-        """
-        data = self._data.copy(deep=deep)
-        return WeightedArray(data=data, dtype=self.dtype)
-
-    def __getitem__(self, item):
-        # type (Any) -> Any
-        """Select a subset of self.
-
-        Parameters
-        ----------
-        item : int, slice, or ndarray
-            * int: The position in 'self' to get.
-
-            * slice: A slice object, where 'start', 'stop', and 'step' are
-              integers or None
-
-            * ndarray: A 1-d boolean NumPy ndarray the same length as 'self'
-
-        Returns
-        -------
-        item : scalar or @see cl WeightedArray
-
-        Notes
-        -----
-        For scalar ``item``, return a scalar value suitable for the array's
-        type. This should be an instance of ``self.dtype.type``.
-
-        For slice ``key``, return an instance of ``ExtensionArray``, even
-        if the slice is length 0 or 1.
-
-        For a boolean mask, return an instance of ``ExtensionArray``, filtered
-        to the values where ``item`` is True.
-        """
-        return self._data[item]
-
-    def __setitem__(self, key, value):
-        # type: (Union[int, np.ndarray], Any) -> None
-        """Set one or more values inplace.
-
-        This method is not required to satisfy the pandas extension array
-        interface.
-
-        Parameters
-        ----------
-        key : int, ndarray, or slice
-            When called from, e.g. ``Series.__setitem__``, ``key`` will be
-            one of:
-
-            * scalar int
-            * ndarray of integers.
-            * boolean ndarray
-            * slice object
-
-        value : ``WeightedSeriesDtype.type``,
-            ``Sequence[WeightedSeriesDtype.type]``,
-            or object value or values to be set of ``key``.
-        """
-        self._data[key] = value
 
     def __add__(self, other):
         "Addition"
