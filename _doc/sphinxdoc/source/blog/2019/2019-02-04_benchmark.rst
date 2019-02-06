@@ -1,0 +1,36 @@
+
+.. blogpost::
+    :title: Cython, Pythran, nuitka, numba
+    :keywords: Cython, Pythran, nuitka, numba
+    :date: 2018-08-05
+    :categories: C++
+
+    I discovered than :epkg:`Pythran` was now a possible
+    backend for :epkg:`Cython`:
+    `Pythran as a Numpy backend <https://cython.readthedocs.io/en/latest/src/userguide/numpy_pythran.html>`_.
+    On one benchmark, it increases the speed by 2. I recommend the reading of
+    the following article:
+    `Optimizing your code with NumPy, Cython, pythran and numba <https://flothesof.github.io/optimizing-python-code-numpy-cython-pythran-numba.html>`_
+    which instigates the performance brought by the four
+    following tool and gives some hints on how to write
+    efficient code with these tools:
+
+    * :epkg:`Cython`: write code as a mix of *Python* and *C*,
+      the closer to *C* the code is, the faster it is. It works
+      well with :epkg:`numpy`.
+    * :epkg:`Pythran`: it is *C* compiler for *Python* code
+      as *Cython* is but optimized for numerical computation.
+    * :epkg:`nuitka`: another compiler
+    * :epkg:`numba`: :epkg:`JIT` or just in time compilation
+
+    The first three tools converts *Python* into *C* code
+    and then compiles it. The main issue comes from type inference
+    as *C* is a strongly typed language and *Python* is not.
+    The inference is not always possible and that explains
+    why the generated code is faster if the user specifies
+    the type of each variable used in the optimized section.
+    :epkg:`numba` relies on :epkg:`llvmlite`. The first execution
+    is slower because it includes a compilation based on types
+    discovered along the first execution. If the function is called
+    a second time with the same type, the program uses the optimized
+    version of it.
