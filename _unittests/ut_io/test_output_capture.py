@@ -144,14 +144,14 @@ class TestOutputCapture(ExtTestCase):
             mes = [str(e) for e in excs]
             raise Exception(
                 "Unable to run autosignature:\n{0}".format("\n----\n".join(mes)))
-        else:
-            if len(excs) == 1:
-                res = str(excs[0]) + "\n---\n" + res
-            self.assertIn(
-                "cpyquickhelper.io.stdchelper.cprint", res)
-            self.assertIn("Displays a string on the standard output", res)
-            self.assertIn("Signature", res)
-            self.assertIn("name='cprint'", res)
+
+        if len(excs) == 1:
+            res = str(excs[0]) + "\n---\n" + res
+        self.assertIn(
+            "cpyquickhelper.io.stdchelper.cprint", res)
+        self.assertIn("Displays a string on the standard output", res)
+        self.assertIn("Signature", res)
+        self.assertIn("name='cprint'", res)
 
 
 if __name__ == "__main__":
