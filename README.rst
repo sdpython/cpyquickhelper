@@ -47,6 +47,18 @@ README
 *cpyquickhelper* is a template to create a module with
 C functions.
 
+On Windows, the following exception might happen:
+
+::
+
+    LINK : fatal error LNK1158: impossible d'exécuter 'rc.exe'
+
+Which might be resolved with the following line before building it:
+
+::
+
+    set PATH=%PATH%;C:\Program Files (x86)\Windows Kits\10\bin\10.0.16299.0\x64
+
 **Links:**
 
 * `GitHub/cpyquickhelper <https://github.com/sdpython/cpyquickhelper/>`_
