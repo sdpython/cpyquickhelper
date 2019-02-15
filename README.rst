@@ -51,7 +51,7 @@ On Windows, the following exception might happen:
 
 ::
 
-    LINK : fatal error LNK1158: impossible d'exécuter 'rc.exe'
+    LINK : fatal error LNK1158: impossible d'exÃ©cuter 'rc.exe'
 
 Which might be resolved with the following line before building it:
 
