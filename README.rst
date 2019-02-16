@@ -1,9 +1,3 @@
-
-.. _l-README:
-
-README
-======
-
 .. image:: https://travis-ci.org/sdpython/cpyquickhelper.svg?branch=master
     :target: https://travis-ci.org/sdpython/cpyquickhelper
     :alt: Build status
@@ -44,8 +38,29 @@ README
     :target: http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
 
+
+.. _l-README:
+
+cpyquickhelper
+==============
+
 *cpyquickhelper* is a template to create a module with
-C functions.
+C functions in different ways. It implements function
+*measure_time*:
+
+::
+
+    from cpyquickhelper.numbers import measure_time
+    from math import cos
+
+    res = measure_time("cos(x)", context=dict(cos=cos, x=5.))
+    print(res)
+
+::
+
+    {'average': 3.909366205334663e-06, 'deviation': 6.238702219064397e-07,
+     'min_exec': 3.635883331298828e-06, 'max_exec': 5.776062607765198e-06,
+     'repeat': 10, 'number': 50, 'context_size': 240}
 
 On Windows, the following exception might happen:
 
