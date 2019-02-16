@@ -153,7 +153,7 @@ if is_local():
         unittest_modules=["pyquickhelper"],
         additional_notebook_path=["pyquickhelper", "jyquickhelper"],
         additional_local_path=["pyquickhelper", "jyquickhelper"],
-        requirements=["pyquickhelper", "jyquickhelper"],
+        requirements=["pyquickhelper", "jyquickhelper", "pybind11"],
         layout=["html"], github_owner='sdpython',
         add_htmlhelp=sys.platform.startswith("win"),
         coverage_options=dict(omit=["*exclude*.py"]),
@@ -250,6 +250,6 @@ if not r:
         packages=packages,
         package_dir=package_dir,
         package_data=package_data,
-        setup_requires=["pyquickhelper"],
+        setup_requires=["pyquickhelper", "pybind11"],
         install_requires=["pybind11"],
     )
