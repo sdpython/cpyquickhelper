@@ -194,7 +194,7 @@ if not r:
         # see https://blog.qiqitori.com/?p=390
         extra_compile_args_numbers = ['-std=c++11']  # , '-o2', '-mavx512f']
 
-    ext_thread = Extension('src.cpyquickhelper.parallel.threader',
+    ext_thread = Extension('cpyquickhelper.parallel.threader',
                            [os.path.join(root, 'src/cpyquickhelper/parallel/threaderc.cpp'),
                             os.path.join(root, 'src/cpyquickhelper/parallel/threader.cpp')],
                            extra_compile_args=extra_compile_args_thread,
@@ -202,13 +202,13 @@ if not r:
                                root, 'src/cpyquickhelper/parallel')],
                            libraries=libraries_thread)
 
-    ext_stdhelper = Extension('src.cpyquickhelper.io.stdchelper',
+    ext_stdhelper = Extension('cpyquickhelper.io.stdchelper',
                               [os.path.join(root, 'src/cpyquickhelper/io/stdchelper.cpp'),
                                os.path.join(root, 'src/cpyquickhelper/io/stdcapture.cpp')],
                               extra_compile_args=extra_compile_args_thread,
                               include_dirs=[os.path.join(root, 'src/cpyquickhelper/io')])
 
-    ext_numbers = Extension('src.cpyquickhelper.numbers.weighted_number',
+    ext_numbers = Extension('cpyquickhelper.numbers.weighted_number',
                             [os.path.join(root, 'src/cpyquickhelper/numbers/weighted_number.cpp'),
                              os.path.join(root, 'src/cpyquickhelper/numbers/weighted_number_python.cpp')],
                             extra_compile_args=extra_compile_args_numbers,
@@ -221,7 +221,7 @@ if not r:
                             ],
                             language='c++')
 
-    ext_benchmark = Extension('src.cpyquickhelper.numbers.cbenchmark',
+    ext_benchmark = Extension('cpyquickhelper.numbers.cbenchmark',
                               [os.path.join(
                                   root, 'src/cpyquickhelper/numbers/cbenchmark.cpp')],
                               extra_compile_args=extra_compile_args_numbers,
