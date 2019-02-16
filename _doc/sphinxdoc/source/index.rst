@@ -16,8 +16,8 @@ cpyquickhelper
 .. image:: https://circleci.com/gh/sdpython/cpyquickhelper/tree/master.svg?style=svg
     :target: https://circleci.com/gh/sdpython/cpyquickhelper/tree/master
 
-.. image:: https://dev.azure.com/xavierdupre3/pyquickhelper/_apis/build/status/sdpython.pyquickhelper
-    :target: https://dev.azure.com/xavierdupre3/pyquickhelper/
+.. image:: https://dev.azure.com/xavierdupre3/cpyquickhelper/_apis/build/status/sdpython.cpyquickhelper
+    :target: https://dev.azure.com/xavierdupre3/cpyquickhelper/
 
 .. image:: https://badge.fury.io/py/cpyquickhelper.svg
     :target: https://pypi.org/project/cpyquickhelper/
