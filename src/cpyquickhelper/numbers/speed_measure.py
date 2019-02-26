@@ -24,6 +24,9 @@ def measure_time(stmt, context, repeat=10, number=50):
 
         res = measure_time("cos(x)", context=dict(cos=cos, x=5.))
         print(res)
+
+    See `Timer.repeat <https://docs.python.org/3/library/timeit.html?timeit.Timer.repeat>`_
+    for a better understanding of parameter *repeat* and *number*.
     """
     import numpy
     tim = Timer(stmt, globals=context)
