@@ -5,7 +5,12 @@
 History
 =======
 
-current - 2019-02-16 - 0.00Mb
+current - 2019-02-26 - 0.00Mb
+=============================
+
+* `11`: add parameter div_by_number to measure_time (2019-02-26)
+
+0.1.182 - 2019-02-16 - 0.17Mb
 =============================
 
 * `10`: fix binary location in the setup (2019-02-16)
