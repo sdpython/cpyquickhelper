@@ -38,7 +38,6 @@
     :target: http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
 
-
 .. _l-README:
 
 cpyquickhelper
