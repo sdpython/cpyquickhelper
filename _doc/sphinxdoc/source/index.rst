@@ -53,7 +53,6 @@ cpyquickhelper
 
 This library explores various technics to use
 :epkg:`C` or :epkg:`C++` functions in :epkg:`Python`.
-.
 
 .. toctree::
     :maxdepth: 1
