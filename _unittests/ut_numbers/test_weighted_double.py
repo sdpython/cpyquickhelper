@@ -2,30 +2,13 @@
 @brief      test log(time=2s)
 """
 
-
-import sys
-import os
 import unittest
 from inspect import signature, isbuiltin, isclass, ismethod, isfunction, _signature_fromstr, Signature
 from pyquickhelper.pycode import ExtTestCase
 from pyquickhelper.helpgen import rst2html
 
-
-try:
-    import src
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import src
-
-from src.cpyquickhelper.numbers.weighted_number import WeightedDouble, WeightedFloat  # pylint: disable=E0611
-from src.cpyquickhelper.numbers.weighted_dataframe import WeightedSeriesDtype
+from cpyquickhelper.numbers.weighted_number import WeightedDouble, WeightedFloat  # pylint: disable=E0611
+from cpyquickhelper.numbers.weighted_dataframe import WeightedSeriesDtype
 
 
 class TestWeightedDouble(ExtTestCase):
@@ -65,11 +48,11 @@ class TestWeightedDouble(ExtTestCase):
         res = _signature_fromstr(Signature, WeightedDouble.__init__, sig)
         self.assertNotEmpty(res)
         newstring = [
-            ".. autosignature:: src.cpyquickhelper.numbers.weighted_number.WeightedDouble.__init__"]
+            ".. autosignature:: cpyquickhelper.numbers.weighted_number.WeightedDouble.__init__"]
         newstring = "\n".join(newstring)
         res = rst2html(newstring, writer="rst", layout="sphinx")
         self.assertIn(
-            "src.cpyquickhelper.numbers.weighted_number.WeightedDouble.__init__", res)
+            "cpyquickhelper.numbers.weighted_number.WeightedDouble.__init__", res)
         self.assertIn("(*self*, *value*, *weight* = *1.0*)", res)
 
     def test_attribute(self):

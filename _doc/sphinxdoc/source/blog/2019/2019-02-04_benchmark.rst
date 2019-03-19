@@ -3,7 +3,7 @@
     :title: Branching
     :keywords: branching, optimization
     :date: 2019-02-04
-    :categories: processeur
+    :categories: processor
 
     I wanted to test some facts described in the following blog post:
     `Why is it faster to process a sorted array than an unsorted array? <https://stackoverflow.com/questions/11227809/why-is-it-faster-to-process-a-sorted-array-than-an-unsorted-array>`_.

@@ -3,28 +3,12 @@
 @brief      test log(time=33s)
 """
 
-import sys
-import os
 import unittest
 from pandas import DataFrame, Series
 from pyquickhelper.pycode import ExtTestCase
 
-
-try:
-    import src
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import src
-
-from src.cpyquickhelper.numbers.weighted_number import WeightedDouble  # pylint: disable=E0611
-from src.cpyquickhelper.numbers.weighted_dataframe import WeightedArray
+from cpyquickhelper.numbers.weighted_number import WeightedDouble  # pylint: disable=E0611
+from cpyquickhelper.numbers.weighted_dataframe import WeightedArray
 
 
 class TestDocumentationExample(ExtTestCase):

@@ -597,11 +597,7 @@ std::string get_simd_available_option()
 
 
 #ifndef SKIP_PYTHON
-#ifdef _MSC_VER
 #define CBENCHMARK_MODULE_NAME "cpyquickhelper.numbers.cbenchmark"
-#else
-#define CBENCHMARK_MODULE_NAME "cbenchmark"
-#endif
 
 // See https://github.com/pybind/pybind11/issues/616.
 // Required to use ExecutionStat defined in cbenchmark.

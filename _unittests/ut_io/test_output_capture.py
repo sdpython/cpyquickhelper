@@ -10,22 +10,9 @@ from pyquickhelper.helpgen import rst2html
 from pyquickhelper.sphinxext.import_object_helper import import_any_object
 from pyquickhelper.sphinxext.import_object_helper import import_object
 
-
-try:
-    import src
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import src
-
-from src.cpyquickhelper.io.stdhelper import capture_output
-from src.cpyquickhelper.io.stdchelper import cprint
+import cpyquickhelper
+from cpyquickhelper.io.stdhelper import capture_output
+from cpyquickhelper.io.stdchelper import cprint  # pylint: disable=E0611
 
 
 class TestOutputCapture(ExtTestCase):
@@ -128,7 +115,8 @@ class TestOutputCapture(ExtTestCase):
         self.assertNotEmpty(obj)
         self.assertEqual(kind, "function")
         self.assertNotEmpty(res)
-        dirname = os.path.abspath(os.path.dirname(src.__file__))
+        dirname = os.path.join(os.path.abspath(os.path.dirname(
+            cpyquickhelper.__file__)), "..")
         excs = []
         for name in ['src.cpyquickhelper.io.stdchelper.cprint',
                      'cpyquickhelper.io.stdchelper.cprint']:

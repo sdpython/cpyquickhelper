@@ -2,30 +2,13 @@
 @brief      test log(time=28s)
 """
 
-
-import sys
-import os
 import unittest
 import numpy
 import pandas
 from pyquickhelper.loghelper import fLOG
 from pyquickhelper.pycode import ExtTestCase
 
-
-try:
-    import src
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import src
-
-from src.cpyquickhelper.fastdata import df2array, df2arrays
+from cpyquickhelper.fastdata import df2array, df2arrays
 
 
 class TestPandasNumpy(ExtTestCase):

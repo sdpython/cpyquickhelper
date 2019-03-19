@@ -2,9 +2,6 @@
 @brief      test log(time=2s)
 """
 
-
-import sys
-import os
 import unittest
 from io import StringIO
 import numpy
@@ -12,22 +9,8 @@ from pandas import DataFrame, Series, concat
 from pandas.core.dtypes.base import ExtensionDtype
 from pyquickhelper.pycode import ExtTestCase
 
-
-try:
-    import src
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import src
-
-from src.cpyquickhelper.numbers.weighted_number import WeightedDouble  # noqa
-from src.cpyquickhelper.numbers.weighted_dataframe import WeightedSeriesDtype, WeightedArray, WeightedSeries
+from cpyquickhelper.numbers.weighted_number import WeightedDouble  # pylint: disable=E0611
+from cpyquickhelper.numbers.weighted_dataframe import WeightedSeriesDtype, WeightedArray, WeightedSeries
 
 
 class TestWeightedSeries(ExtTestCase):

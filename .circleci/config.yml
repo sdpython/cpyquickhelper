@@ -59,6 +59,7 @@ jobs:
           name: compile and build
           command: |
             . venv/bin/activate
+            export PYTHONPATH=src
             python setup.py build_ext --inplace
 
       - run:
