@@ -1,4 +1,4 @@
-#include "cbenchmark.h"
+#include "cbenchmark_dot.h"
 
 #if !defined(_CRT_SECURE_NO_WARNINGS)
 #define _CRT_SECURE_NO_WARNINGS
@@ -598,7 +598,7 @@ std::string get_simd_available_option()
 
 #ifndef SKIP_PYTHON
 
-PYBIND11_MODULE(cbenchmark, m) {
+PYBIND11_MODULE(cbenchmark_dot, m) {
 	m.doc() =
     #if defined(__APPLE__)
     "Measures the execution time of functions implemented in C."
@@ -679,7 +679,7 @@ It can simply be called with the following example:
 .. runpython::
     :showcode:
     
-    from cpyquickhelper.numbers.cbenchmark import get_simd_available_option
+    from cpyquickhelper.numbers.cbenchmark_dot import get_simd_available_option
     print(get_simd_available_option())
 )pbdoc"
         #endif

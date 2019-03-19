@@ -27,18 +27,18 @@ except ImportError:
     import src
 
 from src.cpyquickhelper.numbers import check_speed
-from src.cpyquickhelper.numbers.cbenchmark import measure_scenario_A, measure_scenario_B  # pylint: disable=W0611, E0611
-from src.cpyquickhelper.numbers.cbenchmark import measure_scenario_C, measure_scenario_D  # pylint: disable=W0611, E0611
-from src.cpyquickhelper.numbers.cbenchmark import measure_scenario_E, measure_scenario_F  # pylint: disable=W0611, E0611
-from src.cpyquickhelper.numbers.cbenchmark import measure_scenario_G, measure_scenario_H  # pylint: disable=W0611, E0611
-from src.cpyquickhelper.numbers.cbenchmark import measure_scenario_I, measure_scenario_J  # pylint: disable=W0611, E0611
-from src.cpyquickhelper.numbers.cbenchmark import vector_dot_product, empty_vector_dot_product  # pylint: disable=W0611, E0611
-from src.cpyquickhelper.numbers.cbenchmark import vector_dot_product16, vector_dot_product16_sse  # pylint: disable=W0611, E0611
-from src.cpyquickhelper.numbers.cbenchmark import vector_dot_product16_nofcall  # pylint: disable=W0611, E0611
-from src.cpyquickhelper.numbers.cbenchmark import vector_dot_product16_avx512, get_simd_available_option  # pylint: disable=W0611, E0611
+from src.cpyquickhelper.numbers.cbenchmark_dot import measure_scenario_A, measure_scenario_B  # pylint: disable=W0611, E0611
+from src.cpyquickhelper.numbers.cbenchmark_dot import measure_scenario_C, measure_scenario_D  # pylint: disable=W0611, E0611
+from src.cpyquickhelper.numbers.cbenchmark_dot import measure_scenario_E, measure_scenario_F  # pylint: disable=W0611, E0611
+from src.cpyquickhelper.numbers.cbenchmark_dot import measure_scenario_G, measure_scenario_H  # pylint: disable=W0611, E0611
+from src.cpyquickhelper.numbers.cbenchmark_dot import measure_scenario_I, measure_scenario_J  # pylint: disable=W0611, E0611
+from src.cpyquickhelper.numbers.cbenchmark_dot import vector_dot_product, empty_vector_dot_product  # pylint: disable=W0611, E0611
+from src.cpyquickhelper.numbers.cbenchmark_dot import vector_dot_product16, vector_dot_product16_sse  # pylint: disable=W0611, E0611
+from src.cpyquickhelper.numbers.cbenchmark_dot import vector_dot_product16_nofcall  # pylint: disable=W0611, E0611
+from src.cpyquickhelper.numbers.cbenchmark_dot import vector_dot_product16_avx512, get_simd_available_option  # pylint: disable=W0611, E0611
 
 
-class TestCBenchmark(ExtTestCase):
+class TestCBenchmarkDot(ExtTestCase):
 
     funcs = [(k, v) for k, v in globals().copy().items()
              if k.startswith("measure_scenario")]

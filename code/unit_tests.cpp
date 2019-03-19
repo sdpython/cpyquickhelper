@@ -9,7 +9,7 @@
 #include <vector>
 #include "unit_tests.h"
 #include "weighted_number.h"
-#include "cbenchmark.h"
+#include "cbenchmark_dot.h"
 
 void ASSERT_EQUAL(double a, double b)
 {

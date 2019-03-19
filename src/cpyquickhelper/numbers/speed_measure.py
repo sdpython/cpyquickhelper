@@ -56,10 +56,10 @@ def _fcts():
     Returns functions to measure.
     """
     import numpy
-    from .cbenchmark import vector_dot_product  # pylint: disable=E0611
-    from .cbenchmark import vector_dot_product16  # pylint: disable=E0611
-    from .cbenchmark import vector_dot_product16_nofcall  # pylint: disable=E0611
-    from .cbenchmark import vector_dot_product16_sse  # pylint: disable=E0611
+    from .cbenchmark_dot import vector_dot_product  # pylint: disable=E0611
+    from .cbenchmark_dot import vector_dot_product16  # pylint: disable=E0611
+    from .cbenchmark_dot import vector_dot_product16_nofcall  # pylint: disable=E0611
+    from .cbenchmark_dot import vector_dot_product16_sse  # pylint: disable=E0611
 
     def simple_dot(values):
         return numpy.dot(values, values)

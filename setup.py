@@ -221,9 +221,9 @@ if not r:
                             ],
                             language='c++')
 
-    ext_benchmark = Extension('cpyquickhelper.numbers.cbenchmark',
+    ext_benchmark = Extension('cpyquickhelper.numbers.cbenchmark_dot',
                               [os.path.join(
-                                  root, 'src/cpyquickhelper/numbers/cbenchmark.cpp')],
+                                  root, 'src/cpyquickhelper/numbers/cbenchmark_dot.cpp')],
                               extra_compile_args=extra_compile_args_numbers,
                               include_dirs=[
                                   # Path to pybind11 headers
