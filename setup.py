@@ -181,18 +181,23 @@ if not r:
         libraries_thread = ['kernel32']
         extra_compile_args_thread = None
         extra_compile_args_numbers = ['/EHsc', '/O2', '/Gy']
+        extra_compile_args_bench = extra_compile_args_numbers.copy()
     elif sys.platform.startswith("darwin"):
         libraries_thread = None
         extra_compile_args_thread = ['-lpthread', '-stdlib=libc++', '-std=c++11',
                                      '-mmacosx-version-min=10.7']
         extra_compile_args_numbers = ['-stdlib=libc++', '-mmacosx-version-min=10.7',
                                       '-std=c++11']
+        extra_compile_args_bench = extra_compile_args_numbers.copy()
+        extra_compile_args_bench.append('-fpermissive')
     else:
         libraries_thread = None
         extra_compile_args_thread = ['-lpthread', '-std=c++11']
         # option -mavx512f enable AVX 512 instructions
         # see https://blog.qiqitori.com/?p=390
         extra_compile_args_numbers = ['-std=c++11']  # , '-o2', '-mavx512f']
+        extra_compile_args_bench = extra_compile_args_numbers.copy()
+        extra_compile_args_bench.append('-fpermissive')
 
     # extensions
 
@@ -239,7 +244,7 @@ if not r:
     ext_benchmark_dot = Extension('cpyquickhelper.numbers.cbenchmark_dot',
                                   [os.path.join(
                                       root, 'src/cpyquickhelper/numbers/cbenchmark_dot.cpp')],
-                                  extra_compile_args=extra_compile_args_numbers,
+                                  extra_compile_args=extra_compile_args_bench,
                                   include_dirs=[
                                       # Path to pybind11 headers
                                       get_pybind_include(),
