@@ -44,7 +44,7 @@
 
         from pandas import DataFrame, Series
         from cpyquickhelper.numbers.weighted_number import WeightedDouble
-        from cpyquickhelper.numbers.weighted_dataframe WeightedArray
+        from cpyquickhelper.numbers.weighted_dataframe import WeightedArray
 
         n1 = WeightedDouble(1, 1)
         n2 = WeightedDouble(3, 2)

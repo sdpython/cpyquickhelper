@@ -7,10 +7,12 @@
 
     I discovered than :epkg:`Pythran` was now a possible
     backend for :epkg:`Cython`:
-    `Pythran as a Numpy backend <https://cython.readthedocs.io/en/latest/src/userguide/numpy_pythran.html>`_.
+    `Pythran as a Numpy backend
+    <https://cython.readthedocs.io/en/latest/src/userguide/numpy_pythran.html>`_.
     On one benchmark, it increases the speed by 2. I recommend the reading of
     the following article:
-    `Optimizing your code with NumPy, Cython, pythran and numba <https://flothesof.github.io/optimizing-python-code-numpy-cython-pythran-numba.html>`_
+    `Optimizing your code with NumPy, Cython, pythran and numba
+    <https://flothesof.github.io/optimizing-python-code-numpy-cython-pythran-numba.html>`_
     which instigates the performance brought by the four
     following tool and gives some hints on how to write
     efficient code with these tools:
