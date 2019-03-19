@@ -45,7 +45,7 @@ class TestCBenchmarkDot(ExtTestCase):
 
     def a_test_benchmark(self, label, values, th, repeat=5, number=10):
         rows = []
-        for _, v in TestCBenchmark.funcs:
+        for _, v in TestCBenchmarkDot.funcs:
             exe = v(values, th, repeat, number)
             d = exe.todict()
             d['doc'] = v.__doc__.split('``')[1]

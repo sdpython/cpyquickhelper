@@ -19,7 +19,6 @@
 namespace py = pybind11;
 #endif
 
-
 template<typename DTYPE>
 class FunctionMeasureVectorCount : FunctionMeasure
 {
@@ -530,6 +529,7 @@ float vector_dot_product16_avx512(py::array_t<float> v1, py::array_t<float> v2)
 // get_simd_available_option
 /////////////////////
 
+
 std::string get_simd_available_option()
 {
     std::string message = "";
@@ -598,6 +598,36 @@ std::string get_simd_available_option()
 
 #ifndef SKIP_PYTHON
 
+// See https://github.com/pybind/pybind11/issues/616.
+// Required to use ExecutionStat defined in cbenchmark.
+template <> struct py::detail::type_caster<ExecutionStat> {
+    PYBIND11_TYPE_CASTER(ExecutionStat, _("ExecutionStat"));
+
+    bool load(handle src, bool) {
+        if (!src) return false;
+        value.number = src.attr("number").cast<int>();
+        value.repeat = src.attr("repeat").cast<int>();
+        value.average = src.attr("average").cast<double>();
+        value.deviation = src.attr("deviation").cast<double>();
+        value.deviation = src.attr("deviation").cast<double>();
+        value.min_exec = src.attr("min_exec").cast<double>();
+        value.max_exec = src.attr("max_exec").cast<double>();
+        return true;
+    }
+
+    static handle cast(ExecutionStat v, return_value_policy /*policy*/, handle /*parent*/) {
+        py::object tv_py = py::module::import("cpyquickhelper.numbers.cbenchmark").attr("ExecutionStat")();
+        tv_py.attr("number") = py::cast(v.number);
+        tv_py.attr("repeat") = py::cast(v.repeat);
+        tv_py.attr("average") = py::cast(v.average);
+        tv_py.attr("deviation") = py::cast(v.deviation);
+        tv_py.attr("min_exec") = py::cast(v.min_exec);
+        tv_py.attr("max_exec") = py::cast(v.max_exec);
+        return tv_py.release();
+    }
+};
+
+
 PYBIND11_MODULE(cbenchmark_dot, m) {
 	m.doc() =
     #if defined(__APPLE__)
@@ -607,37 +637,7 @@ PYBIND11_MODULE(cbenchmark_dot, m) {
 also implemented in C.)pbdoc"
     #endif
     ;
-
-    py::class_<ExecutionStat>(m, "ExecutionStat", 
-        "Holds results to compare execution time of functions.")
-        .def(py::init<>())
-        .def_readwrite("number", &ExecutionStat::number, "number of executions being measured")
-        .def_readwrite("repeat", &ExecutionStat::repeat, "number of times the experiment is repeated")
-        .def_readwrite("average", &ExecutionStat::average, "average processing time")
-        .def_readwrite("deviation", &ExecutionStat::deviation, "standard deviation")
-        .def_readwrite("min_exec", &ExecutionStat::min_exec, "minimum execution time")
-        .def_readwrite("max_exec", &ExecutionStat::max_exec, "maximum execution time")
-        .def("__str__", [](const ExecutionStat& report) -> std::string {
-            char buffer[1000];
-            sprintf(buffer, "%1.3gs (+/- %1.3g) in [%1.3g, %1.3g] N=%d rep=%d",
-                    report.average, report.deviation,
-                    report.min_exec, report.max_exec,
-                    report.number, report.repeat);
-            return buffer;
-            },
-            "usual operator")
-        .def("todict", [](const ExecutionStat& report) -> std::map<std::string, double> {
-            std::map<std::string, double> res;
-            res["average"] = report.average;
-            res["deviation"] = report.deviation;
-            res["min_exec"] = report.min_exec;
-            res["max_exec"] = report.max_exec;
-            res["number"] = report.number;
-            res["repeat"] = report.repeat;
-            return res;
-        }, "Converts the structure into a dictionary.")
-        ;
-
+    
     CBENCHMARK_ADDFUNC(A, "Measure C++ implementation. Loop on ``if (values[i] >= th) ++nb;``");
     CBENCHMARK_ADDFUNC(B, "Measure C++ implementation. Loop on ``if (*it >= th) ++nb;``");
     CBENCHMARK_ADDFUNC(C, "Measure C++ implementation. Loop on ``if (*it >= th) nb++;``");

@@ -194,6 +194,8 @@ if not r:
         # see https://blog.qiqitori.com/?p=390
         extra_compile_args_numbers = ['-std=c++11']  # , '-o2', '-mavx512f']
 
+    # extensions
+
     ext_thread = Extension('cpyquickhelper.parallel.threader',
                            [os.path.join(root, 'src/cpyquickhelper/parallel/threaderc.cpp'),
                             os.path.join(root, 'src/cpyquickhelper/parallel/threader.cpp')],
@@ -221,9 +223,9 @@ if not r:
                             ],
                             language='c++')
 
-    ext_benchmark = Extension('cpyquickhelper.numbers.cbenchmark_dot',
+    ext_benchmark = Extension('cpyquickhelper.numbers.cbenchmark',
                               [os.path.join(
-                                  root, 'src/cpyquickhelper/numbers/cbenchmark_dot.cpp')],
+                                  root, 'src/cpyquickhelper/numbers/cbenchmark.cpp')],
                               extra_compile_args=extra_compile_args_numbers,
                               include_dirs=[
                                   # Path to pybind11 headers
@@ -234,9 +236,25 @@ if not r:
                               ],
                               language='c++')
 
+    ext_benchmark_dot = Extension('cpyquickhelper.numbers.cbenchmark_dot',
+                                  [os.path.join(
+                                      root, 'src/cpyquickhelper/numbers/cbenchmark_dot.cpp')],
+                                  extra_compile_args=extra_compile_args_numbers,
+                                  include_dirs=[
+                                      # Path to pybind11 headers
+                                      get_pybind_include(),
+                                      get_pybind_include(user=True),
+                                      os.path.join(
+                                          root, 'src/cpyquickhelper/numbers')
+                                  ],
+                                  language='c++')
+
+    # setup
+
     setup(
         name=project_var_name,
-        ext_modules=[ext_thread, ext_stdhelper, ext_numbers, ext_benchmark],
+        ext_modules=[ext_thread, ext_stdhelper, ext_numbers,
+                     ext_benchmark, ext_benchmark_dot],
         version='%s%s' % (sversion, subversion),
         author='Xavier Dupré',
         author_email='xavier.dupre@gmail.com',

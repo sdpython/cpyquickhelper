@@ -24,7 +24,8 @@ except ImportError:
         sys.path.append(path)
     import src
 
-from src.cpyquickhelper.numbers import WeightedDouble, WeightedFloat, WeightedSeriesDtype
+from src.cpyquickhelper.numbers.weighted_number import WeightedDouble, WeightedFloat  # pylint: disable=E0611
+from src.cpyquickhelper.numbers.weighted_dataframe import WeightedSeriesDtype
 
 
 class TestWeightedDouble(ExtTestCase):

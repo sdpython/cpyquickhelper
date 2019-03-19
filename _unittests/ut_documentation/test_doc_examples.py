@@ -23,7 +23,8 @@ except ImportError:
         sys.path.append(path)
     import src
 
-from src.cpyquickhelper.numbers import WeightedDouble, WeightedArray
+from src.cpyquickhelper.numbers.weighted_number import WeightedDouble
+from src.cpyquickhelper.numbers.weighted_dataframe import WeightedArray
 
 
 class TestDocumentationExample(ExtTestCase):
