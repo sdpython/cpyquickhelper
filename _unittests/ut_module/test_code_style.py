@@ -55,6 +55,7 @@ class TestCodeStyle(ExtTestCase):
                          "imported as skip_",
                          "Unused import src",
                          "No name 'cprint' in module 'src.cpyquickhelper.io.stdchelper'",
+                         "test_weighted_dataframe.py:29: E0611",
                          ])
 
 

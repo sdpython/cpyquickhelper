@@ -15,7 +15,8 @@
         :showcode:
 
         from pandas import DataFrame, Series
-        from cpyquickhelper.numbers import WeightedDouble, WeightedSeries
+        from cpyquickhelper.numbers.weighted_number import WeightedDouble
+        from cpyquickhelper.numbers.weighted_dataframe import WeightedSeries
 
         n1 = WeightedDouble(1, 1)
         n2 = WeightedDouble(3, 2)
@@ -42,7 +43,8 @@
         :showcode:
 
         from pandas import DataFrame, Series
-        from cpyquickhelper.numbers import WeightedDouble, WeightedArray
+        from cpyquickhelper.numbers.weighted_number import WeightedDouble
+        from cpyquickhelper.numbers.weighted_dataframe WeightedArray
 
         n1 = WeightedDouble(1, 1)
         n2 = WeightedDouble(3, 2)

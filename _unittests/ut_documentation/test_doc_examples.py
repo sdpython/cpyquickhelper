@@ -23,7 +23,7 @@ except ImportError:
         sys.path.append(path)
     import src
 
-from src.cpyquickhelper.numbers.weighted_number import WeightedDouble
+from src.cpyquickhelper.numbers.weighted_number import WeightedDouble  # pylint: disable=E0611
 from src.cpyquickhelper.numbers.weighted_dataframe import WeightedArray
 
 

@@ -597,6 +597,11 @@ std::string get_simd_available_option()
 
 
 #ifndef SKIP_PYTHON
+#ifdef _MSC_VER
+#define CBENCHMARK_MODULE_NAME "cpyquickhelper.numbers.cbenchmark"
+#else
+#define CBENCHMARK_MODULE_NAME "cbenchmark"
+#endif
 
 // See https://github.com/pybind/pybind11/issues/616.
 // Required to use ExecutionStat defined in cbenchmark.
@@ -615,8 +620,8 @@ template <> struct py::detail::type_caster<ExecutionStat> {
         return true;
     }
 
-    static handle cast(ExecutionStat v, return_value_policy /*policy*/, handle /*parent*/) {
-        py::object tv_py = py::module::import("cpyquickhelper.numbers.cbenchmark").attr("ExecutionStat")();
+    static handle cast(ExecutionStat v, return_value_policy /*policy*/, handle /*parent*/) {        
+        py::object tv_py = py::module::import(CBENCHMARK_MODULE_NAME).attr("ExecutionStat")();
         tv_py.attr("number") = py::cast(v.number);
         tv_py.attr("repeat") = py::cast(v.repeat);
         tv_py.attr("average") = py::cast(v.average);
