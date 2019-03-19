@@ -30,10 +30,6 @@
     :alt: GitHub Issues
     :target: https://github.com/sdpython/cpyquickhelper/issues
 
-.. image:: https://badge.waffle.io/sdpython/cpyquickhelper.png?label=to%20do&title=to%20do
-    :alt: Waffle
-    :target: https://waffle.io/cpyquickhelper/cpyquickhelper
-
 .. image:: http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/_images/nbcov.png
     :target: http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
