@@ -5,6 +5,7 @@
 #include <vector>
 #include <thread>
 #include <iterator>
+#include <iostream>
 #include "repeat_fct.h"
 
 #ifndef SKIP_PYTHON
