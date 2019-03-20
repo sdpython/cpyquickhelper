@@ -26,9 +26,16 @@ The second example exposes a function doing a benchmark comparing
 the execution time of a couple of C++ function. The difficulty is
 the measure cannot happen in Python as the C++ execution time
 is not significant compare to the time spent in Python.
-Results are stored in a C++ classes exposes in Python.
+Results are stored in a C++ classes exposes in :epjg:`Python`.
 
 .. autosignature:: cpyquickhelper.numbers.cbenchmark.ExecutionStat
+
+Next function gives more information what the current
+processor assuming the package was compiled on
+the machine it was installed. The result depends on
+the compiler defined constants.
+
+.. autosignature:: cpyquickhelper.numbers.cbenchmark.get_simd_available_option
 
 The function to be tested can be found in
 `cbenchmark.cpp <https://github.com/sdpython/cpyquickhelper/blob/master/src/cpyquickhelper/numbers/cbenchmark.cpp>`_ and
@@ -76,7 +83,7 @@ And it is replaced by the following scenarios:
 The last implemented is taken from
 `Checking whether a number is positive or negative using bitwise operators <https://stackoverflow.com/questions/3779202/checking-whether-a-number-is-positive-or-negative-using-bitwise-operators>`_.
 
-.. autosignature:: cpyquickhelper.numbers.cbenchmark.measure_scenario_I
+.. autosignature:: cpyquickhelper.numbers.cbenchmark_dot.measure_scenario_I
 
 The other function implements different *dot* products between two
 vectors:
@@ -87,7 +94,7 @@ The second function does the same dot product but while computing
 the dot product, if the remaining size is more than 16,
 it calls a function which does the 16 product in one sequence.
 
-.. autosignature:: cpyquickhelper.numbers.cbenchmark.vector_dot_product16
+.. autosignature:: cpyquickhelper.numbers.cbenchmark_dot.vector_dot_product16
 
 The following use :epkg:`SSE` instructions.
 See documentation on `Intel website <https://software.intel.com/sites/landingpage/IntrinsicsGuide/#expand=4895,152,3895,3886,3877,5554,5559,5554,152,127,3895,127&text=_mm_add_ps>`_.
@@ -96,7 +103,7 @@ See documentation on `Intel website <https://software.intel.com/sites/landingpag
 
 The next one is using AVX instruction with 512 bits.
 
-.. autosignature:: cpyquickhelper.numbers.vector_dot_product16_avx512
+.. autosignature:: cpyquickhelper.numbers.cbenchmark_dot.vector_dot_product16_avx512
 
 The last function is used to measure the time spent in the python
 binding, it is the same signature as the dot product but does nothing.
@@ -112,3 +119,22 @@ once the module was compiled.
 .. autosignature:: cpyquickhelper.numbers.speed_measure.check_speed
 
 .. autosignature:: cpyquickhelper.numbers.speed_measure.measure_time
+
+Benchmark sum accumulator
++++++++++++++++++++++++++
+
+The following benchmark measures the differences while
+computing a sum of a float vector with a double or float
+accumulator. The two following functions implements the
+sum in C++.
+
+.. autosignature:: cpyquickhelper.numbers.cbenchmark_sum_type.vector_float_sum
+
+.. autosignature:: cpyquickhelper.numbers.cbenchmark_sum_type.vector_double_sum
+
+The two next functions runs the benchmark in C, the measures does not
+include the :epkg:`python` binding.
+
+.. autosignature:: cpyquickhelper.numbers.cbenchmark_sum_type.measure_scenario_Float
+
+.. autosignature:: cpyquickhelper.numbers.cbenchmark_sum_type.measure_scenario_Double

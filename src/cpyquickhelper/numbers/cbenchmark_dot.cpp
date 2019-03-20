@@ -19,194 +19,171 @@
 namespace py = pybind11;
 #endif
 
-template<typename DTYPE>
-class FunctionMeasureVectorCount : FunctionMeasure
-{
-    protected:
-
-    std::vector<DTYPE> values;
-    DTYPE th;
-
-    public:
-
-    FunctionMeasureVectorCount(const std::vector<DTYPE> &v, DTYPE t) : values(v), th(t)
-    {
-        if (this->values.size() == 0)
-            throw std::runtime_error("Array to process must not be empty.");
-    }
-};
-
 
 template<typename DTYPE>
-class FunctionMeasureVectorCountSleep : FunctionMeasureVectorCount<DTYPE>
+class FunctionMeasureVectorCountSleep : FunctionMeasureVectorThreshold<DTYPE>
 {
     public:
     FunctionMeasureVectorCountSleep(const std::vector<DTYPE> &v, DTYPE t) :
-        FunctionMeasureVectorCount<DTYPE>(v, t) { }
+        FunctionMeasureVectorThreshold<DTYPE>(v, t) { }
     int run(int i)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(this->th));
+        std::this_thread::sleep_for(std::chrono::milliseconds((int)this->th));
         return 0;
     }
 };
 
-#define REPEAT_INST(INST) {\
-    INST INST INST INST INST\
-    INST INST INST INST INST\
-    }
-
-
 template<typename DTYPE>
-class FunctionMeasureVectorCountA : FunctionMeasureVectorCount<DTYPE>
+class FunctionMeasureVectorCountA : FunctionMeasureVectorThreshold<DTYPE>
 {
     public:
     FunctionMeasureVectorCountA(const std::vector<DTYPE> &v, DTYPE t) :
-        FunctionMeasureVectorCount<DTYPE>(v, t) { }
+        FunctionMeasureVectorThreshold<DTYPE>(v, t) { }
     int run(int x)
     {
         int nb = x % 1; // == 0 but otherwise the compiler detects the
                         // the code does not change depending on x
                         // and it caches the results.
         for(int i = 0; i < this->values.size(); ++i)
-            REPEAT_INST(if (this->values[i] >= this->th) ++nb;)
+            REPEAT_INST10(if (this->values[i] >= this->th) ++nb;)
         return nb;
     }
 };
 
 
 template<typename DTYPE>
-class FunctionMeasureVectorCountB : FunctionMeasureVectorCount<DTYPE>
+class FunctionMeasureVectorCountB : FunctionMeasureVectorThreshold<DTYPE>
 {
     public:
     FunctionMeasureVectorCountB(const std::vector<DTYPE> &v, DTYPE t) :
-        FunctionMeasureVectorCount<DTYPE>(v, t) { }
+        FunctionMeasureVectorThreshold<DTYPE>(v, t) { }
     int run(int x)
     {
         int nb = x % 1;
         for(auto it = this->values.begin(); it != this->values.end(); ++it)
-            REPEAT_INST(if (*it >= this->th) ++nb;)
+            REPEAT_INST10(if (*it >= this->th) ++nb;)
         return nb;
     }
 };
 
 template<typename DTYPE>
-class FunctionMeasureVectorCountC : FunctionMeasureVectorCount<DTYPE>
+class FunctionMeasureVectorCountC : FunctionMeasureVectorThreshold<DTYPE>
 {
     public:
     FunctionMeasureVectorCountC(const std::vector<DTYPE> &v, DTYPE t) :
-        FunctionMeasureVectorCount<DTYPE>(v, t) { }
+        FunctionMeasureVectorThreshold<DTYPE>(v, t) { }
     int run(int x)
     {
         int nb = x % 1;
         for(auto it = this->values.begin(); it != this->values.end(); ++it)
-            REPEAT_INST(if (*it >= this->th) nb++;)
+            REPEAT_INST10(if (*it >= this->th) nb++;)
         return nb;
     }
 };
 
 template<typename DTYPE>
-class FunctionMeasureVectorCountD : FunctionMeasureVectorCount<DTYPE>
+class FunctionMeasureVectorCountD : FunctionMeasureVectorThreshold<DTYPE>
 {
     public:
     FunctionMeasureVectorCountD(const std::vector<DTYPE> &v, DTYPE t) :
-        FunctionMeasureVectorCount<DTYPE>(v, t) { }
+        FunctionMeasureVectorThreshold<DTYPE>(v, t) { }
     int run(int x)
     {
         int nb = x % 1;
         for(auto it = this->values.begin(); it != this->values.end(); ++it)
-            REPEAT_INST(nb += *it >= this->th ? 1 : 0;)
+            REPEAT_INST10(nb += *it >= this->th ? 1 : 0;)
         return nb;
     }
 };
 
 template<typename DTYPE>
-class FunctionMeasureVectorCountE : FunctionMeasureVectorCount<DTYPE>
+class FunctionMeasureVectorCountE : FunctionMeasureVectorThreshold<DTYPE>
 {
     public:
     FunctionMeasureVectorCountE(const std::vector<DTYPE> &v, DTYPE t) :
-        FunctionMeasureVectorCount<DTYPE>(v, t) { }
+        FunctionMeasureVectorThreshold<DTYPE>(v, t) { }
     int run(int x)
     {
         int nb = x % 1;
         for(auto it = this->values.begin(); it != this->values.end(); ++it)
-            REPEAT_INST(if (*it >= this->th) nb += 1;)
+            REPEAT_INST10(if (*it >= this->th) nb += 1;)
         return nb;
     }
 };
 
 template<typename DTYPE>
-class FunctionMeasureVectorCountF : FunctionMeasureVectorCount<DTYPE>
+class FunctionMeasureVectorCountF : FunctionMeasureVectorThreshold<DTYPE>
 {
     public:
     FunctionMeasureVectorCountF(const std::vector<DTYPE> &v, DTYPE t) :
-        FunctionMeasureVectorCount<DTYPE>(v, t) { }
+        FunctionMeasureVectorThreshold<DTYPE>(v, t) { }
     int run(int x)
     {
         int nb = x % 1;
         for(auto it = this->values.begin(); it != this->values.end(); ++it)
-            REPEAT_INST(nb += (*it - this->th) >= 0 ? 1 : 0;)
+            REPEAT_INST10(nb += (*it - this->th) >= 0 ? 1 : 0;)
         return nb;
     }
 };
 
 template<typename DTYPE>
-class FunctionMeasureVectorCountG : FunctionMeasureVectorCount<DTYPE>
+class FunctionMeasureVectorCountG : FunctionMeasureVectorThreshold<DTYPE>
 {
     public:
     FunctionMeasureVectorCountG(const std::vector<DTYPE> &v, DTYPE t) :
-        FunctionMeasureVectorCount<DTYPE>(v, t) { }
+        FunctionMeasureVectorThreshold<DTYPE>(v, t) { }
     int run(int x)
     {
         int nb = x % 1;
         for(auto it = this->values.begin(); it != this->values.end(); ++it)
-            REPEAT_INST(nb += (*it - this->th) < 0 ? 1 : 0;)
+            REPEAT_INST10(nb += (*it - this->th) < 0 ? 1 : 0;)
         return (int)std::distance(this->values.begin(), this->values.end()) - nb;
     }
 };
 
 template<typename DTYPE>
-class FunctionMeasureVectorCountH : FunctionMeasureVectorCount<DTYPE>
+class FunctionMeasureVectorCountH : FunctionMeasureVectorThreshold<DTYPE>
 {
     public:
     FunctionMeasureVectorCountH(const std::vector<DTYPE> &v, DTYPE t) :
-        FunctionMeasureVectorCount<DTYPE>(v, t) { }
+        FunctionMeasureVectorThreshold<DTYPE>(v, t) { }
     int run(int x)
     {
         int nb = x % 1;
         for(auto it = this->values.begin(); it != this->values.end(); ++it)
-            REPEAT_INST(nb += *it < this->th ? 1 : 0;)
+            REPEAT_INST10(nb += *it < this->th ? 1 : 0;)
         return (int)std::distance(this->values.begin(), this->values.end()) - nb;
     }
 };
 
 template<typename DTYPE>
-class FunctionMeasureVectorCountI : FunctionMeasureVectorCount<DTYPE>
+class FunctionMeasureVectorCountI : FunctionMeasureVectorThreshold<DTYPE>
 {
     public:
     FunctionMeasureVectorCountI(const std::vector<DTYPE> &v, DTYPE t) :
-        FunctionMeasureVectorCount<DTYPE>(v, t) { }
+        FunctionMeasureVectorThreshold<DTYPE>(v, t) { }
     int run(int x)
     {
         int nb = x % 1;
         for(auto it = this->values.begin(); it != this->values.end(); ++it)
-            REPEAT_INST(nb += 1 ^ ((unsigned int)(*it - this->th) >> (sizeof(int) * CHAR_BIT - 1));)
+            REPEAT_INST10(nb += 1 ^ ((unsigned int)(*it - this->th) >> (sizeof(int) * CHAR_BIT - 1));)
         return nb;
     }
 };
 
 template<typename DTYPE>
-class FunctionMeasureVectorCountJ : FunctionMeasureVectorCount<DTYPE>
+class FunctionMeasureVectorCountJ : FunctionMeasureVectorThreshold<DTYPE>
 {
     public:
     FunctionMeasureVectorCountJ(const std::vector<DTYPE> &v, DTYPE t) :
-        FunctionMeasureVectorCount<DTYPE>(v, t) { }
+        FunctionMeasureVectorThreshold<DTYPE>(v, t) { }
     int run(int x)
     {
         int nb = x % 1; // == 0 but otherwise the compiler detects the
                         // the code does not change depending on x
                         // and it caches the results.
         for(int i = 0; i < this->values.size(); ++i)
-            REPEAT_INST(nb += this->values[i] >= this->th ? 1 : 0;)
+            REPEAT_INST10(nb += this->values[i] >= this->th ? 1 : 0;)
         return nb;
     }
 };
@@ -218,12 +195,12 @@ class FunctionMeasureVectorCountJ : FunctionMeasureVectorCount<DTYPE>
 
 #if defined(_MSC_VER)
 #define STRING_CONCAT(A, B) A ## B
-#define CBENCHMARK_ADDFUNC(suf, C)\
+#define CBENCHMARK_ADDFUNC(suf, C, DTYPE)\
     m.def(STRING_CONCAT("measure_scenario_", #suf), \
-            [](const std::vector<int> &values, int th, int repeat=100, int number=1000, bool verbose=false) -> ExecutionStat { \
+            [](const std::vector<DTYPE> &values, DTYPE th, int repeat=100, int number=1000, bool verbose=false) -> ExecutionStat { \
                 ExecutionStat res; \
-                FunctionMeasureVectorCount##suf<int> fct(values, th); \
-                repeat_execution<FunctionMeasureVectorCount##suf<int>>(fct, repeat, number, res, verbose); \
+                FunctionMeasureVectorCount##suf<DTYPE> fct(values, th); \
+                repeat_execution<FunctionMeasureVectorCount##suf<DTYPE>>(fct, repeat, number, res, verbose); \
                 return res; \
             }, \
             C, \
@@ -232,12 +209,12 @@ class FunctionMeasureVectorCountJ : FunctionMeasureVectorCount<DTYPE>
             py::arg("verbose")=false);
 #else
 #define STRING_CONCAT_GCC(A, B) #A #B
-#define CBENCHMARK_ADDFUNC(suf, C)\
+#define CBENCHMARK_ADDFUNC(suf, C, DTYPE)\
     m.def(STRING_CONCAT_GCC(measure_scenario_, suf), \
-            [](const std::vector<int> &values, int th, int repeat=100, int number=1000, bool verbose=false) -> ExecutionStat { \
+            [](const std::vector<DTYPE> &values, DTYPE th, int repeat=100, int number=1000, bool verbose=false) -> ExecutionStat { \
                 ExecutionStat res; \
-                FunctionMeasureVectorCount##suf<int> fct(values, th); \
-                repeat_execution<FunctionMeasureVectorCount##suf<int>>(fct, repeat, number, res, verbose); \
+                FunctionMeasureVectorCount##suf<DTYPE> fct(values, th); \
+                repeat_execution<FunctionMeasureVectorCount##suf<DTYPE>>(fct, repeat, number, res, verbose); \
                 return res; \
             }, \
             C, \
@@ -525,76 +502,6 @@ float vector_dot_product16_avx512(py::array_t<float> v1, py::array_t<float> v2)
 
 #endif
 
-/////////////////////
-// get_simd_available_option
-/////////////////////
-
-
-std::string get_simd_available_option()
-{
-    std::string message = "";
-    
-#if defined(__SSE__) || (defined(_MSC_VER) && !defined(_M_CEE_PURE))
-    // __SSE__ not defined by Visual Studio.
-    message += " __SSE__";
-#endif
-#if defined(__SSE2__) || (defined(_MSC_VER) && !defined(_M_CEE_PURE))
-    // __SSE2__ not defined by Visual Studio.
-    message += " __SSE2__";
-#endif
-#if defined(__SSE3__) || (defined(_MSC_VER) && !defined(_M_CEE_PURE))
-    // __SSE3__ not defined by Visual Studio.
-    message += " __SSE3__";
-#endif
-#if defined(__SSE4_1__) || (defined(_MSC_VER) && !defined(_M_CEE_PURE))
-    // __SSE4_1__ not defined by Visual Studio.
-    message += " __SSE4_1__";
-#endif
-#if defined(__AVX__)
-    message += " __AVX__";
-#endif
-#if defined(__AVX2__)
-    message += " __AVX2__";
-#endif
-#if defined(__AVX512F__)
-    message += " __AVX512F__";
-#endif
-#if defined(__AVX512DQ__)
-    message += " __AVX512DQ__";
-#endif
-#if defined(__AVX512PF__)
-    message += " __AVX512PF__";
-#endif
-#if defined(__AVX512ER__)
-    message += " __AVX512ER__";
-#endif
-#if defined(__AVX512CD__)
-    message += " __AVX512CD__";
-#endif
-#if defined(__AVX512BW__)
-    message += " __AVX512BW__";
-#endif
-#if defined(__AVX512VL__)
-    message += " __AVX512VL__";
-#endif
-#if defined(__FMA__)
-    message += " __FMA__";
-#endif
-#if defined(__AVX512IFMA__)
-    message += " __AVX512IFMA__";
-#endif
-#if defined(__F16C__)
-    message += " __F16C__";
-#endif
-#if defined(__ARM_NEON__)
-    message += " __ARM_NEON__";
-#endif
-
-    return message.empty() 
-                ? "No available options." 
-                : (std::string("Available options: ") + message);
-}
-
 
 #ifndef SKIP_PYTHON
 #define CBENCHMARK_MODULE_NAME "cpyquickhelper.numbers.cbenchmark"
@@ -632,24 +539,24 @@ template <> struct py::detail::type_caster<ExecutionStat> {
 PYBIND11_MODULE(cbenchmark_dot, m) {
 	m.doc() =
     #if defined(__APPLE__)
-    "Measures the execution time of functions implemented in C."
+    "Measures the execution time of functions implemented in C and about dot product."
     #else
     R"pbdoc(Measures the execution time of functions implemented in C, the measures are
-also implemented in C.)pbdoc"
+also implemented in C. The functions propose different implementations of the dot product.)pbdoc"
     #endif
     ;
     
-    CBENCHMARK_ADDFUNC(A, "Measure C++ implementation. Loop on ``if (values[i] >= th) ++nb;``");
-    CBENCHMARK_ADDFUNC(B, "Measure C++ implementation. Loop on ``if (*it >= th) ++nb;``");
-    CBENCHMARK_ADDFUNC(C, "Measure C++ implementation. Loop on ``if (*it >= th) nb++;``");
-    CBENCHMARK_ADDFUNC(D, "Measure C++ implementation. Loop on ``nb += *it >= th ? 1 : 0;``");
-    CBENCHMARK_ADDFUNC(E, "Measure C++ implementation. Loop on ``if (*it >= th) nb += 1;``");
-    CBENCHMARK_ADDFUNC(F, "Measure C++ implementation. Loop on ``nb += (*it - th) >= 0 ? 1 : 0;``");
-    CBENCHMARK_ADDFUNC(G, "Measure C++ implementation. Loop on ``nb += (*it - th) < 0 ? 1 : 0;``");
-    CBENCHMARK_ADDFUNC(H, "Measure C++ implementation. Loop on ``nb += *it < th ? 1 : 0;``");
-    CBENCHMARK_ADDFUNC(I, "Measure C++ implementation. Loop on ``nb += 1 ^ ((unsigned int)(*it) >> (sizeof(int) * CHAR_BIT - 1));``");
-    CBENCHMARK_ADDFUNC(J, "Measure C++ implementation. Loop on ``nb += values[i] >= th ? 1 : 0;``");
-    CBENCHMARK_ADDFUNC(Sleep, "Measure C++ implementation. Loop on ``sleep``");
+    CBENCHMARK_ADDFUNC(A, "Measure C++ implementation. Loop on ``if (values[i] >= th) ++nb;``", float);
+    CBENCHMARK_ADDFUNC(B, "Measure C++ implementation. Loop on ``if (*it >= th) ++nb;``", float);
+    CBENCHMARK_ADDFUNC(C, "Measure C++ implementation. Loop on ``if (*it >= th) nb++;``", float);
+    CBENCHMARK_ADDFUNC(D, "Measure C++ implementation. Loop on ``nb += *it >= th ? 1 : 0;``", float);
+    CBENCHMARK_ADDFUNC(E, "Measure C++ implementation. Loop on ``if (*it >= th) nb += 1;``", float);
+    CBENCHMARK_ADDFUNC(F, "Measure C++ implementation. Loop on ``nb += (*it - th) >= 0 ? 1 : 0;``", float);
+    CBENCHMARK_ADDFUNC(G, "Measure C++ implementation. Loop on ``nb += (*it - th) < 0 ? 1 : 0;``", float);
+    CBENCHMARK_ADDFUNC(H, "Measure C++ implementation. Loop on ``nb += *it < th ? 1 : 0;``", float);
+    CBENCHMARK_ADDFUNC(I, "Measure C++ implementation. Loop on ``nb += 1 ^ ((unsigned int)(*it) >> (sizeof(int) * CHAR_BIT - 1));``", float);
+    CBENCHMARK_ADDFUNC(J, "Measure C++ implementation. Loop on ``nb += values[i] >= th ? 1 : 0;``", float);
+    CBENCHMARK_ADDFUNC(Sleep, "Measure C++ implementation. Loop on ``sleep``", float);
         
     m.def("vector_dot_product", &vector_dot_product,
           "Computes a dot product in C++ with vectors of floats.");
@@ -669,23 +576,6 @@ also implemented in C.)pbdoc"
     m.def("vector_dot_product16_avx512", &vector_dot_product16_sse,
           "Computes a dot product in C++ with vectors of floats. Goes 16 by 16. Use SSE instructions because ``__AVX512F__`` is not defined.");
 #endif
-
-    m.def ("get_simd_available_option", &get_simd_available_option,
-        #if defined(__APPLE__)
-           "Returns the available compilation options for SIMD."
-        #else
-            R"pbdoc(Returns the available compilation options for SIMD.
-It can simply be called with the following example:
-
-.. runpython::
-    :showcode:
-    
-    from cpyquickhelper.numbers.cbenchmark_dot import get_simd_available_option
-    print(get_simd_available_option())
-)pbdoc"
-        #endif
-    );
-
 }
 
 #endif

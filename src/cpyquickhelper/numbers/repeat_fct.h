@@ -10,6 +10,11 @@
 #include <vector>
 #include <cmath>
 
+#define REPEAT_INST10(INST) {\
+    INST INST INST INST INST\
+    INST INST INST INST INST\
+    }
+
 /**
 * Pointer on a function which takes nothing and returns nothing.
 */
@@ -37,6 +42,41 @@ class FunctionMeasure
         * Function to measure.
         */
         int run(int i) { throw std::runtime_error("It should be overwritten."); }
+};
+
+template<typename DTYPE>
+class FunctionMeasureVector : FunctionMeasure
+{
+    protected:
+
+    std::vector<DTYPE> values;
+
+    public:
+
+    FunctionMeasureVector(const std::vector<DTYPE> &v) : values(v)
+    {
+        // std::this_thread::sleep_for(std::chrono::milliseconds(this->th));
+        if (this->values.size() == 0)
+            throw std::runtime_error("Array to process must not be empty.");
+    }
+};
+
+template<typename DTYPE>
+class FunctionMeasureVectorThreshold : FunctionMeasure
+{
+    protected:
+
+    std::vector<DTYPE> values;
+    DTYPE th;
+
+    public:
+
+    FunctionMeasureVectorThreshold(const std::vector<DTYPE> &v, DTYPE t) : values(v), th(t)
+    {
+        // std::this_thread::sleep_for(std::chrono::milliseconds(this->th));
+        if (this->values.size() == 0)
+            throw std::runtime_error("Array to process must not be empty.");
+    }
 };
 
 /**
@@ -87,8 +127,8 @@ void repeat_execution(FCTTYPE& fct, int repeat, int number, ExecutionStat& repor
     }
     report.number = number;
     report.repeat = repeat;
-    report.average /= number;
-    report.deviation /= number;
+    report.average /= (number * repeat);
+    report.deviation /= (number * repeat);
     report.deviation -= report.average * report.average;
     report.deviation = sqrt(report.deviation > 0 ? report.deviation : 0);
 }
