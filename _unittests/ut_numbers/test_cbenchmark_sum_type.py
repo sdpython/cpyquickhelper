@@ -1,5 +1,5 @@
 """
-@brief      test log(time=3s)
+@brief      test log(time=2s)
 """
 
 import unittest
@@ -28,7 +28,7 @@ class TestCBenchmarkSumType(ExtTestCase):
         return rows
 
     def test_vector_sum(self):
-        li = list(range(300000))
+        li = list(range(300))
         random.shuffle(li)
         rows = self.a_test_benchmark("float", li, len(li) // 2)
         df = pandas.DataFrame(rows)
