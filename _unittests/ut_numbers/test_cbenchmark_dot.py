@@ -8,7 +8,6 @@ import numpy
 import pandas
 from pyquickhelper.pycode import ExtTestCase
 from pyquickhelper.loghelper import noLOG
-
 from cpyquickhelper.numbers import check_speed
 from cpyquickhelper.numbers.cbenchmark import get_simd_available_option  # pylint: disable=W0611, E0611
 from cpyquickhelper.numbers.cbenchmark_dot import measure_scenario_A, measure_scenario_B  # pylint: disable=W0611, E0611

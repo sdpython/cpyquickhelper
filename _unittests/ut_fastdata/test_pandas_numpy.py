@@ -7,7 +7,6 @@ import numpy
 import pandas
 from pyquickhelper.loghelper import fLOG
 from pyquickhelper.pycode import ExtTestCase
-
 from cpyquickhelper.fastdata import df2array, df2arrays
 
 

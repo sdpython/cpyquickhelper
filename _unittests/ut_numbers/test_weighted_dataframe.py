@@ -8,7 +8,6 @@ import numpy
 from pandas import DataFrame, Series, concat
 from pandas.core.dtypes.base import ExtensionDtype
 from pyquickhelper.pycode import ExtTestCase
-
 from cpyquickhelper.numbers.weighted_number import WeightedDouble  # pylint: disable=E0611
 from cpyquickhelper.numbers.weighted_dataframe import WeightedSeriesDtype, WeightedArray, WeightedSeries
 

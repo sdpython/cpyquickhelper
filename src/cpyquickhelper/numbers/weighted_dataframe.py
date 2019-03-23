@@ -8,7 +8,7 @@ from pandas import Series
 from pandas.api.extensions import register_series_accessor
 from pandas.arrays import PandasArray
 from pandas.core.arrays.numpy_ import PandasDtype
-from .weighted_number import WeightedDouble
+from .weighted_number import WeightedDouble  # pylint: disable=E0611
 
 
 class WeightedSeriesDtype(PandasDtype):

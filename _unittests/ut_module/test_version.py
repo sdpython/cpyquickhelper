@@ -5,7 +5,6 @@
 import os
 import unittest
 import re
-
 from cpyquickhelper import __version__
 
 

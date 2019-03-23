@@ -9,7 +9,6 @@ from pyquickhelper.pycode import ExtTestCase, skipif_appveyor
 from pyquickhelper.helpgen import rst2html
 from pyquickhelper.sphinxext.import_object_helper import import_any_object
 from pyquickhelper.sphinxext.import_object_helper import import_object
-
 import cpyquickhelper
 from cpyquickhelper.io.stdhelper import capture_output
 from cpyquickhelper.io.stdchelper import cprint  # pylint: disable=E0611

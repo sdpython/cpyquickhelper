@@ -5,7 +5,6 @@
 import unittest
 import numpy
 from pyquickhelper.pycode import ExtTestCase
-
 from cpyquickhelper.numbers import measure_time
 
 

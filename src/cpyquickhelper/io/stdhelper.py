@@ -5,7 +5,7 @@
 from typing import Tuple, Union
 from io import StringIO
 from contextlib import redirect_stdout, redirect_stderr
-from .stdchelper import begin_capture, end_capture, get_capture
+from .stdchelper import begin_capture, end_capture, get_capture  # pylint: disable=E0611
 
 
 def capture_output_c(function_to_call) -> Tuple[bytes, Union[bytes, None]]:

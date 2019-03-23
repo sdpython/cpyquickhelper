@@ -8,7 +8,6 @@ import unittest
 from pyquickhelper.loghelper import fLOG
 from pyquickhelper.pycode import ExtTestCase
 from pyquickhelper.ipythonhelper import test_notebook_execution_coverage
-
 import cpyquickhelper
 
 

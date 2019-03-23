@@ -3,7 +3,7 @@
 @brief Shortcut to *parallel*.
 """
 from threading import Thread
-from .threader import kill_thread
+from .threader import kill_thread  # pylint: disable=E0611
 
 
 class KThread(Thread):

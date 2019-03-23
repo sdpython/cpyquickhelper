@@ -6,7 +6,6 @@
 import unittest
 from pandas import DataFrame, Series
 from pyquickhelper.pycode import ExtTestCase
-
 from cpyquickhelper.numbers.weighted_number import WeightedDouble  # pylint: disable=E0611
 from cpyquickhelper.numbers.weighted_dataframe import WeightedArray
 

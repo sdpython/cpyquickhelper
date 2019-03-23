@@ -5,7 +5,6 @@
 import unittest
 from time import sleep
 from pyquickhelper.loghelper import fLOG
-
 from cpyquickhelper.parallel import KThread
 
 

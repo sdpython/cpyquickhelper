@@ -6,7 +6,6 @@ import unittest
 from inspect import signature, isbuiltin, isclass, ismethod, isfunction, _signature_fromstr, Signature
 from pyquickhelper.pycode import ExtTestCase
 from pyquickhelper.helpgen import rst2html
-
 from cpyquickhelper.numbers.weighted_number import WeightedDouble, WeightedFloat  # pylint: disable=E0611
 from cpyquickhelper.numbers.weighted_dataframe import WeightedSeriesDtype
 
