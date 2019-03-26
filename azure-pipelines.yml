@@ -29,17 +29,21 @@ jobs:
     displayName: 'Install tools'
   - script: pip install -r requirements.txt
     displayName: 'Install Requirements'
-  - script: export PYTHONPATH=src
-    displayName: 'PYTHONPATH=src'
-  - script: python setup.py build_ext --inplace
-    displayName: 'Build package'
-  - script: export
-    displayName: 'export'
-  - script: python -u setup.py unittests
+  - script: |
+      export PYTHONPATH=src
+      python -u setup.py buld_ext --inplace
     displayName: 'Runs Unit Tests'
-  - script: python -u setup.py bdist_wheel
+  - script: |
+      export PYTHONPATH=src
+      python -u setup.py unittests
+    displayName: 'Runs Unit Tests'
+  - script: |
+      export PYTHONPATH=src
+      python -u setup.py bdist_wheel
     displayName: 'Build Package'
-  - script: python -u setup.py build_sphinx
+  - script: |
+      export PYTHONPATH=src
+      python -u setup.py build_sphinx
     displayName: 'Builds Documentation'
   - task: PublishPipelineArtifact@0
     inputs:
@@ -85,15 +89,18 @@ jobs:
     displayName: 'Install pybind11'
   - script: pip install -r requirements.txt
     displayName: 'Install Requirements'
-  - script: export PYTHONPATH=src
-    displayName: 'PYTHONPATH=src'
   - script: |
           export MACOSX_DEPLOYMENT_TARGET=10.13
+          export PYTHONPATH=src
           python setup.py build_ext --inplace
     displayName: 'Build package'
-  - script: python -u setup.py unittests
+  - script: |
+      export PYTHONPATH=src
+      python -u setup.py unittests
     displayName: 'Runs Unit Tests'
-  - script: python -u setup.py bdist_wheel
+  - script: |
+      export PYTHONPATH=src
+      python -u setup.py bdist_wheel
     displayName: 'Build Package'
   - task: PublishPipelineArtifact@0
     inputs:
