@@ -31,7 +31,7 @@ jobs:
     displayName: 'Install Requirements'
   - script: |
       export PYTHONPATH=src
-      python -u setup.py buld_ext --inplace
+      python -u setup.py build_ext --inplace
     displayName: 'Runs Unit Tests'
   - script: |
       export PYTHONPATH=src
