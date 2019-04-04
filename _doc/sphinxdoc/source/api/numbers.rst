@@ -142,4 +142,8 @@ include the :epkg:`python` binding.
 Lapack, Blas
 ++++++++++++
 
-.. autosignature:: cpyquickhelper.numbers.direct_blas_lapack
+.. autosignature:: cpyquickhelper.numbers.direct_blas_lapack.cblas_ddot
+
+.. autosignature:: cpyquickhelper.numbers.direct_blas_lapack.cblas_sdot
+
+.. autosignature:: cpyquickhelper.numbers.direct_blas_lapack.dgelss

@@ -11,6 +11,7 @@ import numpy
 cimport numpy
 cimport cython
 numpy.import_array()
+cimport scipy.linalg.cython_blas as cython_blas
 cimport scipy.linalg.cython_lapack as cython_lapack
 
 
@@ -88,7 +89,8 @@ cdef void copy2array1(const double* pC, double[::1] C) nogil:
     memcpy(&C[0], pC, size * sizeof(double))
     
                 
-cdef int _dgelss(double[:, ::1] A, double [:, ::1] B, int* rank, const double * rcond) nogil:
+cdef int _dgelss(double[:, ::1] A, double [:, ::1] B, int* rank,
+                 const double * rcond) nogil:
     """
     Same function as :func:`dgels` but does no check.
     """
@@ -124,3 +126,47 @@ cdef void _dgelss_noalloc(double[:, ::1] A, double [:, ::1] B, int* rank, const 
                          &A[0,0], &lda, &B[0,0], &ldb,  # 4-7
                          pS, rcond, rank,               # 8-10
                          pC, work, info)                # 11-13
+
+
+cdef double _cblas_ddot(int n, const double* x, int sx,
+                        const double* y, int sy) nogil:    
+    cdef float r
+    with nogil:
+        r = cython_blas.ddot(&n, x, &sx, y, &sy)
+    return r
+
+
+cdef float _cblas_sdot(int n, const float* x, int sx,
+                       const float* y, int sy) nogil:
+    cdef float r
+    with nogil:
+        r = cython_blas.sdot(&n, x, &sx, y, &sy)
+    return r
+
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def cblas_ddot(const double[:] x, const double[:] y):
+    """
+    Computes a dot product with
+    `cblas_ddot <https://software.intel.com/en-us/mkl-developer-reference-c-cblas-dot>`_.
+    """
+    if x.shape[0] != y.shape[0]:        
+        raise ValueError("Vector must have same shape.")
+    return _cblas_ddot(x.shape[0], &x[0], x.strides[0] / x.itemsize,
+                       &y[0], y.strides[0] / y.itemsize)
+    
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def cblas_sdot(const float[:] x, const float[:] y):
+    """
+    Computes a dot product with
+    `cblas_sdot <https://software.intel.com/en-us/mkl-developer-reference-c-cblas-dot>`_.
+    """
+    if x.shape[0] != y.shape[0]:        
+        raise ValueError("Vector must have same shape.")
+    return _cblas_sdot(x.shape[0], &x[0], x.strides[0] / x.itemsize,
+                       &y[0], y.strides[0] / y.itemsize)
+
+

@@ -7,6 +7,7 @@ import numpy
 from scipy.linalg.lapack import dgelss as scipy_dgelss  # pylint: disable=E0611
 from pyquickhelper.pycode import ExtTestCase
 from cpyquickhelper.numbers.direct_blas_lapack import dgelss  # pylint: disable=E0611
+from cpyquickhelper.numbers.direct_blas_lapack import cblas_ddot, cblas_sdot  # pylint: disable=E0611
 
 
 class TestDirectBlasLapack(ExtTestCase):
@@ -43,6 +44,20 @@ class TestDirectBlasLapack(ExtTestCase):
         info = dgelss(A, B)
         self.assertEqual(info, 0)
         self.assertEqual(B.ravel()[:2], x.ravel()[:2])
+
+    def test_ddot(self):
+        A = numpy.array([1., 2., 3.])
+        B = numpy.array([-1., -2.2, 3.])
+        dot1 = A @ B
+        dot2 = cblas_ddot(A, B)
+        self.assertAlmostEqual(dot1, dot2, delta=1e-5)
+
+    def test_sdot(self):
+        A = numpy.array([1., 2., 3.], dtype=numpy.float32)
+        B = numpy.array([-1., -2.2, 3.], dtype=numpy.float32)
+        dot1 = A @ B
+        dot2 = cblas_sdot(A, B)
+        self.assertAlmostEqual(dot1, dot2)
 
 
 if __name__ == "__main__":
