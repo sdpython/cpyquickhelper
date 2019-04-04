@@ -8,6 +8,7 @@ pybind11
 pylint
 pillow
 pyquickhelper>=1.9
+scipy
 sphinx-rtd-theme
 sphinxjp.themes.sphinxjp
 wheel
