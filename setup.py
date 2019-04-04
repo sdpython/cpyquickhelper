@@ -3,6 +3,8 @@ import sys
 import os
 from setuptools import setup, Extension
 from setuptools import find_packages
+import numpy
+from Cython.Build import cythonize
 
 #########
 # settings
@@ -267,13 +269,36 @@ if not r:
                                        ],
                                        language='c++')
 
+    # cython and numbers
+
+    if '--inplace' in sys.argv:
+        pattern1 = "src.cpyquickhelper.numbers.%s"
+    else:
+        pattern1 = "cpyquickhelper.numbers.%s"
+    name = 'direct_blas_lapack'
+    ext_blas = Extension(pattern1 % name,
+                         ['src/cpyquickhelper/numbers/%s.pyx' % name],
+                         include_dirs=[numpy.get_include()],
+                         extra_compile_args=["-O3"])
+
+    # cythonize
+
+    opts = dict(boundscheck=False, cdivision=True,
+                wraparound=False, language_level=3,
+                cdivision_warnings=True)
+    ext_modules = cythonize([ext_blas], compiler_directives=opts)
+
     # setup
+    ext_modules.extend([
+        ext_thread, ext_stdhelper,
+        ext_numbers, ext_benchmark,
+        ext_benchmark_dot,
+        ext_benchmark_sum_type
+    ])
 
     setup(
         name=project_var_name,
-        ext_modules=[ext_thread, ext_stdhelper, ext_numbers,
-                     ext_benchmark, ext_benchmark_dot,
-                     ext_benchmark_sum_type],
+        ext_modules=ext_modules,
         version='%s%s' % (sversion, subversion),
         author='Xavier Dupré',
         author_email='xavier.dupre@gmail.com',
@@ -288,5 +313,6 @@ if not r:
         package_dir=package_dir,
         package_data=package_data,
         setup_requires=["pyquickhelper", "pybind11"],
-        install_requires=["pybind11"],
+        install_requires=["pybind11", "numpy",
+                          "cython", 'scipy'],
     )

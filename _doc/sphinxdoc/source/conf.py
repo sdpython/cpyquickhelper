@@ -60,11 +60,13 @@ mathdef_link_only = True
 
 epkg_dictionary.update({
     'AVX': 'https://en.wikipedia.org/wiki/Advanced_Vector_Extensions',
+    'BLAS': 'http://www.netlib.org/blas/explore-html',
     'C': 'https://en.wikipedia.org/wiki/C_(programming_language)',
     'C++': 'https://en.wikipedia.org/wiki/C%2B%2B',
     'DataFrame': 'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html',
     'ExtensionArray': 'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.api.extensions.ExtensionArray.html',
     'JIT': 'https://en.wikipedia.org/wiki/Just-in-time_compilation',
+    'LAPACK': 'http://www.netlib.org/lapack/explore-html',
     'llvmlite': 'https://llvmlite.readthedocs.io/en/latest/index.html',
     'nuitka': 'http://nuitka.net/',
     'numba': 'https://numba.pydata.org/',

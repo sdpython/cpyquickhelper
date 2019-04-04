@@ -138,3 +138,8 @@ include the :epkg:`python` binding.
 .. autosignature:: cpyquickhelper.numbers.cbenchmark_sum_type.measure_scenario_Float
 
 .. autosignature:: cpyquickhelper.numbers.cbenchmark_sum_type.measure_scenario_Double
+
+Lapack, Blas
+++++++++++++
+
+.. autosignature:: cpyquickhelper.numbers.direct_blas_lapack
