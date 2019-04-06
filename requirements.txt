@@ -7,7 +7,7 @@ pandas>=0.24
 pybind11
 pylint
 pillow
-pyquickhelper>=1.9
+pyquickhelper>=1.9.3100
 scipy
 sphinx-rtd-theme
 sphinxjp.themes.sphinxjp
