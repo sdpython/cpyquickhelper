@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
-import sphinx_rtd_theme
+import sphinx_readable_theme
 
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.split(__file__)[0])))
@@ -10,8 +10,7 @@ local_template = os.path.join(os.path.abspath(
 
 from pyquickhelper.helpgen.default_conf import set_sphinx_variables, get_default_stylesheet
 set_sphinx_variables(__file__, "cpyquickhelper", "Xavier Dupré", 2019,
-                     "sphinx_rtd_theme", [
-                         sphinx_rtd_theme.get_html_theme_path()],
+                     "readable", sphinx_readable_theme.get_html_theme_path(),
                      locals(), extlinks=dict(
                          issue=('https://github.com/sdpython/cpyquickhelper/issues/%s', 'issue')),
                      title="cpyquickhelper", book=True)

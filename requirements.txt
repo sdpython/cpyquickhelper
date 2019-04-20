@@ -9,6 +9,6 @@ pylint
 pillow
 pyquickhelper>=1.9.3100
 scipy
-sphinx-rtd-theme
-sphinxjp.themes.sphinxjp
+sphinx
+sphinx_readable_theme
 wheel
