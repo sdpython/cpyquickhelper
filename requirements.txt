@@ -2,7 +2,8 @@ coverage
 Cython
 jupyter
 jyquickhelper
-numpy>=1.14
+git+https://github.com/sdpython/nbconvert.git@fixes
+numpy>=1.16
 pandas>=0.24
 pybind11
 pylint
