@@ -98,6 +98,16 @@ def check_speed(dims=[100000], repeat=10, number=50, fLOG=print):  # pylint: dis
 
         import mkl
         mkl.set_num_threads(1)
+
+    One example of use:
+
+    .. runpython::
+        :showcode:
+
+        from cpyquickhelper.numbers import check_speed
+        res = list(check_speed(dims=[100, 1000]))
+        import pprint
+        pprint.pprint(res)
     """
     import numpy
     fcts = _fcts()
