@@ -38,8 +38,8 @@ the compiler defined constants.
 .. autosignature:: cpyquickhelper.numbers.cbenchmark.get_simd_available_option
 
 The function to be tested can be found in
-`cbenchmark.cpp <https://github.com/sdpython/cpyquickhelper/blob/master/src/cpyquickhelper/numbers/cbenchmark.cpp>`_ and
-`repeat_fct.h <https://github.com/sdpython/cpyquickhelper/blob/master/src/cpyquickhelper/numbers/repeat_fct.h>`_.
+`cbenchmark.cpp <https://github.com/sdpython/cpyquickhelper/blob/master/cpyquickhelper/numbers/cbenchmark.cpp>`_ and
+`repeat_fct.h <https://github.com/sdpython/cpyquickhelper/blob/master/cpyquickhelper/numbers/repeat_fct.h>`_.
 It all began with the blog post
 `Why is it faster to process a sorted array than an unsorted array? <https://stackoverflow.com/questions/11227809/why-is-it-faster-to-process-a-sorted-array-than-an-unsorted-array/11227902#11227902>`_.
 It plays with a function for which the third line

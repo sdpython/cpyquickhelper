@@ -33,8 +33,9 @@ CLASSIFIERS = [
 # data
 #######
 
-packages = find_packages('src', exclude='src')
-package_dir = {k: "src/" + k.replace(".", "/") for k in packages}
+here = os.path.dirname(__file__)
+packages = find_packages(where=here)
+package_dir = {k: os.path.join(here, k.replace(".", "/")) for k in packages}
 package_data = {
     project_var_name + ".js": ["*.js", "*.css"],
 }
@@ -207,80 +208,77 @@ if not r:
     # extensions
 
     ext_thread = Extension('cpyquickhelper.parallel.threader',
-                           [os.path.join(root, 'src/cpyquickhelper/parallel/threaderc.cpp'),
-                            os.path.join(root, 'src/cpyquickhelper/parallel/threader.cpp')],
+                           [os.path.join(root, 'cpyquickhelper/parallel/threaderc.cpp'),
+                            os.path.join(root, 'cpyquickhelper/parallel/threader.cpp')],
                            extra_compile_args=extra_compile_args_thread,
                            include_dirs=[os.path.join(
-                               root, 'src/cpyquickhelper/parallel')],
+                               root, 'cpyquickhelper/parallel')],
                            libraries=libraries_thread)
 
     ext_stdhelper = Extension('cpyquickhelper.io.stdchelper',
-                              [os.path.join(root, 'src/cpyquickhelper/io/stdchelper.cpp'),
-                               os.path.join(root, 'src/cpyquickhelper/io/stdcapture.cpp')],
+                              [os.path.join(root, 'cpyquickhelper/io/stdchelper.cpp'),
+                               os.path.join(root, 'cpyquickhelper/io/stdcapture.cpp')],
                               extra_compile_args=extra_compile_args_thread,
-                              include_dirs=[os.path.join(root, 'src/cpyquickhelper/io')])
+                              include_dirs=[os.path.join(root, 'cpyquickhelper/io')])
 
     ext_numbers = Extension('cpyquickhelper.numbers.weighted_number',
-                            [os.path.join(root, 'src/cpyquickhelper/numbers/weighted_number.cpp'),
-                             os.path.join(root, 'src/cpyquickhelper/numbers/weighted_number_python.cpp')],
+                            [os.path.join(root, 'cpyquickhelper/numbers/weighted_number.cpp'),
+                             os.path.join(root, 'cpyquickhelper/numbers/weighted_number_python.cpp')],
                             extra_compile_args=extra_compile_args_numbers,
                             include_dirs=[
                                 # Path to pybind11 headers
                                 get_pybind_include(),
                                 get_pybind_include(user=True),
                                 os.path.join(
-                                    root, 'src/cpyquickhelper/numbers')
+                                    root, 'cpyquickhelper/numbers')
                             ],
                             language='c++')
 
     ext_benchmark = Extension('cpyquickhelper.numbers.cbenchmark',
                               [os.path.join(
-                                  root, 'src/cpyquickhelper/numbers/cbenchmark.cpp')],
+                                  root, 'cpyquickhelper/numbers/cbenchmark.cpp')],
                               extra_compile_args=extra_compile_args_numbers,
                               include_dirs=[
                                   # Path to pybind11 headers
                                   get_pybind_include(),
                                   get_pybind_include(user=True),
                                   os.path.join(
-                                      root, 'src/cpyquickhelper/numbers')
+                                      root, 'cpyquickhelper/numbers')
                               ],
                               language='c++')
 
     ext_benchmark_dot = Extension('cpyquickhelper.numbers.cbenchmark_dot',
                                   [os.path.join(
-                                      root, 'src/cpyquickhelper/numbers/cbenchmark_dot.cpp')],
+                                      root, 'cpyquickhelper/numbers/cbenchmark_dot.cpp')],
                                   extra_compile_args=extra_compile_args_bench,
                                   include_dirs=[
                                       # Path to pybind11 headers
                                       get_pybind_include(),
                                       get_pybind_include(user=True),
                                       os.path.join(
-                                          root, 'src/cpyquickhelper/numbers')
+                                          root, 'cpyquickhelper/numbers')
                                   ],
                                   language='c++')
 
     ext_benchmark_sum_type = Extension('cpyquickhelper.numbers.cbenchmark_sum_type',
                                        [os.path.join(
-                                           root, 'src/cpyquickhelper/numbers/cbenchmark_sum_type.cpp')],
+                                           root, 'cpyquickhelper/numbers/cbenchmark_sum_type.cpp')],
                                        extra_compile_args=extra_compile_args_bench,
                                        include_dirs=[
                                            # Path to pybind11 headers
                                            get_pybind_include(),
                                            get_pybind_include(user=True),
                                            os.path.join(
-                                               root, 'src/cpyquickhelper/numbers')
+                                               root, 'cpyquickhelper/numbers')
                                        ],
                                        language='c++')
 
     # cython and numbers
 
-    if '--inplace' in sys.argv:
-        pattern1 = "src.cpyquickhelper.numbers.%s"
-    else:
-        pattern1 = "cpyquickhelper.numbers.%s"
+    pattern1 = "cpyquickhelper.numbers.%s"
     name = 'direct_blas_lapack'
     ext_blas = Extension(pattern1 % name,
-                         ['src/cpyquickhelper/numbers/%s.pyx' % name],
+                         ['cpyquickhelper/numbers/%s.pyx' % name],
                          include_dirs=[numpy.get_include()],
                          extra_compile_args=["-O3"])
 

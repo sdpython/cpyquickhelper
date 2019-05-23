@@ -107,7 +107,7 @@ class TestOutputCapture(ExtTestCase):
         self.assertFalse(isfunction(cprint))
         sig = "cprint(*args)"
         res = _signature_fromstr(Signature, cprint, sig)
-        docname = "src.cpyquickhelper.io.stdchelper.cprint"
+        docname = "cpyquickhelper.io.stdchelper.cprint"
         obj, _ = import_object(docname, "function", use_init=False)
         self.assertNotEmpty(obj)
         obj, _, kind = import_any_object(docname, use_init=False)
@@ -117,7 +117,7 @@ class TestOutputCapture(ExtTestCase):
         dirname = os.path.join(os.path.abspath(os.path.dirname(
             cpyquickhelper.__file__)), "..")
         excs = []
-        for name in ['src.cpyquickhelper.io.stdchelper.cprint',
+        for name in ['cpyquickhelper.io.stdchelper.cprint',
                      'cpyquickhelper.io.stdchelper.cprint']:
             newstring = ".. autosignature:: {0}\n    :debug:\n    :syspath: {1}".format(
                 name, dirname)

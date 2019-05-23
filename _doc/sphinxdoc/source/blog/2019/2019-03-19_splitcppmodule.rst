@@ -15,4 +15,4 @@
     links to this part of the documentation
     `Custom type casters <https://pybind11.readthedocs.io/en/stable/advanced/cast/custom.html>`_.
     and implemented in this module somewhere in
-    `cbenchmark_dot.cpp <https://github.com/sdpython/cpyquickhelper/blob/master/src/cpyquickhelper/numbers/cbenchmark_dot.cpp#L608>`_.
+    `cbenchmark_dot.cpp <https://github.com/sdpython/cpyquickhelper/blob/master/cpyquickhelper/numbers/cbenchmark_dot.cpp#L608>`_.

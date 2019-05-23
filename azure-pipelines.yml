@@ -30,19 +30,15 @@ jobs:
   - script: pip install -r requirements.txt
     displayName: 'Install Requirements'
   - script: |
-      export PYTHONPATH=src
       python -u setup.py build_ext --inplace
     displayName: 'Runs Unit Tests'
   - script: |
-      export PYTHONPATH=src
       python -u setup.py unittests
     displayName: 'Runs Unit Tests'
   - script: |
-      export PYTHONPATH=src
       python -u setup.py bdist_wheel
     displayName: 'Build Package'
   - script: |
-      export PYTHONPATH=src
       python -u setup.py build_sphinx
     displayName: 'Builds Documentation'
   - task: PublishPipelineArtifact@0
@@ -91,15 +87,12 @@ jobs:
     displayName: 'Install Requirements'
   - script: |
           export MACOSX_DEPLOYMENT_TARGET=10.13
-          export PYTHONPATH=src
           python setup.py build_ext --inplace
     displayName: 'Build package'
   - script: |
-      export PYTHONPATH=src
       python -u setup.py unittests
     displayName: 'Runs Unit Tests'
   - script: |
-      export PYTHONPATH=src
       python -u setup.py bdist_wheel
     displayName: 'Build Package'
   - task: PublishPipelineArtifact@0
