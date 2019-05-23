@@ -274,4 +274,4 @@ dist
 _doc/sphinxdoc/source/cpyquickhelper
 _doc/sphinxdoc/source/HISTORY.rst
 _doc/sphinxdoc/source/nbcov*.png
-src/cpyquickhelper/numbers/direct_blas_lapack.c
+cpyquickhelper/numbers/direct_blas_lapack.c
