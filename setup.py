@@ -95,7 +95,7 @@ if is_local() and not ask_help():
                 raise Exception(
                     "Git version is wrong: '{0}'.".format(subversion))
         else:
-            raise FileNotFoundError(versiontxt)
+            subversion = ""
 else:
     # when the module is installed, no commit number is displayed
     subversion = ""
