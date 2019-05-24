@@ -3,7 +3,6 @@ import sys
 import os
 from setuptools import setup, Extension
 from setuptools import find_packages
-import numpy
 from Cython.Build import cythonize
 
 #########
@@ -281,7 +280,7 @@ if not r:
                                        language='c++')
 
     # cython and numbers
-
+    import numpy
     pattern1 = "cpyquickhelper.numbers.%s"
     name = 'direct_blas_lapack'
     ext_blas = Extension(pattern1 % name,
