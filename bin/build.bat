@@ -20,7 +20,7 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 @echo Build
 @echo running %root%\setup.py bdist_wheel
 @echo ##################
-%pythonexe% -u %root%\setup.py bdist_wheel
+%pythonexe% -u %root%\setup.py bdist_wheel sdist
 if %errorlevel% neq 0 exit /b %errorlevel%
 @echo Done Build.
 cd %current%

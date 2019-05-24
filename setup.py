@@ -33,11 +33,12 @@ CLASSIFIERS = [
 # data
 #######
 
-here = os.path.dirname(__file__)
-packages = find_packages(where=here)
-package_dir = {k: os.path.join(here, k.replace(".", "/")) for k in packages}
+packages = find_packages()
+package_dir = {k: os.path.join('.', k.replace(".", "/")) for k in packages}
 package_data = {
-    project_var_name + ".js": ["*.js", "*.css"],
+    project_var_name + ".io": ["*.cpp", "*.hpp"],
+    project_var_name + ".numbers": ["*.cpp", "*.h", "*.pyx"],
+    project_var_name + ".parallel": ["*.cpp", "*.hpp"],
 }
 
 ############
@@ -78,17 +79,23 @@ if is_local() and not ask_help():
         from pyquickhelper.pycode import write_version_for_setup
         return write_version_for_setup(__file__)
 
-    write_version()
+    try:
+        write_version()
+        subversion = None
+    except Exception:
+        subversion = ""
 
-    versiontxt = os.path.join(os.path.dirname(__file__), "version.txt")
-    if os.path.exists(versiontxt):
-        with open(versiontxt, "r") as f:
-            lines = f.readlines()
-        subversion = "." + lines[0].strip("\r\n ")
-        if subversion == ".0":
-            raise Exception("Git version is wrong: '{0}'.".format(subversion))
-    else:
-        raise FileNotFoundError(versiontxt)
+    if subversion is None:
+        versiontxt = os.path.join(os.path.dirname(__file__), "version.txt")
+        if os.path.exists(versiontxt):
+            with open(versiontxt, "r") as f:
+                lines = f.readlines()
+            subversion = "." + lines[0].strip("\r\n ")
+            if subversion == ".0":
+                raise Exception(
+                    "Git version is wrong: '{0}'.".format(subversion))
+        else:
+            raise FileNotFoundError(versiontxt)
 else:
     # when the module is installed, no commit number is displayed
     subversion = ""
