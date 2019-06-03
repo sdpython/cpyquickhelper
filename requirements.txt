@@ -8,8 +8,8 @@ pandas>=0.24
 pybind11
 pylint
 pillow
-pyquickhelper>=1.9.3118
+pyquickhelper>=1.9.3141
 scipy
-sphinx
+sphinx>=2.1
 sphinx_readable_theme
 wheel
