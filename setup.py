@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
+import warnings
 from setuptools import setup, Extension
 from setuptools import find_packages
-from Cython.Build import cythonize
 
 #########
 # settings
@@ -296,15 +296,24 @@ if not r:
     opts = dict(boundscheck=False, cdivision=True,
                 wraparound=False, language_level=3,
                 cdivision_warnings=True)
-    ext_modules = cythonize([ext_blas], compiler_directives=opts)
+
+    try:
+        from Cython.Build import cythonize
+        ext_modules = cythonize([ext_blas], compiler_directives=opts)
+    except ImportError:
+        # Cython is not installed.
+        warnings.warn(
+            "cython is not installed. Only pure python subpckages will be available.")
+        ext_modules = None
 
     # setup
-    ext_modules.extend([
-        ext_thread, ext_stdhelper,
-        ext_numbers, ext_benchmark,
-        ext_benchmark_dot,
-        ext_benchmark_sum_type
-    ])
+    if ext_modules is not None:
+        ext_modules.extend([
+            ext_thread, ext_stdhelper,
+            ext_numbers, ext_benchmark,
+            ext_benchmark_dot,
+            ext_benchmark_sum_type
+        ])
 
     setup(
         name=project_var_name,
