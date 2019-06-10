@@ -82,11 +82,11 @@ class WeightedSeriesDtype(PandasDtype):
         if not string.startswith("WD"):
             raise TypeError("Unable to parse '{0}'".format(string))
         val = string[2:].strip('() ').split(",")
-        if len(val) == 1:
-            val = float(val)
+        if len(val) == 1 and val[0]:
+            val = float(val[0])
         elif len(val) == 2:
             val = float(val[0]), float(val[1])
-        elif len(val) == 0:
+        elif len(val) == 0 or (len(val) == 1 and val[0] == ''):
             val = nan
         else:
             raise TypeError("Unable to parse '{0}'".format(string))
@@ -225,7 +225,8 @@ class WeightedArray(PandasArray):
         @see cl WeightedArray
         """
         for s in to_concat:
-            if not isinstance(s.dtype, WeightedSeriesDtype):
+            if not isinstance(s.dtype, (WeightedSeriesDtype, object)):
                 raise TypeError(
-                    "All arrays must be of type WeightedSeriesDtype")
+                    "All arrays must be of type WeightedSeriesDtype not {}-{}".format(
+                        type(s), type(s.dtype)))
         return WeightedArray(list(chain(*to_concat)))
