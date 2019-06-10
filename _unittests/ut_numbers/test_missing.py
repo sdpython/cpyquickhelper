@@ -14,7 +14,7 @@ class TestMissing(ExtTestCase):
         obj = WeightedSeriesDtype()
         s = str(obj)
         self.assertEqual(s, "WeightedDouble")
-        t = obj.type()
+        t = obj.type()  # pylint: disable=E1102
         self.assertNotEmpty(t)
         n = t.name
         self.assertEqual(n, "WeightedDouble")
@@ -45,7 +45,7 @@ class TestMissing(ExtTestCase):
         a2 = arr.isna()
         self.assertEqual(str(a2), '[False]')
         serie = numpy.array([WeightedSeriesDtype()])
-        a2 = arr._concat_same_type([serie])
+        a2 = arr._concat_same_type([serie])  # pylint: disable=W0212
         self.assertIn("WeightedDouble", str(a2))
 
 
