@@ -17,10 +17,11 @@ if not exist %pythonexe% set pythonexe="c:\Python36_x64\python.exe"
 if %errorlevel% neq 0 exit /b %errorlevel%
 @echo Done Compile.
 @echo ##################
+cd %root%
 @echo Build
-@echo running %root%\setup.py bdist_wheel
+@echo running setup.py bdist_wheel sdist
 @echo ##################
-%pythonexe% -u %root%\setup.py bdist_wheel sdist
+%pythonexe% -u setup.py bdist_wheel sdist
 if %errorlevel% neq 0 exit /b %errorlevel%
 @echo Done Build.
 cd %current%
