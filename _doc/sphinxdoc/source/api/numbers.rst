@@ -110,6 +110,11 @@ binding, it is the same signature as the dot product but does nothing.
 
 .. autosignature:: cpyquickhelper.numbers.cbenchmark_dot.empty_vector_dot_product
 
+One final version was added to compare how fast
+a parallelized version could be:
+
+.. autosignature:: cpyquickhelper.numbers.cbenchmark_dot.vector_dot_product_openmp
+
 Speed measure
 +++++++++++++
 

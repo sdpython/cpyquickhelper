@@ -19,6 +19,7 @@ from cpyquickhelper.numbers.cbenchmark_dot import vector_dot_product, empty_vect
 from cpyquickhelper.numbers.cbenchmark_dot import vector_dot_product16, vector_dot_product16_sse  # pylint: disable=W0611, E0611
 from cpyquickhelper.numbers.cbenchmark_dot import vector_dot_product16_nofcall  # pylint: disable=W0611, E0611
 from cpyquickhelper.numbers.cbenchmark_dot import vector_dot_product16_avx512  # pylint: disable=W0611, E0611
+from cpyquickhelper.numbers.cbenchmark_dot import vector_dot_product_openmp  # pylint: disable=W0611, E0611
 
 
 class TestCBenchmarkDot(ExtTestCase):
@@ -77,6 +78,15 @@ class TestCBenchmarkDot(ExtTestCase):
         self.assertEqual(d1, d5)
         self.assertEqual(d1, d6)
         self.assertEqual(len(res), 6)
+
+    def test_vector_dot_product_openmp(self):
+        a = numpy.array([3, 4, 5], dtype=numpy.float32)
+        b = numpy.array([3.1, 4.1, 5.1], dtype=numpy.float32)
+        d1 = numpy.dot(a, b)
+        d2 = vector_dot_product(a, b)
+        d3 = vector_dot_product_openmp(a, b)
+        self.assertEqual(d1, d2)
+        self.assertEqual(d1, d3)
 
     def test_vector_dot_product16(self):
         a = numpy.array([3, 4, 5] * 6, dtype=numpy.float32)

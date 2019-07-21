@@ -195,101 +195,117 @@ if not r:
     if sys.platform.startswith("win"):
         libraries_thread = ['kernel32']
         extra_compile_args_thread = None
-        extra_compile_args_numbers = ['/EHsc', '/O2', '/Gy']
+        extra_compile_args_numbers = ['/EHsc', '/O2', '/Gy', '/openmp']
         extra_compile_args_bench = extra_compile_args_numbers.copy()
+        extra_link_args = None
     elif sys.platform.startswith("darwin"):
         libraries_thread = None
         extra_compile_args_thread = ['-lpthread', '-stdlib=libc++', '-std=c++11',
-                                     '-mmacosx-version-min=10.7']
+                                     '-mmacosx-version-min=10.7', '-fopenmp']
         extra_compile_args_numbers = ['-stdlib=libc++', '-mmacosx-version-min=10.7',
-                                      '-std=c++11']
+                                      '-std=c++11', '-fopenmp']
         extra_compile_args_bench = extra_compile_args_numbers.copy()
         extra_compile_args_bench.append('-fpermissive')
+        extra_link_args = ['-lomp']
     else:
         libraries_thread = None
-        extra_compile_args_thread = ['-lpthread', '-std=c++11']
+        extra_compile_args_thread = ['-lpthread', '-std=c++11', '-fopenmp']
         # option -mavx512f enable AVX 512 instructions
         # see https://blog.qiqitori.com/?p=390
-        extra_compile_args_numbers = ['-std=c++11']  # , '-o2', '-mavx512f']
+        # , '-o2', '-mavx512f']
+        extra_compile_args_numbers = ['-std=c++11', '-fopenmp']
         extra_compile_args_bench = extra_compile_args_numbers.copy()
         extra_compile_args_bench.append('-fpermissive')
+        extra_link_args = ['-lgomp']
 
     # extensions
 
-    ext_thread = Extension('cpyquickhelper.parallel.threader',
-                           [os.path.join(root, 'cpyquickhelper/parallel/threaderc.cpp'),
-                            os.path.join(root, 'cpyquickhelper/parallel/threader.cpp')],
-                           extra_compile_args=extra_compile_args_thread,
-                           include_dirs=[os.path.join(
-                               root, 'cpyquickhelper/parallel')],
-                           libraries=libraries_thread)
+    ext_thread = Extension(
+        'cpyquickhelper.parallel.threader',
+        [os.path.join(root, 'cpyquickhelper/parallel/threaderc.cpp'),
+         os.path.join(root, 'cpyquickhelper/parallel/threader.cpp')],
+        extra_compile_args=extra_compile_args_thread,
+        extra_link_args=extra_link_args,
+        include_dirs=[os.path.join(root, 'cpyquickhelper/parallel')],
+        libraries=libraries_thread,
+        define_macros=[('USE_OPENMP', None)])
 
-    ext_stdhelper = Extension('cpyquickhelper.io.stdchelper',
-                              [os.path.join(root, 'cpyquickhelper/io/stdchelper.cpp'),
-                               os.path.join(root, 'cpyquickhelper/io/stdcapture.cpp')],
-                              extra_compile_args=extra_compile_args_thread,
-                              include_dirs=[os.path.join(root, 'cpyquickhelper/io')])
+    ext_stdhelper = Extension(
+        'cpyquickhelper.io.stdchelper',
+        [os.path.join(root, 'cpyquickhelper/io/stdchelper.cpp'),
+         os.path.join(root, 'cpyquickhelper/io/stdcapture.cpp')],
+        extra_compile_args=extra_compile_args_thread,
+        extra_link_args=extra_link_args,
+        include_dirs=[os.path.join(root, 'cpyquickhelper/io')],
+        define_macros=[('USE_OPENMP', None)])
 
-    ext_numbers = Extension('cpyquickhelper.numbers.weighted_number',
-                            [os.path.join(root, 'cpyquickhelper/numbers/weighted_number.cpp'),
-                             os.path.join(root, 'cpyquickhelper/numbers/weighted_number_python.cpp')],
-                            extra_compile_args=extra_compile_args_numbers,
-                            include_dirs=[
-                                # Path to pybind11 headers
-                                get_pybind_include(),
-                                get_pybind_include(user=True),
-                                os.path.join(
-                                    root, 'cpyquickhelper/numbers')
-                            ],
-                            language='c++')
+    ext_numbers = Extension(
+        'cpyquickhelper.numbers.weighted_number',
+        [os.path.join(root, 'cpyquickhelper/numbers/weighted_number.cpp'),
+         os.path.join(root, 'cpyquickhelper/numbers/weighted_number_python.cpp')],
+        extra_compile_args=extra_compile_args_numbers,
+        extra_link_args=extra_link_args,
+        include_dirs=[
+            # Path to pybind11 headers
+            get_pybind_include(),
+            get_pybind_include(user=True),
+            os.path.join(root, 'cpyquickhelper/numbers')
+        ],
+        language='c++',
+        define_macros=[('USE_OPENMP', None)])
 
-    ext_benchmark = Extension('cpyquickhelper.numbers.cbenchmark',
-                              [os.path.join(
-                                  root, 'cpyquickhelper/numbers/cbenchmark.cpp')],
-                              extra_compile_args=extra_compile_args_numbers,
-                              include_dirs=[
-                                  # Path to pybind11 headers
-                                  get_pybind_include(),
-                                  get_pybind_include(user=True),
-                                  os.path.join(
-                                      root, 'cpyquickhelper/numbers')
-                              ],
-                              language='c++')
+    ext_benchmark = Extension(
+        'cpyquickhelper.numbers.cbenchmark',
+        [os.path.join(root, 'cpyquickhelper/numbers/cbenchmark.cpp')],
+        extra_compile_args=extra_compile_args_numbers,
+        extra_link_args=extra_link_args,
+        include_dirs=[
+            # Path to pybind11 headers
+            get_pybind_include(),
+            get_pybind_include(user=True),
+            os.path.join(root, 'cpyquickhelper/numbers')
+        ],
+        language='c++',
+        define_macros=[('USE_OPENMP', None)])
 
-    ext_benchmark_dot = Extension('cpyquickhelper.numbers.cbenchmark_dot',
-                                  [os.path.join(
-                                      root, 'cpyquickhelper/numbers/cbenchmark_dot.cpp')],
-                                  extra_compile_args=extra_compile_args_bench,
-                                  include_dirs=[
-                                      # Path to pybind11 headers
-                                      get_pybind_include(),
-                                      get_pybind_include(user=True),
-                                      os.path.join(
-                                          root, 'cpyquickhelper/numbers')
-                                  ],
-                                  language='c++')
+    ext_benchmark_dot = Extension(
+        'cpyquickhelper.numbers.cbenchmark_dot',
+        [os.path.join(root, 'cpyquickhelper/numbers/cbenchmark_dot.cpp')],
+        extra_compile_args=extra_compile_args_bench,
+        extra_link_args=extra_link_args,
+        include_dirs=[
+            # Path to pybind11 headers
+            get_pybind_include(),
+            get_pybind_include(user=True),
+            os.path.join(root, 'cpyquickhelper/numbers')
+        ],
+        language='c++',
+        define_macros=[('USE_OPENMP', None)])
 
-    ext_benchmark_sum_type = Extension('cpyquickhelper.numbers.cbenchmark_sum_type',
-                                       [os.path.join(
-                                           root, 'cpyquickhelper/numbers/cbenchmark_sum_type.cpp')],
-                                       extra_compile_args=extra_compile_args_bench,
-                                       include_dirs=[
-                                           # Path to pybind11 headers
-                                           get_pybind_include(),
-                                           get_pybind_include(user=True),
-                                           os.path.join(
-                                               root, 'cpyquickhelper/numbers')
-                                       ],
-                                       language='c++')
+    ext_benchmark_sum_type = Extension(
+        'cpyquickhelper.numbers.cbenchmark_sum_type',
+        [os.path.join(root, 'cpyquickhelper/numbers/cbenchmark_sum_type.cpp')],
+        extra_compile_args=extra_compile_args_bench,
+        extra_link_args=extra_link_args,
+        include_dirs=[
+            # Path to pybind11 headers
+            get_pybind_include(),
+            get_pybind_include(user=True),
+            os.path.join(root, 'cpyquickhelper/numbers')
+        ],
+        language='c++',
+        define_macros=[('USE_OPENMP', None)])
 
     # cython and numbers
     import numpy
     pattern1 = "cpyquickhelper.numbers.%s"
     name = 'direct_blas_lapack'
-    ext_blas = Extension(pattern1 % name,
-                         ['cpyquickhelper/numbers/%s.pyx' % name],
-                         include_dirs=[numpy.get_include()],
-                         extra_compile_args=["-O3"])
+    ext_blas = Extension(
+        pattern1 % name,
+        ['cpyquickhelper/numbers/%s.pyx' % name],
+        include_dirs=[numpy.get_include()],
+        extra_compile_args=["-O3"],
+        define_macros=[('USE_OPENMP', None)])
 
     # cythonize
 
