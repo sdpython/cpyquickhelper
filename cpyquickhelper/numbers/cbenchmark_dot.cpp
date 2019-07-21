@@ -241,27 +241,42 @@ float vector_dot_product_pointer(const float *p1, const float *p2, size_t size)
 }
 
 
-float vector_dot_product_pointer_openmp(const float *p1, const float *p2, size_t size)
+#ifdef USE_OPENMP
+float _vector_dot_product_pointer_openmp(const float *p1, const float *p2,
+                                         int size, int nthreads)
 {
     float sum = 0;
-    float psum;
-    int i;
-    int tid;
-    int isize = (int) size;
-
-    #pragma omp parallel private(i,tid,psum)
+    #pragma omp parallel for reduction(+ : sum) num_threads(nthreads)
+    for (int i = 0; i < size; ++i) 
     {
-        psum = 0.0;
-        tid = omp_get_thread_num();
-
-        #pragma omp for reduction(+:sum)
-        for (i=0; i < isize; ++i) 
-        {
-            sum += (p1[i] * p2[i]);
-            psum = sum;
-        }
-        // printf("Thread %d partial sum = %f\n",tid, psum);
+        sum += (p1[i] * p2[i]);
     }
+    return sum;
+}
+#else
+float _vector_dot_product_pointer_openmp(const float *p1, const float *p2,
+                                         int size, int nthreads)
+{
+    float sum = 0;
+    for (int i = 0; i < size; ++i) 
+        sum += (p1[i] * p2[i]);
+    return sum;
+}
+#endif
+
+float vector_dot_product_pointer_openmp(const float *p1, const float *p2, size_t size,
+                                        int nthreads=-1)
+{
+    if (nthreads <= 0)
+        nthreads = ::omp_get_max_threads();
+    nthreads = nthreads <= 2 ? 2 : nthreads;
+    int isize = (int)(size - (size % nthreads));
+    float sum = _vector_dot_product_pointer_openmp(p1, p2, isize, nthreads);
+    const float * end1 = p1 + size;
+    p1 += isize;
+    p2 += isize;
+    for(; p1 != end1; ++p1, ++p2)
+        sum += *p1 * *p2;
     return sum;
 }
 
@@ -277,14 +292,14 @@ float vector_dot_product(py::array_t<float> v1, py::array_t<float> v2)
     return vector_dot_product_pointer(v1.data(0), v2.data(0), v1.shape(0));
 }
 
-float vector_dot_product_openmp(py::array_t<float> v1, py::array_t<float> v2)
+float vector_dot_product_openmp(py::array_t<float> v1, py::array_t<float> v2, int nthreads=-1)
 {
     #ifdef USE_OPENMP
     if (v1.ndim() != v2.ndim())
         throw std::runtime_error("Vector v1 and v2 must have the same dimension.");
     if (v1.ndim() != 1)
         throw std::runtime_error("Vector v1 and v2 must be vectors.");
-    return vector_dot_product_pointer_openmp(v1.data(0), v2.data(0), v1.shape(0));
+    return vector_dot_product_pointer_openmp(v1.data(0), v2.data(0), v1.shape(0), nthreads);
     #else
     throw std::runtime_error("OPENMP is not enabled.");
     #endif
@@ -603,6 +618,7 @@ also implemented in C. The functions propose different implementations of the do
     m.def("vector_dot_product", &vector_dot_product,
           "Computes a dot product in C++ with vectors of floats.");
     m.def("vector_dot_product_openmp", &vector_dot_product_openmp,
+          py::arg("p1"), py::arg("p2"), py::arg("nthreads") = -1,
           "Computes a dot product in C++ with vectors of floats and parallelizes with OPENMP.");
     m.def("empty_vector_dot_product", &empty_vector_dot_product,
           "Empty measure to have an idea about the processing due to python binding.");

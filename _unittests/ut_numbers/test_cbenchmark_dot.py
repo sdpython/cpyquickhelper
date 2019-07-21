@@ -88,6 +88,20 @@ class TestCBenchmarkDot(ExtTestCase):
         self.assertEqual(d1, d2)
         self.assertEqual(d1, d3)
 
+    def test_vector_dot_product_openmp_1000(self):
+        for N in range(1002, 1010):
+            a = numpy.array([i % 100 for i in range(0, N)],
+                            dtype=numpy.float32)
+            b = numpy.array([(i % 100) + 0.1 for i in range(0, N)],
+                            dtype=numpy.float32)
+            d1 = numpy.dot(a, b)
+            d2 = vector_dot_product(a, b)
+            self.assertEqualFloat(d1, d2)
+            d3 = vector_dot_product_openmp(a, b, -1)
+            self.assertEqualFloat(d1, d3)
+            d3 = vector_dot_product_openmp(a, b, 4)
+            self.assertEqualFloat(d1, d3)
+
     def test_vector_dot_product16(self):
         a = numpy.array([3, 4, 5] * 6, dtype=numpy.float32)
         b = numpy.array([3.1, 4.1, 5.1] * 6, dtype=numpy.float32)
