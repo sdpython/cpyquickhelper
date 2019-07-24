@@ -69,8 +69,8 @@ jobs:
     displayName: 'export'
   - script: gcc --version
     displayName: 'gcc version'
-  - script: brew install llvm
-    displayName: 'install llvm'
+  - script: brew install llvm libomp
+    displayName: 'install llvm libomp'
   - script: brew install p7zip
     displayName: 'Install p7zip'
   - script: brew install pandoc

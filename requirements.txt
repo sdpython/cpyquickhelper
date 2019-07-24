@@ -1,7 +1,7 @@
 coverage
 Cython
 jupyter
-jupyter_sphinx==0.1.4
+jupyter_sphinx>=0.2.0
 jyquickhelper
 git+https://github.com/sdpython/nbconvert.git@fixes
 numpy>=1.16
