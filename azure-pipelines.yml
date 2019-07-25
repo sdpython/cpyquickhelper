@@ -71,7 +71,7 @@ jobs:
     displayName: 'gcc version'
   - script: brew install llvm
     displayName: 'install llvm'
-  - script: brew install -y libomp-dev
+  - script: brew install libomp
     displayName: 'Install omp'
   - script: brew install p7zip
     displayName: 'Install p7zip'
