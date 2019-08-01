@@ -201,9 +201,9 @@ if not r:
     elif sys.platform.startswith("darwin"):
         libraries_thread = None
         extra_compile_args_thread = ['-lpthread', '-stdlib=libc++', '-std=c++11',
-                                     '-mmacosx-version-min=10.7', '-fopenmp']
+                                     '-mmacosx-version-min=10.7', '-openmp']
         extra_compile_args_numbers = ['-stdlib=libc++', '-mmacosx-version-min=10.7',
-                                      '-std=c++11', '-fopenmp']
+                                      '-std=c++11', '-openmp']
         extra_compile_args_bench = extra_compile_args_numbers.copy()
         extra_compile_args_bench.append('-fpermissive')
         extra_link_args = ['-lomp']
