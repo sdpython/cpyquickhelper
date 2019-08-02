@@ -198,15 +198,17 @@ if not r:
         extra_compile_args_numbers = ['/EHsc', '/O2', '/Gy', '/openmp']
         extra_compile_args_bench = extra_compile_args_numbers.copy()
         extra_link_args = None
+        define_macros=[('USE_OPENMP', None)]
     elif sys.platform.startswith("darwin"):
         libraries_thread = None
         extra_compile_args_thread = ['-lpthread', '-stdlib=libc++', '-std=c++11',
-                                     '-mmacosx-version-min=10.7', '-openmp']
+                                     '-mmacosx-version-min=10.7']  # , '-openmp']
         extra_compile_args_numbers = ['-stdlib=libc++', '-mmacosx-version-min=10.7',
-                                      '-std=c++11', '-openmp']
+                                      '-std=c++11']  # , '-openmp']
         extra_compile_args_bench = extra_compile_args_numbers.copy()
         extra_compile_args_bench.append('-fpermissive')
-        extra_link_args = ['-lomp']
+        extra_link_args = []  # ['-lomp']
+        define_macros=None
     else:
         libraries_thread = None
         extra_compile_args_thread = ['-lpthread', '-std=c++11', '-fopenmp']
@@ -217,6 +219,7 @@ if not r:
         extra_compile_args_bench = extra_compile_args_numbers.copy()
         extra_compile_args_bench.append('-fpermissive')
         extra_link_args = ['-lgomp']
+        define_macros=[('USE_OPENMP', None)]
 
     # extensions
 
@@ -228,7 +231,7 @@ if not r:
         extra_link_args=extra_link_args,
         include_dirs=[os.path.join(root, 'cpyquickhelper/parallel')],
         libraries=libraries_thread,
-        define_macros=[('USE_OPENMP', None)])
+        define_macros=define_macros)
 
     ext_stdhelper = Extension(
         'cpyquickhelper.io.stdchelper',
@@ -237,7 +240,7 @@ if not r:
         extra_compile_args=extra_compile_args_thread,
         extra_link_args=extra_link_args,
         include_dirs=[os.path.join(root, 'cpyquickhelper/io')],
-        define_macros=[('USE_OPENMP', None)])
+        define_macros=define_macros)
 
     ext_numbers = Extension(
         'cpyquickhelper.numbers.weighted_number',
@@ -252,7 +255,7 @@ if not r:
             os.path.join(root, 'cpyquickhelper/numbers')
         ],
         language='c++',
-        define_macros=[('USE_OPENMP', None)])
+        define_macros=define_macros)
 
     ext_benchmark = Extension(
         'cpyquickhelper.numbers.cbenchmark',
@@ -266,7 +269,7 @@ if not r:
             os.path.join(root, 'cpyquickhelper/numbers')
         ],
         language='c++',
-        define_macros=[('USE_OPENMP', None)])
+        define_macros=define_macros)
 
     ext_benchmark_dot = Extension(
         'cpyquickhelper.numbers.cbenchmark_dot',
@@ -280,7 +283,7 @@ if not r:
             os.path.join(root, 'cpyquickhelper/numbers')
         ],
         language='c++',
-        define_macros=[('USE_OPENMP', None)])
+        define_macros=define_macros)
 
     ext_benchmark_sum_type = Extension(
         'cpyquickhelper.numbers.cbenchmark_sum_type',
@@ -294,7 +297,7 @@ if not r:
             os.path.join(root, 'cpyquickhelper/numbers')
         ],
         language='c++',
-        define_macros=[('USE_OPENMP', None)])
+        define_macros=define_macros)
 
     # cython and numbers
     import numpy
@@ -305,7 +308,7 @@ if not r:
         ['cpyquickhelper/numbers/%s.pyx' % name],
         include_dirs=[numpy.get_include()],
         extra_compile_args=["-O3"],
-        define_macros=[('USE_OPENMP', None)])
+        define_macros=define_macros)
 
     # cythonize
 
