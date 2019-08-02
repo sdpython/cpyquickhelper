@@ -272,16 +272,15 @@ float vector_dot_product_pointer_openmp(const float *p1, const float *p2, size_t
         nthreads = ::omp_get_max_threads();
     nthreads = nthreads <= 2 ? 2 : nthreads;
     int isize = (int)(size - (size % nthreads));
-#else
-    nthreads = 1;
-    int isize = (int)size;
-#endif
     float sum = _vector_dot_product_pointer_openmp(p1, p2, isize, nthreads);
-    const float * end1 = p1 + isize;
+    const float * end1 = p1 + size;
     p1 += isize;
     p2 += isize;
     for(; p1 != end1; ++p1, ++p2)
         sum += *p1 * *p2;
+#else
+    float sum = _vector_dot_product_pointer_openmp(p1, p2, isize, 1);
+#endif
     return sum;
 }
 
