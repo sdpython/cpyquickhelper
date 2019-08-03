@@ -279,7 +279,7 @@ float vector_dot_product_pointer_openmp(const float *p1, const float *p2, size_t
     for(; p1 != end1; ++p1, ++p2)
         sum += *p1 * *p2;
 #else
-    float sum = _vector_dot_product_pointer_openmp(p1, p2, isize, 1);
+    float sum = _vector_dot_product_pointer_openmp(p1, p2, (int)size, 1);
 #endif
     return sum;
 }
