@@ -198,7 +198,7 @@ if not r:
         extra_compile_args_numbers = ['/EHsc', '/O2', '/Gy', '/openmp']
         extra_compile_args_bench = extra_compile_args_numbers.copy()
         extra_link_args = None
-        define_macros=[('USE_OPENMP', None)]
+        define_macros = [('USE_OPENMP', None)]
     elif sys.platform.startswith("darwin"):
         libraries_thread = None
         extra_compile_args_thread = ['-lpthread', '-stdlib=libc++', '-std=c++11',
@@ -208,7 +208,7 @@ if not r:
         extra_compile_args_bench = extra_compile_args_numbers.copy()
         extra_compile_args_bench.append('-fpermissive')
         extra_link_args = []  # ['-lomp']
-        define_macros=None
+        define_macros = None
     else:
         libraries_thread = None
         extra_compile_args_thread = ['-lpthread', '-std=c++11', '-fopenmp']
@@ -219,7 +219,7 @@ if not r:
         extra_compile_args_bench = extra_compile_args_numbers.copy()
         extra_compile_args_bench.append('-fpermissive')
         extra_link_args = ['-lgomp']
-        define_macros=[('USE_OPENMP', None)]
+        define_macros = [('USE_OPENMP', None)]
 
     # extensions
 

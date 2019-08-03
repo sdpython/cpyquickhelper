@@ -97,7 +97,11 @@ class TestCBenchmarkDot(ExtTestCase):
             d1 = numpy.dot(a, b)
             d2 = vector_dot_product(a, b)
             self.assertEqualFloat(d1, d2)
-            d3 = vector_dot_product_openmp(a, b, -1)
+            try:
+                d3 = vector_dot_product_openmp(a, b, -1)
+            except RuntimeError as e:
+                if "OPENMP is not enabled" in str(e):
+                    return
             self.assertEqualFloat(d1, d3)
             d3 = vector_dot_product_openmp(a, b, 4)
             self.assertEqualFloat(d1, d3)
