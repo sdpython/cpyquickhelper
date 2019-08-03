@@ -84,7 +84,12 @@ class TestCBenchmarkDot(ExtTestCase):
         b = numpy.array([3.1, 4.1, 5.1], dtype=numpy.float32)
         d1 = numpy.dot(a, b)
         d2 = vector_dot_product(a, b)
-        d3 = vector_dot_product_openmp(a, b)
+        try:
+            d3 = vector_dot_product_openmp(a, b)
+        except RuntimeError as e:
+            if "OPENMP is not enabled" in str(e):
+                return
+            raise e
         self.assertEqual(d1, d2)
         self.assertEqual(d1, d3)
 
