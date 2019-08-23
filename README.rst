@@ -1,3 +1,12 @@
+
+.. image:: https://github.com/sdpython/cpyquickhelper/blob/master/_doc/sphinxdoc/source/phdoc_static/project_ico.png?raw=true
+    :target: https://github.com/sdpython/cpyquickhelper/
+
+.. _l-README:
+
+cpyquickhelper: python + C++ in different ways
+==============================================
+
 .. image:: https://travis-ci.org/sdpython/cpyquickhelper.svg?branch=master
     :target: https://travis-ci.org/sdpython/cpyquickhelper
     :alt: Build status
@@ -33,11 +42,6 @@
 .. image:: http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/_images/nbcov.png
     :target: http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
-
-.. _l-README:
-
-cpyquickhelper
-==============
 
 *cpyquickhelper* is a template to create a module with
 C functions in different ways. It implements function

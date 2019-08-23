@@ -2,8 +2,11 @@
 .. |gitlogo| image:: _static/git_logo.png
              :height: 20
 
-cpyquickhelper
-==============
+.. image:: https://github.com/sdpython/cpyquickhelper/blob/master/_doc/sphinxdoc/source/phdoc_static/project_ico.png?raw=true
+    :target: https://github.com/sdpython/cpyquickhelper/
+
+cpyquickhelper: python + C++ in different ways
+==============================================
 
 .. image:: https://travis-ci.org/sdpython/cpyquickhelper.svg?branch=master
     :target: https://travis-ci.org/sdpython/cpyquickhelper
