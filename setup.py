@@ -35,6 +35,7 @@ CLASSIFIERS = [
 packages = find_packages()
 package_dir = {k: os.path.join('.', k.replace(".", "/")) for k in packages}
 package_data = {
+    project_var_name + ".examples": ["*.cpp", "*.hpp", "*.h"],
     project_var_name + ".io": ["*.cpp", "*.hpp"],
     project_var_name + ".numbers": ["*.cpp", "*.h", "*.pyx"],
     project_var_name + ".parallel": ["*.cpp", "*.hpp"],
@@ -223,6 +224,21 @@ if not r:
 
     # extensions
 
+    ext_custom_container = Extension(
+        'cpyquickhelper.examples.custom_container_python',
+        [os.path.join(root, 'cpyquickhelper/examples/custom_container.cpp'),
+         os.path.join(root, 'cpyquickhelper/examples/custom_container_python.cpp')],
+        extra_compile_args=extra_compile_args_numbers,
+        extra_link_args=extra_link_args,
+        include_dirs=[
+            # Path to pybind11 headers
+            get_pybind_include(),
+            get_pybind_include(user=True),
+            os.path.join(root, 'cpyquickhelper/examples')
+        ],
+        language='c++',
+        define_macros=define_macros)
+
     ext_thread = Extension(
         'cpyquickhelper.parallel.threader',
         [os.path.join(root, 'cpyquickhelper/parallel/threaderc.cpp'),
@@ -328,6 +344,7 @@ if not r:
     # setup
     if ext_modules is not None:
         ext_modules.extend([
+            ext_custom_container,
             ext_thread, ext_stdhelper,
             ext_numbers, ext_benchmark,
             ext_benchmark_dot,
