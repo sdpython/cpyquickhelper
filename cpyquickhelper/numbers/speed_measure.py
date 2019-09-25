@@ -31,7 +31,7 @@ def measure_time(stmt, context, repeat=10, number=50, div_by_number=False):
     The function returns a duration corresponding to
     *number* times the execution of the main statement.
     """
-    import numpy
+    import numpy  # pylint: disable=C0415
     tim = Timer(stmt, globals=context)
     res = numpy.array(tim.repeat(repeat=repeat, number=number))
     if div_by_number:
@@ -55,7 +55,7 @@ def _fcts():
     """
     Returns functions to measure.
     """
-    import numpy
+    import numpy  # pylint: disable=C0415
     from .cbenchmark_dot import vector_dot_product  # pylint: disable=E0611
     from .cbenchmark_dot import vector_dot_product16  # pylint: disable=E0611
     from .cbenchmark_dot import vector_dot_product16_nofcall  # pylint: disable=E0611
@@ -111,7 +111,7 @@ def check_speed(dims=[100000], repeat=10, number=50, fLOG=print):  # pylint: dis
         import pprint
         pprint.pprint(res)
     """
-    import numpy
+    import numpy  # pylint: disable=C0415
     fcts = _fcts()
     mx = max(dims)
     vect = numpy.ones((mx,))

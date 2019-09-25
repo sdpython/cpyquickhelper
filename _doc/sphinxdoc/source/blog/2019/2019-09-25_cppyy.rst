@@ -1,0 +1,42 @@
+
+.. blogpost::
+    :title: cppyy: a new module for to C++ in python
+    :keywords: C++, cppyy, clang, cling
+    :date: 2019-09-25
+    :categories: C++
+
+    I did not try but the approach seems interesting
+    and less verbose than any others.
+    `cppyy <https://cppyy.readthedocs.io/en/latest/index.html>`_
+    uses `cling <https://root.cern.ch/cling>`_ to extend
+    Python code with C++ code during the execution.
+    The `tutorial
+    <https://bitbucket.org/wlav/cppyy/src/master/doc/tutorial/CppyyTutorial.ipynb
+    ?viewer=nbviewer&fileviewer=notebook-viewer%3Anbviewer>`_
+    contains the following example:
+
+    ::
+
+        >>> import cppyy
+        >>> cppyy.cppdef("""
+        ... class MyClass {
+        ... public:
+        ...     MyClass(int i) : m_data(i) {}
+        ...     virtual ~MyClass() {}
+        ...     virtual int add_int(int i) { return m_data + i; }
+        ...     int m_data;
+        ... };""")
+        True
+        >>> from cppyy.gbl import MyClass
+        >>> m = MyClass(42)
+        >>> cppyy.cppdef("""
+        ... void say_hello(MyClass* m) {
+        ...     std::cout << "Hello, the number is: " << m->m_data << std::endl;
+        ... }""")
+        True
+        >>> MyClass.say_hello = cppyy.gbl.say_hello
+        >>> m.say_hello()
+        Hello, the number is: 42
+        >>> m.m_data = 13
+        >>> m.say_hello()
+        Hello, the number is: 13

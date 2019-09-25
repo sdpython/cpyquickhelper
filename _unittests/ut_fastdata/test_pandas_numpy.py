@@ -53,7 +53,7 @@ class TestPandasNumpy(ExtTestCase):
         keys = [_[0] for _ in arr]
         self.assertIn("a,b", keys)
         self.assertIn("c", keys)
-        arr = {k: v for k, v in arr}
+        arr = {k: v for k, v in arr}  # pylint: disable=R1721
         self.assertIsInstance(arr["a,b"], numpy.ndarray)
         self.assertEqual(arr["a,b"].shape, (2, 2))
         self.assertEqual(arr["a,b"].dtype, numpy.float)

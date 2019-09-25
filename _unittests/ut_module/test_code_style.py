@@ -28,7 +28,7 @@ class TestCodeStyle(ExtTestCase):
         test = os.path.normpath(os.path.join(thi, "..", ))
         check_pep8(test, fLOG=fLOG, neg_pattern="temp_.*",
                    pylint_ignore=('C0103', 'C1801', 'R0201', 'R1705', 'W0108', 'W0613',
-                                  'C0111', 'W0703'),
+                                  'C0111', 'W0703', 'C0415'),
                    skip=["No name 'cprint' in module 'cpyquickhelper.io.stdchelper'",
                          "test_weighted_dataframe.py:29: E0611",
                          ])
