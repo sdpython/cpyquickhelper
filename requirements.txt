@@ -7,7 +7,7 @@ git+https://github.com/sdpython/nbconvert.git@fixes
 numpy>=1.16
 pandas>=0.24
 pybind11
-pylint
+pylint>=2.4.1
 pillow
 pyquickhelper>=1.9.3179
 scipy
