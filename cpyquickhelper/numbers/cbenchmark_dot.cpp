@@ -248,9 +248,7 @@ float _vector_dot_product_pointer_openmp(const float *p1, const float *p2,
     float sum = 0;
     #pragma omp parallel for reduction(+ : sum) num_threads(nthreads)
     for (int i = 0; i < size; ++i) 
-    {
         sum += (p1[i] * p2[i]);
-    }
     return sum;
 }
 #else
@@ -363,7 +361,7 @@ float vector_dot_product_pointer16(const float *p1, const float *p2, size_t size
         for(; i < size_; i += BYN, p1 += BYN, p2 += BYN)
             sum += vector_dot_product_pointer16(p1, p2);
     }
-    for(; i < size; ++p1, ++p2, ++i)
+    for(; size > 0; ++p1, ++p2, --size)
         sum += *p1 * *p2;
     return sum;
 }
@@ -489,7 +487,7 @@ float vector_dot_product_pointer16_sse(const float *p1, const float *p2, size_t 
         for(; i < size_; i += BYN, p1 += BYN, p2 += BYN)
             sum += vector_dot_product_pointer16_sse(p1, p2);
     }
-    for(; i < size; ++p1, ++p2, ++i)
+    for(; size > 0; ++p1, ++p2, --size)
         sum += *p1 * *p2;
     return sum;
 }
