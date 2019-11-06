@@ -47,8 +47,7 @@ cpyquickhelper: python + C++ in different ways
 **Links:** `github <https://github.com/sdpython/cpyquickhelper/>`_,
 `documentation <http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/index.html>`_,
 :ref:`l-README`,
-:ref:`blog <ap-main-0>`,
-:ref:`l-issues-todolist`
+:ref:`blog <ap-main-0>`
 
 This library explores various technics to use
 :epkg:`C` or :epkg:`C++` functions in :epkg:`Python`.
