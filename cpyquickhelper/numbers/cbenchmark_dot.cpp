@@ -361,6 +361,7 @@ float vector_dot_product_pointer16(const float *p1, const float *p2, size_t size
         for(; i < size_; i += BYN, p1 += BYN, p2 += BYN)
             sum += vector_dot_product_pointer16(p1, p2);
     }
+    size -= i;
     for(; size > 0; ++p1, ++p2, --size)
         sum += *p1 * *p2;
     return sum;
@@ -487,6 +488,7 @@ float vector_dot_product_pointer16_sse(const float *p1, const float *p2, size_t 
         for(; i < size_; i += BYN, p1 += BYN, p2 += BYN)
             sum += vector_dot_product_pointer16_sse(p1, p2);
     }
+    size -= i;
     for(; size > 0; ++p1, ++p2, --size)
         sum += *p1 * *p2;
     return sum;
