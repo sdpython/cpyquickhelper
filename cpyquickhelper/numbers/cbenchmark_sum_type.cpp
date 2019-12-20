@@ -131,7 +131,7 @@ float py_vector_double_sum(py::array_t<float> v1)
 // See https://github.com/pybind/pybind11/issues/616.
 // Required to use ExecutionStat defined in cbenchmark.
 namespace pybind11 { namespace detail {
-template <> struct py::detail::type_caster<ExecutionStat> {
+template <> struct type_caster<ExecutionStat> {
     PYBIND11_TYPE_CASTER(ExecutionStat, _("ExecutionStat"));
 
     bool load(handle src, bool) {

@@ -212,7 +212,7 @@ if not r:
         define_macros = [('USE_OPENMP', None)]
     else:
         libraries_thread = None
-        extra_compile_args_thread = ['-lpthread', '-fopenmp', '-fpermissive']
+        extra_compile_args_thread = ['-lpthread', '-fopenmp']
         # option -mavx512f enable AVX 512 instructions
         # see https://blog.qiqitori.com/?p=390
         # , '-o2', '-mavx512f']
