@@ -20,7 +20,8 @@ class CustomContainer
 {
     public:
         
-    CustomContainer(size_t size=0, void *p=NULL, ContainerType type=ContainerType::VOID,
+    CustomContainer(size_t size=0, void *p=NULL,
+                    ContainerType type=ContainerType::VOID,
                     bool copy=false, bool del=true);
     ~CustomContainer();
     

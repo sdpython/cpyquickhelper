@@ -569,7 +569,8 @@ float vector_dot_product16_avx512(py::array_t<float> v1, py::array_t<float> v2)
 
 // See https://github.com/pybind/pybind11/issues/616.
 // Required to use ExecutionStat defined in cbenchmark.
-template <> struct py::detail::type_caster<ExecutionStat> {
+namespace pybind11 { namespace detail {
+template <> struct type_caster<ExecutionStat> {
     PYBIND11_TYPE_CASTER(ExecutionStat, _("ExecutionStat"));
 
     bool load(handle src, bool) {
@@ -595,7 +596,7 @@ template <> struct py::detail::type_caster<ExecutionStat> {
         return tv_py.release();
     }
 };
-
+} }
 
 PYBIND11_MODULE(cbenchmark_dot, m) {
 	m.doc() =
