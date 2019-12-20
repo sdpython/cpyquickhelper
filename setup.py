@@ -208,18 +208,16 @@ if not r:
         extra_compile_args_numbers = ['-stdlib=libc++', '-mmacosx-version-min=10.7',
                                       '-std=c++11', '-Xpreprocessor', '-fopenmp']
         extra_compile_args_bench = extra_compile_args_numbers.copy()
-        extra_compile_args_bench.append('-fpermissive')
         extra_link_args = ["-lomp"]
         define_macros = [('USE_OPENMP', None)]
     else:
         libraries_thread = None
-        extra_compile_args_thread = ['-lpthread', '-std=c++11', '-fopenmp']
+        extra_compile_args_thread = ['-lpthread', '-fopenmp']
         # option -mavx512f enable AVX 512 instructions
         # see https://blog.qiqitori.com/?p=390
         # , '-o2', '-mavx512f']
-        extra_compile_args_numbers = ['-std=c++11', '-fopenmp']
+        extra_compile_args_numbers = ['-fopenmp']
         extra_compile_args_bench = extra_compile_args_numbers.copy()
-        extra_compile_args_bench.append('-fpermissive')
         extra_link_args = ['-lgomp']
         define_macros = [('USE_OPENMP', None)]
 
