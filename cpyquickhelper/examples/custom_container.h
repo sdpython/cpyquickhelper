@@ -8,12 +8,12 @@
 
 #include <string>
 
-enum ContainerType {
+typedef enum {
     VOID=0,
     BYTE=1,
     FLOAT=2,
     DOUBLE=3,
-};
+} ContainerType;
 
 
 class CustomContainer
