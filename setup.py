@@ -314,6 +314,20 @@ if not r:
         language='c++',
         define_macros=define_macros)
 
+    ext_slowcode = Extension(
+        'cpyquickhelper.numbers.slowcode',
+        [os.path.join(root, 'cpyquickhelper/numbers/slowcode.cpp')],
+        extra_compile_args=extra_compile_args_numbers,
+        extra_link_args=extra_link_args,
+        include_dirs=[
+            # Path to pybind11 headers
+            get_pybind_include(),
+            get_pybind_include(user=True),
+            os.path.join(root, 'cpyquickhelper/numbers')
+        ],
+        language='c++',
+        define_macros=define_macros)
+
     # cython and numbers
     import numpy
     pattern1 = "cpyquickhelper.numbers.%s"
@@ -343,6 +357,7 @@ if not r:
     # setup
     if ext_modules is not None:
         ext_modules.extend([
+            ext_slowcode,
             ext_custom_container,
             ext_thread, ext_stdhelper,
             ext_numbers, ext_benchmark,

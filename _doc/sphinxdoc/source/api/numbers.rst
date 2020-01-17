@@ -152,3 +152,10 @@ Lapack, Blas
 .. autosignature:: cpyquickhelper.numbers.direct_blas_lapack.cblas_sdot
 
 .. autosignature:: cpyquickhelper.numbers.direct_blas_lapack.dgelss
+
+C++ implementation
+++++++++++++++++++
+
+.. autosignature:: cpyquickhelper.numbers.slowcode.dgemm
+
+.. autosignature:: cpyquickhelper.numbers.slowcode.sgemm
