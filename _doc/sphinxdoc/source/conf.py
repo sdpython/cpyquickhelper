@@ -9,7 +9,7 @@ local_template = os.path.join(os.path.abspath(
     os.path.dirname(__file__)), "phdoc_templates")
 
 from pyquickhelper.helpgen.default_conf import set_sphinx_variables, get_default_stylesheet
-set_sphinx_variables(__file__, "cpyquickhelper", "Xavier Dupré", 2019,
+set_sphinx_variables(__file__, "cpyquickhelper", "Xavier Dupré", 2020,
                      "readable", sphinx_readable_theme.get_html_theme_path(),
                      locals(), extlinks=dict(
                          issue=('https://github.com/sdpython/cpyquickhelper/issues/%s', 'issue')),
