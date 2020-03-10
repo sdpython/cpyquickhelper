@@ -484,7 +484,7 @@ float vector_dot_product_pointer16_sse(const float *p1, const float *p2, size_t 
     float sum = 0;
     size_t i = 0;
     if (size >= BYN) {
-        size_t size_ = size - size % BYNF;
+        size_t size_ = size - size % BYN;
         for(; i < size_; i += BYN, p1 += BYN, p2 += BYN)
             sum += vector_dot_product_pointer16_sse(p1, p2);
     }
@@ -532,7 +532,7 @@ float vector_dot_product_pointer16_avx512(const float *p1, const float *p2)
            r[12] + r[13] + r[14] + r[15]; 
 }
 
-#define BYN 16
+// #define BYN 16
 
 float vector_dot_product_pointer16_avx512(const float *p1, const float *p2, size_t size)
 {
