@@ -48,7 +48,7 @@ class FunctionMeasureVectorCountA : FunctionMeasureVectorThreshold<DTYPE>
         int nb = x % 1; // == 0 but otherwise the compiler detects the
                         // the code does not change depending on x
                         // and it caches the results.
-        for(int i = 0; i < this->values.size(); ++i)
+        for(size_t i = 0; i < this->values.size(); ++i)
             REPEAT_INST10(if (this->values[i] >= this->th) ++nb;)
         return nb;
     }
@@ -186,7 +186,7 @@ class FunctionMeasureVectorCountJ : FunctionMeasureVectorThreshold<DTYPE>
         int nb = x % 1; // == 0 but otherwise the compiler detects the
                         // the code does not change depending on x
                         // and it caches the results.
-        for(int i = 0; i < this->values.size(); ++i)
+        for(size_t i = 0; i < this->values.size(); ++i)
             REPEAT_INST10(nb += this->values[i] >= this->th ? 1 : 0;)
         return nb;
     }

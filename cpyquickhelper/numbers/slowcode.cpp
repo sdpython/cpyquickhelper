@@ -31,7 +31,6 @@ void gemm(bool transA, bool transB,
           NTYPE* C) {
     if (!transA && !transB) {
         // a A B + b C, dimension = M * N
-        size_t total = M * N;
         NTYPE* begin;
         register NTYPE val;
         size_t i, j, k;
