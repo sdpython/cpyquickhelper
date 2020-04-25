@@ -51,8 +51,6 @@ jobs:
     vmImage: 'macOS-latest'
   strategy:
     matrix:
-      Python36:
-        python.version: "3.6"
       Python37:
         python.version: "3.7"
 
@@ -101,6 +99,8 @@ jobs:
   #   displayName: 'Install latex'
   #- script: python -m pip install --upgrade pip setuptools wheel
   #  displayName: 'Install tools'
+
+  - bash: pip install --no-deps pyquickhelper jyquickhelper jupyter_sphinx sphinx-readable-theme
   - script: conda install --file requirements.txt
     displayName: 'Install Requirements'
   - script: |
