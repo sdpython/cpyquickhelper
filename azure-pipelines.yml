@@ -89,7 +89,7 @@ jobs:
   - bash: conda update conda --yes --quiet
     displayName: Update conda.
   - bash: conda info -a
-  - bash: conda create --yes --quiet --name pyenv -c defaults -c conda-forge python=$PYTHON_VERSION tox
+  - bash: conda create --yes --quiet --name pyenv -c defaults -c conda-forge python=$PYTHON_VERSION tox sphinx jupyter Cython numpy mkl scipy scikit-learn pandas coverage pylint
     displayName: Create Anaconda environment.
   - bash: conda list
   - bash: |
@@ -101,7 +101,9 @@ jobs:
   #  displayName: 'Install tools'
 
   - bash: pip install --no-deps pyquickhelper jyquickhelper jupyter_sphinx sphinx-readable-theme
-  - script: conda install --file requirements.txt
+  #- script: conda install --file requirements.txt
+  #  displayName: 'Install Requirements'
+  - script: pip install -r requirements.txt
     displayName: 'Install Requirements'
   - script: |
           # export MACOSX_DEPLOYMENT_TARGET=10.13
