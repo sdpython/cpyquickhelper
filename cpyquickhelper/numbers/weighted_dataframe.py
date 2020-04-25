@@ -79,7 +79,7 @@ class WeightedSeriesDtype(PandasDtype):
         TypeError
             If a class cannot be constructed from this 'string'.
         """
-        if not string.startswith("WD"):
+        if not string.startswith("WD"):  # pragma no cover
             raise TypeError("Unable to parse '{0}'".format(string))
         val = string[2:].strip('() ').split(",")
         if len(val) == 1 and val[0]:
@@ -88,14 +88,13 @@ class WeightedSeriesDtype(PandasDtype):
             val = float(val[0]), float(val[1])
         elif len(val) == 0 or (len(val) == 1 and val[0] == ''):
             val = nan
-        else:
+        else:  # pragma no cover
             raise TypeError("Unable to parse '{0}'".format(string))
         if isinstance(val, tuple):
-            if len(val) != 2:
+            if len(val) != 2:  # pragma no cover
                 raise TypeError("Unable to parse '{0}'".format(string))
             return WeightedDouble(val[0], val[1])
-        else:
-            return WeightedDouble(val)
+        return WeightedDouble(val)
 
 
 @register_series_accessor("wdouble")
@@ -126,12 +125,12 @@ class WeightedDoubleAccessor:
         return self._new_series(lambda s: isnan(s.value))
 
     def _new_series(self, fct):
-        if len(self) == 0:
+        if len(self) == 0:  # pragma no cover
             raise ValueError("Series cannot be empty.")
         if isinstance(self.obj, WeightedArray) or isinstance(self.obj[0], WeightedDouble):
             return WeightedArray([fct(s) for s in self.obj], index=self.obj.index, dtype=float)
-        else:
-            raise TypeError("Unexpected type, array is '{0}', first element is '{1}'".format(
+        raise TypeError(  # pragma no cover
+            "Unexpected type, array is '{0}', first element is '{1}'".format(
                 type(self.obj), type(self.obj[0])))
 
 
@@ -226,7 +225,7 @@ class WeightedArray(PandasArray):
         """
         for s in to_concat:
             if not isinstance(s.dtype, (WeightedSeriesDtype, object)):
-                raise TypeError(
+                raise TypeError(  # pragma no cover
                     "All arrays must be of type WeightedSeriesDtype not {}-{}".format(
                         type(s), type(s.dtype)))
         return WeightedArray(list(chain(*to_concat)))

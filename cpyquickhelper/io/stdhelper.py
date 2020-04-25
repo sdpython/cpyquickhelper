@@ -22,7 +22,7 @@ def capture_output_c(function_to_call) -> Tuple[bytes, Union[bytes, None]]:
 
     .. warning:: *error* is always empty. Both streams are merged.
     """
-    if not callable(function_to_call):
+    if not callable(function_to_call):  # pragma no cover
         raise TypeError("function_to_call must be callable.")
     begin_capture()
     function_to_call()
@@ -30,12 +30,12 @@ def capture_output_c(function_to_call) -> Tuple[bytes, Union[bytes, None]]:
     res = get_capture()
     if isinstance(res, bytes):
         return res, None
-    elif isinstance(res, tuple):
+    if isinstance(res, tuple):
         return res
-    elif res is None:
+    if res is None:
         return None, None
-    else:
-        raise TypeError("Unexpected return type '{0}'.".format(type(res)))
+    raise TypeError(  # pragma no cover
+        "Unexpected return type '{0}'.".format(type(res)))
 
 
 def capture_output_py(function_to_call) -> Tuple[str, str]:
