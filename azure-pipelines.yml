@@ -85,7 +85,7 @@ jobs:
   #  displayName: 'Install tools'
   - script: brew install pybind11
     displayName: 'Install pybind11'
-  - script: pip install -r requirements.txt
+  - script: conda install --file requirements.txt  # pip install -r requirements.txt
     displayName: 'Install Requirements'
   - script: |
           export MACOSX_DEPLOYMENT_TARGET=10.13
