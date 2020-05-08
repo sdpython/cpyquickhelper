@@ -21,6 +21,6 @@ class KThread(Thread):
 
         @return     None if not alive, exit code otherwise.
         """
-        if self.is_alive():
+        if self.is_alive():  # pragma: no cover
             return kill_thread(self.ident)
-        return None
+        return None  # pragma: no cover

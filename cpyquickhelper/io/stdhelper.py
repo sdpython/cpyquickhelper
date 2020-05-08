@@ -28,9 +28,9 @@ def capture_output_c(function_to_call) -> Tuple[bytes, Union[bytes, None]]:
     function_to_call()
     end_capture()
     res = get_capture()
-    if isinstance(res, bytes):
+    if isinstance(res, bytes):  # pragma: no cover
         return res, None
-    if isinstance(res, tuple):
+    if isinstance(res, tuple):  # pragma: no cover
         return res
     if res is None:
         return None, None

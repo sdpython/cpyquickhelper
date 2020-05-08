@@ -5,14 +5,21 @@
 History
 =======
 
-current - 2019-05-24 - 0.00Mb
+current - 2020-05-08 - 0.00Mb
+=============================
+
+* `17`: Add a simple C++ implementation for gemm. (2020-01-17)
+* `15`: enable openmp on mac (2020-01-17)
+* `16`: Add an example of an agnostic container (no data in python containers) (2019-08-29)
+* `14`: link with openmp, implement dot product with it (2019-07-21)
+
+0.2.229 - 2019-06-04 - 0.14Mb
+=============================
+
+0.2.226 - 2019-05-28 - 0.14Mb
 =============================
 
 * `13`: remove folder src (2019-05-23)
-
-0.2.217 - 2019-05-23 - 0.13Mb
-=============================
-
 * `7`: add an example with cython (2019-04-04)
 * `12`: implements a benchmark to measure a sum of floats with float and double accumulator (2019-03-20)
 
