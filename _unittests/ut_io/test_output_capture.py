@@ -21,7 +21,8 @@ class TestOutputCapture(ExtTestCase):
             cprint("cout1")
             cprint("tout2")
 
-        out, err = capture_output(callf, lang="c")
+        res, out, err = capture_output(callf, lang="c")
+        self.assertEmpty(res)
         self.assertTrue(isinstance(out, bytes))
         if sys.platform.startswith("win"):
             self.assertEqual(
@@ -36,17 +37,19 @@ class TestOutputCapture(ExtTestCase):
             print("cout1")
             print("tout2")
 
-        out, err = capture_output(callf, lang="py")
+        fout, out, err = capture_output(callf, lang="py")
         self.assertTrue(isinstance(out, str))
         self.assertEqual(out, 'cout1\ntout2\n')
         self.assertEqual(err, '')
+        self.assertEmpty(fout)
 
     def test_py_output_capture_c(self):
         def callf():
             print("cout1")
             print("tout2")
 
-        out, err = capture_output(callf, lang="c")
+        res, out, err = capture_output(callf, lang="c")
+        self.assertEmpty(res)
         self.assertTrue(isinstance(out, bytes))
         if sys.platform.startswith("win"):
             self.assertEqual(err, None)
@@ -67,10 +70,11 @@ class TestOutputCapture(ExtTestCase):
             cprint("cout1")
             cprint("tout2")
 
-        out, err = capture_output(callf, lang="py")
+        fout, out, err = capture_output(callf, lang="py")
         self.assertTrue(isinstance(out, str))
         self.assertEqual(out, '')
         self.assertEqual(err, '')
+        self.assertEmpty(fout)
 
     def test_c_output_capture_py_error(self):
         callf = 4
@@ -83,10 +87,11 @@ class TestOutputCapture(ExtTestCase):
             cprint("tout2")
             return (4, 5)
 
-        out, err = capture_output(callf, lang="py")
+        fout, out, err = capture_output(callf, lang="py")
         self.assertTrue(isinstance(out, str))
         self.assertEqual(out, '')
         self.assertEqual(err, '')
+        self.assertEqual(fout, (4, 5))
 
     def test_c_output_capture_py_error2(self):
         def callf():

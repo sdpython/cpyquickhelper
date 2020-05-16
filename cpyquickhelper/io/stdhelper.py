@@ -25,15 +25,15 @@ def capture_output_c(function_to_call) -> Tuple[bytes, Union[bytes, None]]:
     if not callable(function_to_call):  # pragma no cover
         raise TypeError("function_to_call must be callable.")
     begin_capture()
-    function_to_call()
+    fout = function_to_call()
     end_capture()
     res = get_capture()
     if isinstance(res, bytes):  # pragma: no cover
-        return res, None
+        return fout, res, None
     if isinstance(res, tuple):  # pragma: no cover
-        return res
+        return (fout, ) + res
     if res is None:
-        return None, None
+        return fout, None, None
     raise TypeError(  # pragma no cover
         "Unexpected return type '{0}'.".format(type(res)))
 
@@ -59,8 +59,8 @@ def capture_output_py(function_to_call) -> Tuple[str, str]:
     out, err = StringIO(), StringIO()
     with redirect_stdout(out):
         with redirect_stderr(err):
-            function_to_call()
-    return out.getvalue(), err.getvalue()
+            fout = function_to_call()
+    return fout, out.getvalue(), err.getvalue()
 
 
 def capture_output(function_to_call, lang="py"):
@@ -77,5 +77,4 @@ def capture_output(function_to_call, lang="py"):
         return capture_output_py(function_to_call)
     elif lang == "c":
         return capture_output_c(function_to_call)
-    else:
-        raise ValueError("lang must be 'py' or 'c' not '{0}'".format(lang))
+    raise ValueError("lang must be 'py' or 'c' not '{0}'".format(lang))
