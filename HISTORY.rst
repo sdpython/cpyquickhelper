@@ -5,7 +5,12 @@
 History
 =======
 
-current - 2020-05-08 - 0.00Mb
+current - 2020-05-16 - 0.00Mb
+=============================
+
+* `18`: Returns the results as well when capturing the standard output (2020-05-16)
+
+0.2.299 - 2020-05-08 - 0.45Mb
 =============================
 
 * `17`: Add a simple C++ implementation for gemm. (2020-01-17)
