@@ -26,7 +26,7 @@ def df2array(df, check=True):
     """
     if check:
         if not isinstance(df, pandas.DataFrame):
-            raise TypeError("df is not a pandas.DataFrame")
+            raise TypeError("df is not a pandas.DataFrame")  # pragma: no cover
         if len(df._data.blocks) != 1:
             raise ValueError(
                 "The dataframe has many block of data. There should be only one column type.")
@@ -65,7 +65,7 @@ def df2arrays(df, sep=",", check=True):
     """
     if check:
         if not isinstance(df, pandas.DataFrame):
-            raise TypeError("df is not a pandas.DataFrame")
+            raise TypeError("df is not a pandas.DataFrame")  # pragma: no cover
 
     cols = df.columns
     res = []

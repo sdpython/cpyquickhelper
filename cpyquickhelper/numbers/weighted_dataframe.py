@@ -154,7 +154,7 @@ class WeightedSeries(Series):
         and then tries @see cl WeightedDoubleAccessor.
         """
         if hasattr(Series, attr):
-            return self.__dict__[attr]
+            return getattr(self, attr)
         elif hasattr(WeightedDoubleAccessor, attr):
             obj = WeightedDoubleAccessor(self)
             return getattr(obj, attr)
