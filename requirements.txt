@@ -3,6 +3,7 @@ Cython
 jupyter
 jupyter_sphinx>=0.2.0
 jyquickhelper
+matplotlib
 numpy>=1.16
 pandas>=0.24
 pybind11
