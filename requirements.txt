@@ -6,9 +6,10 @@ jyquickhelper
 matplotlib
 numpy>=1.16
 pandas>=0.24
-pybind11
-pylint>=2.4.1
 pillow
+pybind11
+pycodestyle
+pylint>=2.4.1
 pyquickhelper>=1.9.3299
 scipy
 sphinx>=2.1
