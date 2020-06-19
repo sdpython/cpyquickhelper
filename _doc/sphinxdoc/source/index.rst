@@ -44,6 +44,10 @@ cpyquickhelper: python + C++ in different ways
     :target: http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
 
+.. image:: https://img.shields.io/github/repo-size/sdpython/cpyquickhelper
+    :target: https://github.com/sdpython/cpyquickhelper/
+    :alt: size
+
 **Links:** `github <https://github.com/sdpython/cpyquickhelper/>`_,
 `documentation <http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/index.html>`_,
 :ref:`l-README`,

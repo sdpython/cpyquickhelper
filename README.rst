@@ -43,6 +43,10 @@ cpyquickhelper: python + C++ in different ways
     :target: http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
 
+.. image:: https://img.shields.io/github/repo-size/sdpython/cpyquickhelper
+    :target: https://github.com/sdpython/cpyquickhelper/
+    :alt: size
+
 *cpyquickhelper* is a template to create a module with
 C functions in different ways. It implements function
 *measure_time*:
