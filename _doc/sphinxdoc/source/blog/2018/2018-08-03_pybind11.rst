@@ -11,8 +11,7 @@
     to implement a couple of operators and to see
     how it behaves into a dataframe.
 
-    .. runpython::
-        :showcode:
+    ::
 
         from pandas import DataFrame, Series
         from cpyquickhelper.numbers.weighted_number import WeightedDouble
@@ -29,6 +28,21 @@
         print(df.wd.wdouble.value)
         # About types
         print(df.dtypes)
+
+    Output:
+
+    ::
+
+                    wd    x              A
+        0  1.000000 (1)  6.0   7.000000 (2)
+        1  3.000000 (2)  7.0  10.000000 (3)
+        <WeightedArray>
+        [1.0, 3.0]
+        Length: 2, dtype: float64
+        wd     object
+        x     float64
+        A      object
+        dtype: object    
 
     The latest version of :epkg:`pandas`
     (0.23) introduced :epkg:`ExtensionArray`
