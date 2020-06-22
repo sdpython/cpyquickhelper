@@ -14,5 +14,4 @@ pyquickhelper>=1.9.3299
 scipy
 sphinx>=2.1
 sphinxcontrib.imagesvg
-sphinx_readable_theme
 wheel
