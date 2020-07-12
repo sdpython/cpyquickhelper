@@ -28,12 +28,12 @@ def capture_output_c(function_to_call) -> Tuple[bytes, Union[bytes, None]]:
     fout = function_to_call()
     end_capture()
     res = get_capture()
+    if res is None:
+        return fout, None, None
     if isinstance(res, bytes):  # pragma: no cover
         return fout, res, None
     if isinstance(res, tuple):  # pragma: no cover
         return (fout, ) + res
-    if res is None:
-        return fout, None, None
     raise TypeError(  # pragma no cover
         "Unexpected return type '{0}'.".format(type(res)))
 
