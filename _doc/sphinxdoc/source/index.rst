@@ -69,7 +69,7 @@ Links on how to use :epkg:`C` in :epkg:`Python` extension:
 
 * `Extending Python with C or C++ <https://docs.python.org/3/extending/extending.html>`_
 * `Building C and C++ Extensions with distutils <https://docs.python.org/3/extending/building.html#building-c-and-c-extensions-with-distutils>`_
-* `Building Extensions For Python 3.5 <http://stevedower.id.au/blog/building-for-python-3-5/>`_
+* `Building Extensions For Python 3.5 <https://stevedower.id.au/blog/building-for-python-3-5/>`_
 
 The produced code might be quite verbose.
 One possible option is :epkg:`pybind11` which
