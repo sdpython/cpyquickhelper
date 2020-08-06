@@ -7,6 +7,8 @@
 
 #include <chrono>
 #include <exception>
+#include <stdexcept>
+#include <iostream>
 #include <vector>
 #include <cmath>
 

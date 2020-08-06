@@ -210,23 +210,74 @@ double benchmark(dot_type * fct, const std::vector<float>& v1, const std::vector
     return std::chrono::duration<double>(end - start).count() / repeat;
 }
 
+typedef int64_t sum_odd_type(const int64_t*, size_t size);
+
+double benchmark(sum_odd_type* fct, const std::vector<int64_t>& v1, int repeat, int number)
+{
+    const int64_t* p1 = v1.data();
+    double sum = 0;
+    auto start = std::chrono::high_resolution_clock::now();
+    for (int r = 0; r < repeat; ++r)
+    {
+        for (int i = 0; i < number; ++i) {
+            sum += (*fct)(p1, v1.size());
+        }
+    }
+    auto end = std::chrono::high_resolution_clock::now();
+    if (sum < 0)
+        throw std::runtime_error("issue 2");
+    return std::chrono::duration<double>(end - start).count() / repeat;
+}
+
 void test_vector_dot_benchmark(int n, int repeat = 10, int number = 50)
 {
     std::vector<float> v1(n);
     std::vector<float> v2(n);
     for (int i = 0; i < v1.size(); ++i) {
-        v1[i] = i;
-        v2[i] = i + 0.1;
+        v1[i] = i + 0.32453f;
+        v2[i] = i + 0.32142f;
     }
     double t;
     t = benchmark(&vector_dot_product_pointer, v1, v2, repeat, number);
     std::cout << v1.size() << " -- vector_dot_product_pointer:          " << t << "\n";
+    t = benchmark(&vector_dot_product_pointer_openmp_default, v1, v2, repeat, number);
+    std::cout << v1.size() << " -- vector_dot_product_pointer_openmp:   " << t << "\n";
     t = benchmark(&vector_dot_product_pointer16, v1, v2, repeat, number);
     std::cout << v1.size() << " -- vector_dot_product_pointer16:        " << t << "\n";
     t = benchmark(&vector_dot_product_pointer16_nofcall, v1, v2, repeat, number);
     std::cout << v1.size() << " -- vector_dot_product_pointer16_nofcall:" << t << "\n";
     t = benchmark(&vector_dot_product_pointer16_sse, v1, v2, repeat, number);
     std::cout << v1.size() << " -- vector_dot_product_pointer16_sse:    " << t << "\n";
+}
+
+void test_sum_odd_benchmark(int n, int repeat = 20, int number = 100)
+{
+    std::vector<int64_t> v1(n);
+    for (int i = 0; i < v1.size(); ++i) {
+        v1[i] = i;
+    }
+    double t;
+    t = benchmark(&sum_odd_test, v1, repeat, number);
+    std::cout << v1.size() << " -- sum_odd_test:    " << t << "\n";
+    t = benchmark(&sum_odd_inline, v1, repeat, number);
+    std::cout << v1.size() << " -- sum_odd_inline:  " << t << "\n";
+    t = benchmark(&sum_odd_b, v1, repeat, number);
+    std::cout << v1.size() << " -- sum_odd_b:       " << t << "\n";
+}
+
+void test_sum_odd0_benchmark(int n, int repeat = 20, int number = 100)
+{
+    std::vector<int64_t> v1(n);
+    for (int i = 0; i < v1.size(); ++i) {
+        v1[i] = i;
+    }
+    double t;
+    t = benchmark(&sum_odd0_test, v1, repeat, number);
+    std::cout << v1.size() << " -- sum_odd0_test:    " << t << "\n";
+    t = benchmark(&sum_odd0_inline, v1, repeat, number);
+    std::cout << v1.size() << " -- sum_odd0_inline:  " << t << "\n";
+    t = benchmark(&sum_odd0_b, v1, repeat, number);
+    std::cout << v1.size() << " -- sum_odd0_b:       " << t << "\n";
 }
 
 void run_all_tests()
@@ -242,7 +293,15 @@ void run_all_tests()
     test_equal();
     test_string();
     test_vector_dot();
-    for (int n = 10; n < 1000000; n += 10000) {
+    for (int n = 12; n < 620000; n += 200000) {
+        std::cout << "\n";
+        test_sum_odd_benchmark(n);
+    }
+    for (int n = 12; n < 620000; n += 200000) {
+        std::cout << "\n";
+        test_sum_odd0_benchmark(n);
+    }
+    for (int n = 10; n < 620000; n += 200000) {
         std::cout << "\n";
         test_vector_dot_benchmark(n);
     }
