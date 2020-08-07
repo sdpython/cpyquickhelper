@@ -3,26 +3,21 @@
 @brief Addition for :epkg:`pandas`.
 """
 from itertools import chain
-from numpy import isnan, dtype, nan, array
+import numpy
 from pandas import Series
-from pandas.api.extensions import register_series_accessor
+from pandas.api.extensions import (
+    register_series_accessor, ExtensionDtype, register_extension_dtype)
 from pandas.arrays import PandasArray
 from pandas.core.arrays.numpy_ import PandasDtype
 from .weighted_number import WeightedDouble  # pylint: disable=E0611
 
 
-class WeightedSeriesDtype(PandasDtype):
+class WeightedSeriesDtype(ExtensionDtype):
     """
     Defines a custom type for a @see cl WeightedSeries.
     """
 
-    dtype = dtype(WeightedDouble)
-
-    def __init__(self):
-        """
-        Initializes dtype.
-        """
-        PandasDtype.__init__(self, dtype=dtype('c16'))
+    dtype = numpy.dtype(WeightedDouble)
 
     def __str__(self):
         """
@@ -87,7 +82,7 @@ class WeightedSeriesDtype(PandasDtype):
         elif len(val) == 2:
             val = float(val[0]), float(val[1])
         elif len(val) == 0 or (len(val) == 1 and val[0] == ''):
-            val = nan
+            val = numpy.nan
         else:  # pragma no cover
             raise TypeError("Unable to parse '{0}'".format(string))
         if isinstance(val, tuple):
@@ -95,6 +90,20 @@ class WeightedSeriesDtype(PandasDtype):
                 raise TypeError("Unable to parse '{0}'".format(string))
             return WeightedDouble(val[0], val[1])
         return WeightedDouble(val)
+
+    @classmethod
+    def construct_array_type(cls):
+        """
+        Return the array type associated with this dtype.
+
+        Returns
+        -------
+        type
+        """
+        return WeightedArray
+
+
+register_extension_dtype(WeightedSeriesDtype)
 
 
 @register_series_accessor("wdouble")
@@ -122,13 +131,14 @@ class WeightedDoubleAccessor:
 
     def isnan(self):
         "Tells if values are missing."
-        return self._new_series(lambda s: isnan(s.value))
+        return self._new_series(lambda s: numpy.isnan(s.value))
 
     def _new_series(self, fct):
         if len(self) == 0:  # pragma no cover
             raise ValueError("Series cannot be empty.")
         if isinstance(self.obj, WeightedArray) or isinstance(self.obj[0], WeightedDouble):
-            return WeightedArray([fct(s) for s in self.obj], index=self.obj.index, dtype=float)
+            return WeightedArray([fct(s) for s in self.obj],
+                                 index=self.obj.index, dtype=float)
         raise TypeError(  # pragma no cover
             "Unexpected type, array is '{0}', first element is '{1}'".format(
                 type(self.obj), type(self.obj[0])))
@@ -155,13 +165,12 @@ class WeightedSeries(Series):
         """
         if hasattr(Series, attr):
             return getattr(self, attr)
-        elif hasattr(WeightedDoubleAccessor, attr):
+        if hasattr(WeightedDoubleAccessor, attr):
             obj = WeightedDoubleAccessor(self)
             return getattr(obj, attr)
-        elif attr == '_ndarray':
-            return array(self)
-        else:
-            raise AttributeError("Unkown attribute '{0}'".format(attr))
+        if attr == '_ndarray':
+            return numpy.array(self)
+        raise AttributeError("Unkown attribute '{0}'".format(attr))
 
 
 class WeightedArray(PandasArray):
@@ -179,9 +188,11 @@ class WeightedArray(PandasArray):
         """
         if "data" in kwargs and isinstance(kwargs["data"], WeightedSeries):
             serie = kwargs["data"]
+        elif len(args) == 1 and isinstance(args[0], numpy.ndarray):
+            PandasArray.__init__(self, args[0])
         else:
             serie = WeightedSeries(*args, **kwargs)
-        PandasArray.__init__(self, serie._ndarray)
+            PandasArray.__init__(self, serie._ndarray)
 
     @property
     def dtype(self):
@@ -208,7 +219,7 @@ class WeightedArray(PandasArray):
 
     def isna(self):
         "is nan?"
-        return array([isnan(s.value) for s in self])
+        return numpy.array([numpy.isnan(s.value) for s in self])
 
     @classmethod
     def _concat_same_type(cls, to_concat):
@@ -229,3 +240,13 @@ class WeightedArray(PandasArray):
                     "All arrays must be of type WeightedSeriesDtype not {}-{}".format(
                         type(s), type(s.dtype)))
         return WeightedArray(list(chain(*to_concat)))
+
+    @classmethod
+    def _from_sequence(cls, scalars, dtype=None, copy: bool = False) -> "PandasArray":
+        if isinstance(dtype, PandasDtype):
+            dtype = dtype._dtype
+
+        result = numpy.asarray(scalars, dtype=dtype)
+        if copy and result is scalars:
+            result = result.copy()
+        return cls(result)

@@ -73,6 +73,18 @@ class TestWeightedSeries(ExtTestCase):
         val = st.getvalue()
         self.assertIn("(", val)
 
+    def test_numpy(self):
+        n1 = WeightedDouble(1, 1)
+        n2 = WeightedDouble(3, 2)
+        arr = numpy.array([n1, n2])
+        self.assertEqual(arr.shape, (2,))
+
+    def test_numpy2(self):
+        n1 = WeightedDouble(1, 1)
+        n2 = WeightedDouble(3, 2)
+        arr = numpy.array([n1, n2], dtype=WeightedDouble)
+        self.assertEqual(arr.shape, (2,))
+
     def test_dataframe(self):
         n1 = WeightedDouble(1, 1)
         n2 = WeightedDouble(3, 2)

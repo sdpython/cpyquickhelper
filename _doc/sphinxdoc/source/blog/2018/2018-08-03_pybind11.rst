@@ -42,7 +42,7 @@
         wd     object
         x     float64
         A      object
-        dtype: object    
+        dtype: object
 
     The latest version of :epkg:`pandas`
     (0.23) introduced :epkg:`ExtensionArray`

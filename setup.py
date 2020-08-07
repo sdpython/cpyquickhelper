@@ -383,5 +383,5 @@ if not r:
         package_data=package_data,
         setup_requires=["pybind11", "cython", "scipy", "numpy"],
         install_requires=["pybind11", "numpy>=1.16",
-                          "cython", 'scipy'],
+                          "cython", 'scipy', 'pandas>=1.0'],
     )

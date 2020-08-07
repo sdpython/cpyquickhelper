@@ -5,7 +5,7 @@ jupyter_sphinx>=0.2.0
 jyquickhelper
 matplotlib
 numpy>=1.16
-pandas>=0.24
+pandas>=1.0
 pillow
 pybind11
 pycodestyle
