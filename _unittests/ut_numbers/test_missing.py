@@ -46,7 +46,7 @@ class TestMissing(ExtTestCase):
         self.assertEqual(str(a2), '[False]')
         serie = numpy.array([WeightedSeriesDtype()])
         a2 = arr._concat_same_type([serie])  # pylint: disable=W0212
-        self.assertIn("WeightedDouble", str(a2))
+        self.assertIn("WeightedSeriesDtype()", str(a2))
 
 
 if __name__ == "__main__":

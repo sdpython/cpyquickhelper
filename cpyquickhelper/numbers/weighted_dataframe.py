@@ -34,6 +34,10 @@ class WeightedSeriesDtype(ExtensionDtype):
         """
         return WeightedSeriesDtype
 
+    def __repr__(self):
+        "usual"
+        return "WeightedSeriesDtype()"
+
     @property
     def kind(self):
         # type () -> str
@@ -200,6 +204,14 @@ class WeightedArray(PandasArray):
         Returns @see cl WeightedSeriesDtype.
         """
         return self._dtype
+
+    @property
+    def name(self):
+        """
+        A string identifying the data type.
+        Will be used for display in, e.g. ``Series.dtype``
+        """
+        return "WeightedArray"
 
     def __add__(self, other):
         "Addition"
