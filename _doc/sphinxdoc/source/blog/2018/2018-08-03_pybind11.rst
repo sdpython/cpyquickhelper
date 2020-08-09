@@ -53,8 +53,9 @@
     underneath but still show what it looks like
     despite the potential speed issue.
 
-    .. runpython::
-        :showcode:
+    `<<<`
+
+    ::
 
         from pandas import DataFrame, Series
         from cpyquickhelper.numbers.weighted_number import WeightedDouble
@@ -71,6 +72,21 @@
         print(df.wd.wdouble.value)
         # About types
         print(df.dtypes)
+
+    `>>>`
+
+    ::
+
+                     wd    x              A
+        0  1.000000 (1)  6.0   7.000000 (2)
+        1  3.000000 (2)  7.0  10.000000 (3)
+        <WeightedArray>
+        [1.0, 3.0]
+        Length: 2, dtype: float64
+        wd     object
+        x     float64
+        A      object
+        dtype: object
 
     The property ``wdouble`` should not be necessary but
     the type of a column is still a :epkg:`Series`,
