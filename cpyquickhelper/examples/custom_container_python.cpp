@@ -48,10 +48,10 @@ PYBIND11_MODULE(custom_container_python, m) {
 	m.doc() = "Implements a custom container which may contain everything.";
     
     py::enum_<ContainerType>(m, "ContainerType")
-        .value("VOID", ContainerType::VOID)
-        .value("BYTE", ContainerType::BYTE)
-        .value("FLOAT", ContainerType::FLOAT)
-        .value("DOUBLE", ContainerType::DOUBLE)
+        .value("VOID", ContainerType::VOID, "untyped pointer")
+        .value("BYTE", ContainerType::BYTE, "byte pointer")
+        .value("FLOAT", ContainerType::FLOAT, "float pointer")
+        .value("DOUBLE", ContainerType::DOUBLE, "double pointer")
         .export_values();
 
 	py::class_<PyCContainer>(m, "PyCContainer", 

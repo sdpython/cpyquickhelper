@@ -70,6 +70,7 @@ epkg_dictionary.update({
     'nuitka': 'http://nuitka.net/',
     'numba': 'https://numba.pydata.org/',
     'pybind11': 'https://github.com/pybind/pybind11',
+    'Pythran': 'https://pythran.readthedocs.io/en/latest/',
     'pythran': 'https://pythran.readthedocs.io/en/latest/',
     'Series': 'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html',
     'SSE': 'https://fr.wikipedia.org/wiki/Streaming_SIMD_Extensions',
