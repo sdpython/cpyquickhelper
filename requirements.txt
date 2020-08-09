@@ -13,6 +13,6 @@ pycodestyle
 pylint>=2.4.1
 pyquickhelper>=1.9.3299
 scipy
-sphinx>=2.1
+sphinx!=3.2.0
 sphinxcontrib.imagesvg
 wheel
