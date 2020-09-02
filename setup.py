@@ -221,7 +221,7 @@ if not r:
         extra_compile_args_bench = extra_compile_args_numbers.copy()
         extra_link_args = ['-lgomp']
         define_macros = [('USE_OPENMP', None)]
-        if platform.linux_distribution()[:2] == ('Ubuntu', '16.04'):
+        if "Ubuntu 16.04" in platform.version():
             extra_compile_args_numbers.append('-std=c++11')
 
     # extensions
