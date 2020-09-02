@@ -84,7 +84,7 @@ def check_speed(dims=[100000], repeat=10, number=50, fLOG=print):  # pylint: dis
     Prints out some information about speed computation
     of this laptop. See :ref:`cbenchmarkbranchingrst` to compare.
 
-    @param      n           sets of dimensions to try
+    @param      dims        sets of dimensions to try
     @param      repeat      average over *repeat* experiment
     @param      number      number of execution in one row
     @param      fLOG        logging function

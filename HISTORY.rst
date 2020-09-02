@@ -5,7 +5,16 @@
 History
 =======
 
-current - 2020-05-16 - 0.00Mb
+current - 2020-09-02 - 0.00Mb
+=============================
+
+* `20`: Fixes build on ubuntu 16.04 (2020-09-02)
+* `19`: PandasDtype fails with numpy 1.19 (2020-08-07)
+
+0.2.303 - 2020-05-16 - 0.43Mb
+=============================
+
+0.2.302 - 2020-05-16 - 0.69Mb
 =============================
 
 * `18`: Returns the results as well when capturing the standard output (2020-05-16)

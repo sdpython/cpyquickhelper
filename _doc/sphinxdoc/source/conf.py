@@ -69,6 +69,7 @@ epkg_dictionary.update({
     'llvmlite': 'https://llvmlite.readthedocs.io/en/latest/index.html',
     'nuitka': 'http://nuitka.net/',
     'numba': 'https://numba.pydata.org/',
+    'PandasArray': 'https://pandas.pydata.org/docs/reference/api/pandas.arrays.PandasArray.html',
     'pybind11': 'https://github.com/pybind/pybind11',
     'Pythran': 'https://pythran.readthedocs.io/en/latest/',
     'pythran': 'https://pythran.readthedocs.io/en/latest/',
