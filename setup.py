@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
+import platform
 import warnings
 from setuptools import setup, Extension
 from setuptools import find_packages
@@ -220,6 +221,8 @@ if not r:
         extra_compile_args_bench = extra_compile_args_numbers.copy()
         extra_link_args = ['-lgomp']
         define_macros = [('USE_OPENMP', None)]
+        if platform.linux_distribution()[:2] == ('Ubuntu', '16.04'):
+            extra_compile_args_numbers.append('-std=c++11')
 
     # extensions
 
