@@ -223,6 +223,8 @@ if not r:
         define_macros = [('USE_OPENMP', None)]
         if "Ubuntu" in platform.version() and "16.04" in platform.version():
             extra_compile_args_numbers.append('-std=c++11')
+            extra_compile_args_thread.append('-std=c++11')
+            extra_compile_args_bench.append('-std=c++11')
 
     # extensions
 
