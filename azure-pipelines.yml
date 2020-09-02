@@ -92,10 +92,6 @@ jobs:
 #  - script: |
 #      python -u setup.py build_sphinx
 #    displayName: 'Builds Documentation'
-  - task: PublishPipelineArtifact@0
-    inputs:
-      artifactName: 'wheel-linux-$(python.version)'
-      targetPath: 'dist'
 
 - job: 'TestMac'
   pool:
