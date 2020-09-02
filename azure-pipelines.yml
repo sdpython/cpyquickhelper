@@ -46,7 +46,6 @@ jobs:
       artifactName: 'wheel-linux-$(python.version)'
       targetPath: 'dist'
 
-jobs:
 - job: 'TestLinux16'
   pool:
     vmImage: 'ubuntu-16.04'
