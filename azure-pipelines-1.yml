@@ -26,7 +26,6 @@ steps:
         ls -lh wheelhouse/
         mkdir -p dist
         cp wheelhouse/$(package_name)*.whl dist/.
-      displayName: Build wheels
    - task: PublishPipelineArtifact@0
      inputs:
        artifactName: 'wheel-manylinux-$(python.version)'
