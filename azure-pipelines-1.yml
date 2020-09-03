@@ -22,7 +22,7 @@ strategy:
 steps:
    - script: |
         set -ex
-        docker run -e PLAT=$(plat) -e package_name=$(package_name) --rm -v `pwd`:/io $(image) /io/build-wheels.sh
+        docker run -e PLAT=$(plat) -e package_name=$(package_name) --rm -v `pwd`:/io $(image) /io/.ci/cpyquickhelper/build-wheels.sh
         ls -lh wheelhouse/
         mkdir -p dist
         cp wheelhouse/$(package_name)*.whl dist/.
