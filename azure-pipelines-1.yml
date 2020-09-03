@@ -2,31 +2,33 @@
 # Create and test a Python package on multiple Python versions.
 # Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
+# https://iscinumpy.gitlab.io/post/azure-devops-python-wheels/
 
 trigger:
 - master
 
 pool:
   vmImage: 'ubuntu-latest'
+
 strategy:
-  matrix:
-    Python37:
-      python.version: '3.7'
-    Python38:
-      python.version: '3.8'
+    matrix:
+      64Bit:
+        package_name: cpyquickhelper
+        arch: x86_64
+        plat: manylinux1_x86_64
+        image: quay.io/pypa/manylinux1_x86_64
+        python.architecture: x64
 
 steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '$(python.version)'
-  displayName: 'Use Python $(python.version)'
-
-- script: |
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
-  displayName: 'Install dependencies'
-
-- script: |
-    pip install pytest pytest-azurepipelines
-    pytest
-  displayName: 'pytest'
+   - script: |
+        set -ex
+        docker run -e PLAT=$(plat) -e package_name=$(package_name) --rm -v `pwd`:/io $(image) /io/.ci/build-wheels.sh
+        ls -lh wheelhouse/
+        mkdir -p dist
+        cp wheelhouse/$(package_name)*.whl dist/.
+      displayName: Build wheels
+   - task: PublishPipelineArtifact@0
+     inputs:
+       artifactName: 'wheel-manylinux-$(python.version)'
+       targetPath: 'dist'
+  
