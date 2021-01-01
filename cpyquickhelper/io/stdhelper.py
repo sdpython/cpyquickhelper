@@ -2,20 +2,20 @@
 @file
 @brief Python wrapper around C functions.
 """
-from typing import Tuple, Union
+from typing import Tuple
 from io import StringIO
 from contextlib import redirect_stdout, redirect_stderr
 from .stdchelper import begin_capture, end_capture, get_capture  # pylint: disable=E0611
 
 
-def capture_output_c(function_to_call) -> Tuple[bytes, Union[bytes, None]]:
+def capture_output_c(function_to_call) -> Tuple:
     """
     Capture the standard output and error for
     function *function_to_call*, it wraps C code which
     catches information from the command line.
 
-    @param      function_to_call        function to call
-    @return                             output, error
+    :param function_to_call: function to call
+    :return: output, error
 
     This function must not be called in parallel with another
     call of the same function.
@@ -46,8 +46,8 @@ def capture_output_py(function_to_call) -> Tuple[str, str]:
     and function
     `redirect_stderr <https://docs.python.org/3/library/contextlib.html#contextlib.redirect_stderr>`_.
 
-    @param      function_to_call        function to call
-    @return                             output, error
+    :param function_to_call: function to call
+    :return: output, error
 
     This function must not be called in parallel with another
     call of the same function.
@@ -70,8 +70,8 @@ def capture_output(function_to_call, lang="py"):
     @see fn capture_output_py or @see fn capture_output_c
     if lang is *'c'*.
 
-    @param      function_to_call        function to call
-    @return                             output, error
+    :param function_to_call: function to call
+    :return: output, error
     """
     if lang == "py":
         return capture_output_py(function_to_call)

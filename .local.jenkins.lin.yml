@@ -2,8 +2,7 @@
 language: python
 
 python:
-  - { PATH: "{{Python37}}", VERSION: 3.7, DIST: std, PYINT: python3.7 }
-  - { PATH: "{{Python38}}", VERSION: 3.8, DIST: std, PYINT: python3.8 }
+  - { PATH: "{{Python39}}", VERSION: 3.9, DIST: std, PYINT: python3.9 }
   
 virtualenv:
   - path: {{ospathjoin(root_path, pickname("$NAME_JENKINS", project_name + "_$VERSION_$DIST_$NAME"), "_venv")}}
@@ -27,4 +26,4 @@ after_script:
 
 documentation:
   - if [ ${NAME} == "UT" ] then $PYINT -u setup.py build_sphinx fi
-  - if [ ${NAME} == "UT" and ${VERSION} == "3.8" ] then cp -R -f _doc/sphinxdoc/build/html dist/html fi
+  - if [ ${NAME} == "UT" and ${VERSION} == "3.9" ] then cp -R -f _doc/sphinxdoc/build/html dist/html fi

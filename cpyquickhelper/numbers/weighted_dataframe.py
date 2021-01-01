@@ -3,10 +3,12 @@
 @brief Addition for :epkg:`pandas`.
 """
 from itertools import chain
+from typing import Sequence, Type
 import numpy
 from pandas import Series
 from pandas.api.extensions import (
     register_series_accessor, ExtensionDtype, register_extension_dtype)
+from pandas.core.arrays.base import ExtensionArrayT
 from pandas.arrays import PandasArray
 from pandas.core.arrays.numpy_ import PandasDtype
 from .weighted_number import WeightedDouble  # pylint: disable=E0611
@@ -234,8 +236,8 @@ class WeightedArray(PandasArray):
         return numpy.array([numpy.isnan(s.value) for s in self])
 
     @classmethod
-    def _concat_same_type(cls, to_concat):
-        # type: (Sequence[ExtensionArray]) -> ExtensionArray
+    def _concat_same_type(cls: Type[ExtensionArrayT],  # pylint: disable=W0221
+                          to_concat: Sequence[ExtensionArrayT]) -> ExtensionArrayT:
         """Concatenate multiple array
 
         Parameters
@@ -254,7 +256,7 @@ class WeightedArray(PandasArray):
         return WeightedArray(list(chain(*to_concat)))
 
     @classmethod
-    def _from_sequence(cls, scalars, dtype=None, copy: bool = False) -> "PandasArray":
+    def _from_sequence(cls, scalars, *, dtype=None, copy=False):
         if isinstance(dtype, PandasDtype):
             dtype = dtype._dtype
 

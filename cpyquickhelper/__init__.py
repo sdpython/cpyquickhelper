@@ -5,7 +5,7 @@
 :epkg:`Python` + C.
 """
 
-__version__ = "0.2.329"
+__version__ = "0.2.336"
 __author__ = "Xavier Dupré"
 __github__ = "https://github.com/sdpython/cpyquickhelper"
 __url__ = "http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/index.html"

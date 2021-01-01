@@ -4,8 +4,8 @@ jobs:
     vmImage: 'ubuntu-latest'
   strategy:
     matrix:
-      Python37-Linux:
-        python.version: '3.8'
+      Python39-Linux:
+        python.version: '3.9'
     maxParallel: 3
 
   steps:
@@ -53,8 +53,8 @@ jobs:
     vmImage: 'ubuntu-16.04'
   strategy:
     matrix:
-      Python37-Linux:
-        python.version: '3.8'
+      Python39-Linux:
+        python.version: '3.9'
     maxParallel: 3
 
   steps:
@@ -98,8 +98,8 @@ jobs:
     vmImage: 'macOS-latest'
   strategy:
     matrix:
-      Python37:
-        python.version: "3.7"
+      Python39-Mac:
+        python.version: "3.9"
 
   steps:
   - task: UsePythonVersion@0
@@ -142,14 +142,11 @@ jobs:
   - bash: |
       source activate pyenv
 
-  # - script: brew cask install mactex
+  # - script: brew install --cask  mactex
   #   displayName: 'Install latex'
   #- script: python -m pip install --upgrade pip setuptools wheel
   #  displayName: 'Install tools'
 
-  - bash: pip install --no-deps pyquickhelper jyquickhelper jupyter_sphinx sphinx-readable-theme
-  #- script: conda install --file requirements.txt
-  #  displayName: 'Install Requirements'
   - script: pip install -r requirements.txt
     displayName: 'Install Requirements'
   - script: python -c "import platform;print(platform.version())"
