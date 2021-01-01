@@ -125,6 +125,7 @@ jobs:
   - script: brew install pandoc
     displayName: 'Install Pandoc'
   - script: brew install graphviz
+    continueOnError: true
     displayName: 'Install Graphviz'
   - script: brew install pybind11
     displayName: 'Install pybind11'
