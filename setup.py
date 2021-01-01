@@ -3,8 +3,7 @@ import sys
 import os
 import platform
 import warnings
-from setuptools import setup, Extension
-from setuptools import find_packages
+from setuptools import setup, Extension, find_packages
 
 #########
 # settings
@@ -334,41 +333,50 @@ if not r:
         define_macros=define_macros)
 
     # cython and numbers
-    import numpy
-    pattern1 = "cpyquickhelper.numbers.%s"
-    name = 'direct_blas_lapack'
-    ext_blas = Extension(
-        pattern1 % name,
-        ['cpyquickhelper/numbers/%s.pyx' % name],
-        include_dirs=[numpy.get_include()],
-        extra_compile_args=["-O3"],
-        define_macros=define_macros)
+    def get_extensions():
+        import numpy
+        pattern1 = "cpyquickhelper.numbers.%s"
+        name = 'direct_blas_lapack'
+        ext_blas = Extension(
+            pattern1 % name,
+            ['cpyquickhelper/numbers/%s.pyx' % name],
+            include_dirs=[numpy.get_include()],
+            extra_compile_args=["-O3"],
+            define_macros=define_macros)
 
-    # cythonize
+        # cythonize
 
-    opts = dict(boundscheck=False, cdivision=True,
-                wraparound=False, language_level=3,
-                cdivision_warnings=True)
+        opts = dict(boundscheck=False, cdivision=True,
+                    wraparound=False, language_level=3,
+                    cdivision_warnings=True)
+
+        try:
+            from Cython.Build import cythonize
+            ext_modules = cythonize([ext_blas], compiler_directives=opts)
+        except ImportError:
+            # Cython is not installed.
+            warnings.warn(
+                "cython is not installed. Only pure python subpckages will be available.")
+            ext_modules = None
+
+        # setup
+        if ext_modules is not None:
+            ext_modules.extend([
+                ext_slowcode,
+                ext_custom_container,
+                ext_thread, ext_stdhelper,
+                ext_numbers, ext_benchmark,
+                ext_benchmark_dot,
+                ext_benchmark_sum_type
+            ])
+        return ext_modules
 
     try:
-        from Cython.Build import cythonize
-        ext_modules = cythonize([ext_blas], compiler_directives=opts)
-    except ImportError:
-        # Cython is not installed.
-        warnings.warn(
-            "cython is not installed. Only pure python subpckages will be available.")
+        ext_modules = get_extensions()
+    except ImportError as e:
+        # Missing dependencies.
+        warnings.warn("Missing dependency %r." % e)
         ext_modules = None
-
-    # setup
-    if ext_modules is not None:
-        ext_modules.extend([
-            ext_slowcode,
-            ext_custom_container,
-            ext_thread, ext_stdhelper,
-            ext_numbers, ext_benchmark,
-            ext_benchmark_dot,
-            ext_benchmark_sum_type
-        ])
 
     setup(
         name=project_var_name,

@@ -8,6 +8,8 @@ History
 current - 2021-01-01 - 0.00Mb
 =============================
 
+* `21`: Fixes setup.py when dependencies are not installed. (2021-01-01)
+
 0.2.330 - 2020-09-02 - 0.45Mb
 =============================
 
@@ -15,9 +17,6 @@ current - 2021-01-01 - 0.00Mb
 * `19`: PandasDtype fails with numpy 1.19 (2020-08-07)
 
 0.2.303 - 2020-05-16 - 0.43Mb
-=============================
-
-0.2.302 - 2020-05-16 - 0.69Mb
 =============================
 
 * `18`: Returns the results as well when capturing the standard output (2020-05-16)
