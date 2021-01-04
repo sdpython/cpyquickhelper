@@ -1,0 +1,30 @@
+
+.. blogpost::
+    :title: Issues with installation from source on Windows
+    :keywords: Windows, win32, pip
+    :date: 2021-01-04
+    :categories: installation
+    :lid: blog-install-issue-windows
+
+    The installation may fail on Windows when the model
+    is compiled from the source. I could not find a particular
+    reason. It works when :epkg:`numpy` is uninstalled
+    before running `pip install cpyquickhelper`.
+    Otherwise, this is the kind of error which appear:
+
+    ::
+
+        AppData\Local\Temp\pip-install-neuk85qw\cpyquickhelper_478c84dd0c2549f4bbfec94c5d99c7f8\cpyquickhelper\numbers\slowcode.cpp :
+        fatal error C1083: Impossible d'ouvrir le fichier g‚n‚r‚(e) par le compilateurÿ: ''ÿ: Invalid argument
+
+    Or:
+
+    ::
+
+        RuntimeError: The current Numpy installation ('c:\\xavierdupre\\venv\\py38\\lib\\site-packages\\numpy\\__init__.py')
+        fails to pass a sanity check due to a bug in the windows runtime.
+
+    This happened on a virtual environment.
+    The best is probably to download one of the
+    `artifacts from appveyor
+    <https://ci.appveyor.com/project/sdpython/cpyquickhelper/build/artifacts>`_.

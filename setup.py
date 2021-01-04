@@ -228,7 +228,7 @@ if not r:
     # cython and numbers
     def get_extensions():
         import numpy
-        
+
         ext_custom_container = Extension(
             'cpyquickhelper.examples.custom_container_python',
             [os.path.join(root, 'cpyquickhelper/examples/custom_container.cpp'),
@@ -308,7 +308,8 @@ if not r:
 
         ext_benchmark_sum_type = Extension(
             'cpyquickhelper.numbers.cbenchmark_sum_type',
-            [os.path.join(root, 'cpyquickhelper/numbers/cbenchmark_sum_type.cpp')],
+            [os.path.join(
+                root, 'cpyquickhelper/numbers/cbenchmark_sum_type.cpp')],
             extra_compile_args=extra_compile_args_bench,
             extra_link_args=extra_link_args,
             include_dirs=[
@@ -333,7 +334,7 @@ if not r:
             ],
             language='c++',
             define_macros=define_macros)
-        
+
         pattern1 = "cpyquickhelper.numbers.%s"
         name = 'direct_blas_lapack'
         ext_blas = Extension(
