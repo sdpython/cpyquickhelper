@@ -43,14 +43,19 @@ jobs:
 #  - script: |
 #      python -u setup.py build_sphinx
 #    displayName: 'Builds Documentation'
+  - script: |
+      python -m pip install cibuildwheel
+      python -m cibuildwheel --output-dir dist/wheelhouse
+    displayName: 'Build Package'
   - task: PublishPipelineArtifact@0
     inputs:
       artifactName: 'wheel-linux-$(python.version)'
       targetPath: 'dist'
 
-- job: 'TestLinux16'
+jobs:
+- job: 'TestWindows'
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'windows-latest'
   strategy:
     matrix:
       Python39-Linux:
@@ -62,18 +67,6 @@ jobs:
     inputs:
       versionSpec: '$(python.version)'
       architecture: 'x64'
-  - script: sudo apt-get update
-    displayName: 'AptGet Update'
-  - script: sudo apt-get install -y pandoc
-    displayName: 'Install Pandoc'
-  - script: sudo apt-get install -y texlive texlive-latex-extra texlive-xetex dvipng
-    displayName: 'Install Latex'
-  - script: sudo apt-get install -y p7zip-full
-    displayName: 'Install 7z, rar'
-  - script: sudo apt-get install -y inkscape
-    displayName: 'Install Inkscape'
-  - script: sudo apt-get install -y graphviz
-    displayName: 'Install Graphviz'
   - script: python -m pip install --upgrade pip setuptools wheel
     displayName: 'Install tools'
   - script: pip install -r requirements.txt
@@ -81,17 +74,16 @@ jobs:
   - script: python -c "import platform;print(platform.version())"
     displayName: 'Platform'
   - script: |
-      python -u setup.py build_ext --inplace
-    displayName: 'Runs Unit Tests'
-  - script: |
-      python -u setup.py unittests
-    displayName: 'Runs Unit Tests'
-  - script: |
       python -u setup.py bdist_wheel
     displayName: 'Build Package'
-#  - script: |
-#      python -u setup.py build_sphinx
-#    displayName: 'Builds Documentation'
+  - script: |
+      python -m pip install cibuildwheel
+      python -m cibuildwheel --output-dir dist/wheelhouse
+    displayName: 'Build Package'
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'wheel-linux-$(python.version)'
+      targetPath: 'dist'
 
 - job: 'TestMac'
   pool:
@@ -162,8 +154,11 @@ jobs:
   - script: |
       python -u setup.py bdist_wheel
     displayName: 'Build Package'
+  - script: |
+      python -m pip install cibuildwheel
+      python -m cibuildwheel --output-dir dist/wheelhouse
+    displayName: 'Build Package'
   - task: PublishPipelineArtifact@0
     inputs:
       artifactName: 'wheel-mac-$(python.version)'
       targetPath: 'dist'
-
