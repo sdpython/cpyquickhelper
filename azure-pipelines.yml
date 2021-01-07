@@ -7,7 +7,6 @@ jobs:
       Python39-Linux:
         python.version: '3.9'
     maxParallel: 3
-
   steps:
   - task: UsePythonVersion@0
     inputs:
@@ -33,7 +32,7 @@ jobs:
     displayName: 'Platform'
   - script: |
       python -u setup.py build_ext --inplace
-    displayName: 'Runs Unit Tests'
+    displayName: 'Build inplace'
   - script: |
       python -u setup.py unittests
     displayName: 'Runs Unit Tests'
@@ -45,8 +44,12 @@ jobs:
 #    displayName: 'Builds Documentation'
   - script: |
       python -m pip install cibuildwheel
+      export CIBW_MANYLINUX_X86_64_IMAGE="manylinux1"
+      export CIBW_BEFORE_BUILD="pip install ."
+      export CIBW_BEFORE_BUILD="pip install pybind11 cython"
+      export CIBW_SKIP="cp37-* cp38-* cp39-*"
       python -m cibuildwheel --output-dir dist/wheelhouse
-    displayName: 'Build Package'
+    displayName: 'Build Package manylinux2014'
   - task: PublishPipelineArtifact@0
     inputs:
       artifactName: 'wheel-linux-$(python.version)'
@@ -60,7 +63,6 @@ jobs:
       Python39-Linux:
         python.version: '3.9'
     maxParallel: 3
-
   steps:
   - task: UsePythonVersion@0
     inputs:
@@ -77,6 +79,9 @@ jobs:
     displayName: 'Build Package'
   - script: |
       python -m pip install cibuildwheel
+      set CIBW_BEFORE_BUILD="pip install ."
+      set CIBW_BEFORE_BUILD="pip install pybind11 cython"
+      set CIBW_SKIP="cp37-* cp38-* cp39-*"
       python -m cibuildwheel --output-dir dist/wheelhouse
     displayName: 'Build Package'
   - task: PublishPipelineArtifact@0
@@ -91,7 +96,6 @@ jobs:
     matrix:
       Python39-Mac:
         python.version: "3.9"
-
   steps:
   - task: UsePythonVersion@0
     inputs:
@@ -99,7 +103,6 @@ jobs:
       architecture: 'x64'
   - script: gcc --version
     displayName: 'gcc version'
-
   - script: |
           brew update
     displayName: 'brew update'
@@ -111,8 +114,9 @@ jobs:
     displayName: 'install llvm'
   - script: brew install libomp
     displayName: 'Install omp'
-  - script: brew install p7zip
-    displayName: 'Install p7zip'
+  # already installed
+  #- script: brew install p7zip
+  #  displayName: 'Install p7zip'
   - script: brew install pandoc
     displayName: 'Install Pandoc'
   - script: brew install graphviz
@@ -120,7 +124,6 @@ jobs:
     displayName: 'Install Graphviz'
   - script: brew install pybind11
     displayName: 'Install pybind11'
-
   - bash: echo "##vso[task.prependpath]$CONDA/bin"
     displayName: Add conda to PATH.
   - bash: sudo chown -R $USER $CONDA
@@ -133,12 +136,10 @@ jobs:
   - bash: conda list
   - bash: |
       source activate pyenv
-
   # - script: brew install --cask  mactex
   #   displayName: 'Install latex'
   #- script: python -m pip install --upgrade pip setuptools wheel
   #  displayName: 'Install tools'
-
   - script: pip install -r requirements.txt
     displayName: 'Install Requirements'
   - script: python -c "import platform;print(platform.version())"
@@ -155,6 +156,9 @@ jobs:
     displayName: 'Build Package'
   - script: |
       python -m pip install cibuildwheel
+      export CIBW_BEFORE_BUILD="pip install ."
+      export CIBW_BEFORE_BUILD="pip install pybind11 cython"
+      export CIBW_SKIP="cp37-* cp38-* cp39-*"
       python -m cibuildwheel --output-dir dist/wheelhouse
     displayName: 'Build Package'
   - task: PublishPipelineArtifact@0
