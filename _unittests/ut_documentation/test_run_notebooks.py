@@ -7,7 +7,7 @@ import os
 import unittest
 import platform
 from pyquickhelper.loghelper import fLOG
-from pyquickhelper.pycode import ExtTestCase
+from pyquickhelper.pycode import ExtTestCase, skipif_appveyor
 from pyquickhelper.ipythonhelper import test_notebook_execution_coverage
 import cpyquickhelper
 
@@ -31,6 +31,7 @@ class TestRunNotebooksPython(ExtTestCase):
         test_notebook_execution_coverage(
             __file__, "branching", folder, 'cpyquickhelper', fLOG=fLOG)
 
+    @skipif_appveyor("unstable issue")
     def test_run_notebooks_nobranching(self):
         fLOG(
             __file__,
