@@ -212,18 +212,14 @@ if not r:
         define_macros = [('USE_OPENMP', None)]
     else:
         libraries_thread = None
-        extra_compile_args_thread = ['-lpthread', '-fopenmp']
+        extra_compile_args_thread = ['-lpthread', '-fopenmp', '-std=c++11']
         # option -mavx512f enable AVX 512 instructions
         # see https://blog.qiqitori.com/?p=390
         # , '-o2', '-mavx512f']
-        extra_compile_args_numbers = ['-fopenmp']
+        extra_compile_args_numbers = ['-fopenmp', '-std=c++11']
         extra_compile_args_bench = extra_compile_args_numbers.copy()
         extra_link_args = ['-lgomp']
         define_macros = [('USE_OPENMP', None)]
-        if "Ubuntu" in platform.version() and "16.04" in platform.version():
-            extra_compile_args_numbers.append('-std=c++11')
-            extra_compile_args_thread.append('-std=c++11')
-            extra_compile_args_bench.append('-std=c++11')
 
     # cython and numbers
     def get_extensions():
