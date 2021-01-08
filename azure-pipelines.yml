@@ -36,9 +36,6 @@ jobs:
   - script: |
       python -u setup.py unittests
     displayName: 'Runs Unit Tests'
-  - script: |
-      python -u setup.py bdist_wheel
-    displayName: 'Build Package'
 #  - script: |
 #      python -u setup.py build_sphinx
 #    displayName: 'Builds Documentation'
@@ -47,8 +44,7 @@ jobs:
       export CIBW_MANYLINUX_X86_64_IMAGE="manylinux2014"
       export CIBW_BEFORE_BUILD="pip install ."
       export CIBW_BEFORE_BUILD="pip install pybind11 cython numpy scipy pyquickhelper"
-      export CIBW_BUILD="cp37-manylinux_x86_64 cp38-manylinux_x86_64"
-      # cp39-manylinux_x86_64 seems broken.
+      export CIBW_BUILD="cp37-manylinux_x86_64 cp38-manylinux_x86_64 cp39-manylinux_x86_64"
       python -m cibuildwheel --output-dir dist/wheelhouse --platform linux
     displayName: 'Build Package manylinux2014'
   - task: PublishPipelineArtifact@0
@@ -75,9 +71,6 @@ jobs:
     displayName: 'Install Requirements'
   - script: python -c "import platform;print(platform.version())"
     displayName: 'Platform'
-  - script: |
-      python -u setup.py bdist_wheel
-    displayName: 'Build Package'
   - script: |
       python -m pip install cibuildwheel
       set CIBW_BEFORE_BUILD=pip install .
@@ -152,9 +145,6 @@ jobs:
   - script: |
       python -u setup.py unittests
     displayName: 'Runs Unit Tests'
-  - script: |
-      python -u setup.py bdist_wheel
-    displayName: 'Build Package'
   - script: |
       python -m pip install cibuildwheel
       export CIBW_BEFORE_BUILD="pip install ."
