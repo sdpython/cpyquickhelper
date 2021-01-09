@@ -72,8 +72,6 @@ jobs:
     displayName: 'Install Requirements'
   - script: python -c "import platform;print(platform.version())"
     displayName: 'Platform'
-  - script: export PYTHONPATH=src
-    displayName: 'PYTHONPATH=src'
   - script: python -u setup.py build_ext --inplace
     displayName: 'Build inplace'
   - script: python -u setup.py unittests
