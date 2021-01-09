@@ -5,7 +5,15 @@
 History
 =======
 
-current - 2021-01-01 - 0.00Mb
+current - 2021-01-09 - 0.00Mb
+=============================
+
+0.3.353 - 2021-01-09 - 0.14Mb
+=============================
+
+* `22`: Update ci to build manylinux wheels (2021-01-09)
+
+0.3.341 - 2021-01-03 - 0.14Mb
 =============================
 
 * `21`: Fixes setup.py when dependencies are not installed. (2021-01-01)
