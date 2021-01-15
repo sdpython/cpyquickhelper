@@ -28,7 +28,7 @@ def capture_output_c(function_to_call) -> Tuple:
     fout = function_to_call()
     end_capture()
     res = get_capture()
-    if res is None:
+    if res is None:  # pragma: no cover
         return fout, None, None
     if isinstance(res, bytes):  # pragma: no cover
         return fout, res, None

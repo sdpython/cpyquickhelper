@@ -45,7 +45,7 @@ def measure_time(stmt, context, repeat=10, number=50, div_by_number=False):
         if hasattr(context['values'], 'shape'):
             mes['size'] = context['values'].shape[0]
         else:
-            mes['size'] = len(context['values'])
+            mes['size'] = len(context['values'])  # pragma: no cover
     else:
         mes['context_size'] = sys.getsizeof(context)
     return mes
