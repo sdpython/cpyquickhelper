@@ -10,9 +10,9 @@ pandas>=1.0
 pillow
 pybind11
 pycodestyle
-pylint>=2.4.1
-pyquickhelper>=1.9.3299
+pylint
+pyquickhelper>=1.10
 scipy
-sphinx!=3.2.0
+sphinx
 sphinxcontrib.imagesvg
 wheel
