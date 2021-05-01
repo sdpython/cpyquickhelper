@@ -25,5 +25,5 @@ after_script:
   - cp dist/*.whl {{root_path}}/../local_pypi/local_pypi_server
 
 documentation:
-  - if [ ${NAME} == "UT" ] then $PYINT -u setup.py build_sphinx fi
+  - if [ ${NAME} == "UT" ] then $PYINT -u setup.py build_sphinx --layout=html fi
   - if [ ${NAME} == "UT" and ${VERSION} == "3.9" ] then cp -R -f _doc/sphinxdoc/build/html dist/html fi

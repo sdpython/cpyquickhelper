@@ -12,6 +12,7 @@ pybind11
 pycodestyle
 pylint
 pyquickhelper>=1.10
+pyquicksetup
 scipy
 sphinx
 sphinxcontrib.imagesvg
