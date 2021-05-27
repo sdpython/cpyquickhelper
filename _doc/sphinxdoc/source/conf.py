@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.split(__file__)[0])))
 local_template = os.path.join(os.path.abspath(
     os.path.dirname(__file__)), "phdoc_templates")
 
-from pyquickhelper.helpgen.default_conf import set_sphinx_variables, get_default_stylesheet
+from pyquickhelper.helpgen.default_conf import set_sphinx_variables
 set_sphinx_variables(__file__, "cpyquickhelper", "Xavier Dupré", 2021,
                      "alabaster", alabaster.get_path(),
                      locals(), extlinks=dict(
@@ -16,13 +16,8 @@ set_sphinx_variables(__file__, "cpyquickhelper", "Xavier Dupré", 2021,
                      title="cpyquickhelper", book=True)
 
 blog_root = "http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/"
-
-html_context = {
-    'css_files': get_default_stylesheet(['_static/my-styles.css']),
-}
-
+html_css_files = ['my-styles.css']
 html_logo = "phdoc_static/project_ico.png"
-
 html_sidebars = {}
 
 language = "en"
