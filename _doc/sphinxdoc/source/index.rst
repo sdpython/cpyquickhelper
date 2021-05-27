@@ -8,8 +8,8 @@
 cpyquickhelper: python + C++ in different ways
 ==============================================
 
-.. image:: https://travis-ci.org/sdpython/cpyquickhelper.svg?branch=master
-    :target: https://travis-ci.org/sdpython/cpyquickhelper
+.. image:: https://travis-ci.com/sdpython/cpyquickhelper.svg?branch=master
+    :target: https://travis-ci.com/sdpython/cpyquickhelper
     :alt: Build status
 
 .. image:: https://ci.appveyor.com/api/projects/status/sia7wxgjv8e1fi5a?svg=true
