@@ -132,15 +132,19 @@ jobs:
   - bash: conda info -a
   - bash: conda create --yes --quiet --name pyenv -c defaults -c conda-forge python=$PYTHON_VERSION tox sphinx jupyter Cython numpy mkl scipy scikit-learn pandas coverage pylint
     displayName: Create Anaconda environment.
-  - bash: conda list
-  - bash: |
-      source activate pyenv
-  # - script: brew install --cask  mactex
-  #   displayName: 'Install latex'
-  #- script: python -m pip install --upgrade pip setuptools wheel
-  #  displayName: 'Install tools'
-  - script: pip install -r requirements.txt
+  - bash: source activate pyenv
+  - script: |
+          curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+          python get-pip.py
+    displayName: Install pip
+  - script: python -m pip install wheel setuptools
+    displayName: 'Install wheel, setuptools'
+  - script: python -m pip install pyquicksetup
+    displayName: 'Install pyquicksetup'
+  - script: python -m pip install -r requirements.txt
     displayName: 'Install Requirements'
+  - script: export PYTHONPATH=src
+    displayName: 'PYTHONPATH=src'
   - script: python -c "import platform;print(platform.version())"
     displayName: 'Platform'
   - script: |
