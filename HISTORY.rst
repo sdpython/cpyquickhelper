@@ -5,7 +5,17 @@
 History
 =======
 
-current - 2021-01-01 - 0.00Mb
+current - 2021-08-15 - 0.00Mb
+=============================
+
+* `23`: Implements edit_distance with pybind11 (2021-08-15)
+
+0.3.353 - 2021-01-09 - 0.14Mb
+=============================
+
+* `22`: Update ci to build manylinux wheels (2021-01-09)
+
+0.3.341 - 2021-01-03 - 0.14Mb
 =============================
 
 * `21`: Fixes setup.py when dependencies are not installed. (2021-01-01)
@@ -28,20 +38,9 @@ current - 2021-01-01 - 0.00Mb
 * `15`: enable openmp on mac (2020-01-17)
 * `16`: Add an example of an agnostic container (no data in python containers) (2019-08-29)
 * `14`: link with openmp, implement dot product with it (2019-07-21)
-
-0.2.229 - 2019-06-04 - 0.14Mb
-=============================
-
-0.2.226 - 2019-05-28 - 0.14Mb
-=============================
-
 * `13`: remove folder src (2019-05-23)
 * `7`: add an example with cython (2019-04-04)
 * `12`: implements a benchmark to measure a sum of floats with float and double accumulator (2019-03-20)
-
-0.1.187 - 2019-02-26 - 0.17Mb
-=============================
-
 * `11`: add parameter div_by_number to measure_time (2019-02-26)
 * `10`: fix binary location in the setup (2019-02-16)
 * `5`: implement a new pandas column type based on a C++ array type (2019-02-02)
