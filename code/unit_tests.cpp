@@ -11,8 +11,7 @@
 #include "weighted_number.h"
 #include "cbenchmark_dot.h"
 
-void ASSERT_EQUAL(double a, double b)
-{
+void ASSERT_EQUAL(double a, double b) {
     if (a != b) {
         char buffer[100];
         sprintf(buffer, "%f != %f", a, b);
@@ -20,8 +19,7 @@ void ASSERT_EQUAL(double a, double b)
     }
 }
 
-void ASSERT_EQUAL_STRING(std::string a, std::string b)
-{
+void ASSERT_EQUAL_STRING(const std::string &a, const std::string &b) {
     if (a != b) {
         std::string quote("'");
         std::string message = quote + a + quote + std::string(" != ") + quote + b + quote;
@@ -29,8 +27,7 @@ void ASSERT_EQUAL_STRING(std::string a, std::string b)
     }
 }
 
-void test_addition()
-{
+void test_addition() {
     WeightedDouble n1(1, 1);
     WeightedDouble n2(1, 1);
     auto res = n1 + n2;
@@ -42,8 +39,7 @@ void test_addition()
     ASSERT_EQUAL(n1.weight, 2);
 }
 
-void test_addition2()
-{
+void test_addition2() {
     WeightedDouble n1(1, 1);
     auto res = n1 + 1;
     ASSERT_EQUAL(res.value, 2);
@@ -54,8 +50,7 @@ void test_addition2()
     ASSERT_EQUAL(n1.weight, 2);
 }
 
-void test_multiplication()
-{
+void test_multiplication() {
     WeightedDouble n1(1, 1);
     WeightedDouble n2(1, 1);
     auto res = n1 * n2;
@@ -67,8 +62,7 @@ void test_multiplication()
     ASSERT_EQUAL(n1.weight, 1);
 }
 
-void test_division()
-{
+void test_division() {
     WeightedDouble n1(1, 1);
     WeightedDouble n2(1, 1);
     auto res = n1 / n2;
@@ -80,8 +74,7 @@ void test_division()
     ASSERT_EQUAL(n1.weight, 1);
 }
 
-void test_soustraction()
-{
+void test_soustraction() {
     WeightedDouble n1(1, 1);
     WeightedDouble n2(1, 1);
     auto res = n1 - n2;
@@ -93,8 +86,7 @@ void test_soustraction()
     ASSERT_EQUAL(n1.weight, 0);
 }
 
-void test_soustraction2()
-{
+void test_soustraction2() {
     WeightedDouble n1(1, 1);
     auto res = n1 - 1;
     ASSERT_EQUAL(res.value, 0);
@@ -105,8 +97,7 @@ void test_soustraction2()
     ASSERT_EQUAL(n1.weight, 0);
 }
 
-void test_multiplication2()
-{
+void test_multiplication2() {
     WeightedDouble n1(1, 1);
     auto res = n1 * 2;
     ASSERT_EQUAL(res.value, 2);
@@ -117,8 +108,7 @@ void test_multiplication2()
     ASSERT_EQUAL(n1.weight, 2);
 }
 
-void test_division2()
-{
+void test_division2() {
     WeightedDouble n1(1, 1);
     auto res = n1 / 2.;
     ASSERT_EQUAL(res.value, 0.5);
@@ -129,8 +119,7 @@ void test_division2()
     ASSERT_EQUAL(n1.weight, 0.5);
 }
 
-void test_equal()
-{
+void test_equal() {
     WeightedDouble n1(1, 1);
     WeightedDouble n2(0, 0);
     auto v = -n1;
@@ -140,8 +129,7 @@ void test_equal()
     ASSERT_EQUAL(n2.weight, -1);
 }
 
-void test_string()
-{
+void test_string() {
     WeightedDouble n1(1, 2);
     auto s = n1.__repr__();
     ASSERT_EQUAL_STRING(s, "WeightedDouble(1.000000, 2)");
@@ -149,8 +137,7 @@ void test_string()
     ASSERT_EQUAL_STRING(s, "1.000000 (2)");
 }
 
-void test_comparisons()
-{
+void test_comparisons() {
     WeightedDouble n1(1, 1);
     WeightedDouble n2(1, 1);
     if (!(n1 == n2)) throw std::exception("Issue");
@@ -173,8 +160,7 @@ void test_comparisons()
     throw std::runtime_error(buffer); \
 }
 
-void test_vector_dot()
-{
+void test_vector_dot() {
     std::vector<float> v1{ 1, 2, 3 };
     std::vector<float> v2{ 1.1, 2.1, 3.1 };
     float d1 = vector_dot_product_pointer(v1.data(), v2.data(), v1.size());
@@ -192,8 +178,7 @@ void test_vector_dot()
 
 typedef float dot_type(const float*, const float*, size_t size);
 
-double benchmark(dot_type * fct, const std::vector<float>& v1, const std::vector<float>& v2, int repeat, int number)
-{
+double benchmark(dot_type * fct, const std::vector<float>& v1, const std::vector<float>& v2, int repeat, int number) {
     const float * p1 = v1.data();
     const float * p2 = v2.data();
     double sum = 0;
@@ -212,8 +197,7 @@ double benchmark(dot_type * fct, const std::vector<float>& v1, const std::vector
 
 typedef int64_t sum_odd_type(const int64_t*, size_t size);
 
-double benchmark(sum_odd_type* fct, const std::vector<int64_t>& v1, int repeat, int number)
-{
+double benchmark(sum_odd_type* fct, const std::vector<int64_t>& v1, int repeat, int number) {
     const int64_t* p1 = v1.data();
     double sum = 0;
     auto start = std::chrono::high_resolution_clock::now();
@@ -229,8 +213,7 @@ double benchmark(sum_odd_type* fct, const std::vector<int64_t>& v1, int repeat, 
     return std::chrono::duration<double>(end - start).count() / repeat;
 }
 
-void test_vector_dot_benchmark(int n, int repeat = 10, int number = 50)
-{
+void test_vector_dot_benchmark(int n, int repeat = 10, int number = 50) {
     std::vector<float> v1(n);
     std::vector<float> v2(n);
     for (int i = 0; i < v1.size(); ++i) {
@@ -250,8 +233,7 @@ void test_vector_dot_benchmark(int n, int repeat = 10, int number = 50)
     std::cout << v1.size() << " -- vector_dot_product_pointer16_sse:    " << t << "\n";
 }
 
-void test_sum_odd_benchmark(int n, int repeat = 20, int number = 100)
-{
+void test_sum_odd_benchmark(int n, int repeat = 20, int number = 100) {
     std::vector<int64_t> v1(n);
     for (int i = 0; i < v1.size(); ++i) {
         v1[i] = i;
@@ -265,8 +247,7 @@ void test_sum_odd_benchmark(int n, int repeat = 20, int number = 100)
     std::cout << v1.size() << " -- sum_odd_b:       " << t << "\n";
 }
 
-void test_sum_odd0_benchmark(int n, int repeat = 20, int number = 100)
-{
+void test_sum_odd0_benchmark(int n, int repeat = 20, int number = 100) {
     std::vector<int64_t> v1(n);
     for (int i = 0; i < v1.size(); ++i) {
         v1[i] = i;
@@ -280,8 +261,7 @@ void test_sum_odd0_benchmark(int n, int repeat = 20, int number = 100)
     std::cout << v1.size() << " -- sum_odd0_b:       " << t << "\n";
 }
 
-void run_all_tests()
-{
+void run_all_tests() {
     test_addition();
     test_addition2();
     test_division();

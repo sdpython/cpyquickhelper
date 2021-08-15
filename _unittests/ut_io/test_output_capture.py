@@ -7,8 +7,8 @@ import unittest
 from inspect import signature, isbuiltin, isfunction, _signature_fromstr, Signature
 from pyquickhelper.pycode import ExtTestCase, skipif_appveyor
 from pyquickhelper.helpgen import rst2html
-from pyquickhelper.sphinxext.import_object_helper import import_any_object
-from pyquickhelper.sphinxext.import_object_helper import import_object
+from pyquickhelper.sphinxext.import_object_helper import (
+    import_any_object, import_object)
 import cpyquickhelper
 from cpyquickhelper.io.stdhelper import capture_output
 from cpyquickhelper.io.stdchelper import cprint  # pylint: disable=E0611
@@ -23,7 +23,7 @@ class TestOutputCapture(ExtTestCase):
 
         res, out, err = capture_output(callf, lang="c")
         self.assertEmpty(res)
-        self.assertTrue(isinstance(out, bytes))
+        self.assertIsInstance(out, bytes)
         if sys.platform.startswith("win"):
             self.assertEqual(
                 out, b'c\x00o\x00u\x00t\x001\x00t\x00o\x00u\x00t\x002\x00')
@@ -38,7 +38,7 @@ class TestOutputCapture(ExtTestCase):
             print("tout2")
 
         fout, out, err = capture_output(callf, lang="py")
-        self.assertTrue(isinstance(out, str))
+        self.assertIsInstance(out, str)
         self.assertEqual(out, 'cout1\ntout2\n')
         self.assertEqual(err, '')
         self.assertEmpty(fout)
@@ -50,20 +50,21 @@ class TestOutputCapture(ExtTestCase):
 
         res, out, err = capture_output(callf, lang="c")
         self.assertEmpty(res)
-        self.assertTrue(isinstance(out, bytes))
-        if sys.platform.startswith("win"):
-            self.assertEqual(err, None)
-            if __name__ == "__main__":
-                self.assertEqual(out, b'cout1\r\ntout2\r\n')
+        if out is not None:
+            self.assertIsInstance(out, bytes)
+            if sys.platform.startswith("win"):
+                self.assertEqual(err, None)
+                if __name__ == "__main__":
+                    self.assertEqual(out, b'cout1\r\ntout2\r\n')
+                else:
+                    self.assertTrue(out.endswith(b'cout1\r\ntout2\r\n'))
             else:
-                self.assertTrue(out.endswith(b'cout1\r\ntout2\r\n'))
-        else:
-            self.assertEqual(err, None)
-            if __name__ == "__main__":
-                self.assertEqual(out, b'cout1tout2')
-            else:
-                if not out.endswith(b'cout1\ntout2\n'):
-                    raise Exception("###{0}###".format(out))
+                self.assertEqual(err, None)
+                if __name__ == "__main__":
+                    self.assertEqual(out, b'cout1tout2')
+                else:
+                    if not out.endswith(b'cout1\ntout2\n'):
+                        raise AssertionError("###{0}###".format(out))
 
     def test_c_output_capture_py(self):
         def callf():
@@ -71,7 +72,7 @@ class TestOutputCapture(ExtTestCase):
             cprint("tout2")
 
         fout, out, err = capture_output(callf, lang="py")
-        self.assertTrue(isinstance(out, str))
+        self.assertIsInstance(out, str)
         self.assertEqual(out, '')
         self.assertEqual(err, '')
         self.assertEmpty(fout)
@@ -88,7 +89,7 @@ class TestOutputCapture(ExtTestCase):
             return (4, 5)
 
         fout, out, err = capture_output(callf, lang="py")
-        self.assertTrue(isinstance(out, str))
+        self.assertIsInstance(out, str)
         self.assertEqual(out, '')
         self.assertEqual(err, '')
         self.assertEqual(fout, (4, 5))
