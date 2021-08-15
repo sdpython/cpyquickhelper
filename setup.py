@@ -36,6 +36,7 @@ CLASSIFIERS = [
 packages = find_packages()
 package_dir = {k: os.path.join('.', k.replace(".", "/")) for k in packages}
 package_data = {
+    project_var_name + ".algorithms": ["*.cpp", "*.hpp"],
     project_var_name + ".examples": ["*.cpp", "*.hpp", "*.h"],
     project_var_name + ".io": ["*.cpp", "*.hpp"],
     project_var_name + ".numbers": ["*.cpp", "*.h", "*.pyx"],
