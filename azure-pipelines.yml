@@ -44,8 +44,7 @@ jobs:
       export CIBW_MANYLINUX_X86_64_IMAGE="manylinux2014"
       export CIBW_BEFORE_BUILD="pip install ."
       export CIBW_BEFORE_BUILD="pip install pybind11 cython numpy scipy pyquickhelper"
-      export CIBW_BUILD="cp37-manylinux_x86_64 cp38-manylinux_x86_64"
-      # fails here cp39-manylinux_x86_64, succeeds locally
+      export CIBW_BUILD="cp37-manylinux_x86_64 cp38-manylinux_x86_64 cp39-manylinux_x86_64"
       python -m cibuildwheel --output-dir dist/wheelhouse --platform linux
     displayName: 'Build Package manylinux2014'
   - task: PublishPipelineArtifact@0
@@ -80,7 +79,7 @@ jobs:
       python -m pip install cibuildwheel
       set CIBW_BEFORE_BUILD=pip install .
       set CIBW_BEFORE_BUILD=pip install pybind11 cython numpy scipy pyquickhelper
-      set CIBW_BUILD=cp37-win_amd64 cp38-win_amd64 cp39-win_amd64
+      set CIBW_BUILD="cp37-win_amd64 cp38-win_amd64 cp39-win_amd64"
       python -m cibuildwheel --output-dir dist/wheelhouse
     displayName: 'Build Package many'
   - task: PublishPipelineArtifact@0
