@@ -93,6 +93,7 @@ def get_compile_args():
             extra_compile_args_bench, extra_compile_args_thread,
             extra_link_args, define_macros)
 
+
 def get_extensions():
     import numpy
     root = os.path.abspath(os.path.dirname(__file__))
@@ -100,16 +101,16 @@ def get_extensions():
      extra_compile_args_bench, extra_compile_args_thread,
      extra_link_args, define_macros) = get_compile_args()
 
-    ext_edit_distance = Extension(
-        'cpyquickhelper.algorithms.edit_distance',
-        [os.path.join(root, 'cpyquickhelper/algorithms/edit_distance.cpp')],
+    ext_edit_distance_c = Extension(
+        'cpyquickhelper.algorithms.edit_distance_c',
+        [os.path.join(root, 'cpyquickhelper/algorithms/edit_distance_c.cpp')],
         extra_compile_args=extra_compile_args_numbers,
         extra_link_args=extra_link_args,
         include_dirs=[
             # Path to pybind11 headers
             get_pybind_include(),
             get_pybind_include(user=True),
-            os.path.join(root, 'cpyquickhelper/numbers')
+            os.path.join(root, 'cpyquickhelper/algorithms')
         ],
         language='c++',
         define_macros=define_macros)
@@ -247,7 +248,7 @@ def get_extensions():
     # setup
     if ext_modules is not None:
         ext_modules.extend([
-            ext_edit_distance,
+            ext_edit_distance_c,
             ext_slowcode,
             ext_custom_container,
             ext_thread, ext_stdhelper,

@@ -4,6 +4,7 @@ API
 
 .. toctree::
 
+    algorithms
     examples
     fastdata
     io
