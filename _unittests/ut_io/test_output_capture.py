@@ -23,7 +23,7 @@ class TestOutputCapture(ExtTestCase):
 
         res, out, err = capture_output(callf, lang="c")
         self.assertEmpty(res)
-        self.assertTrue(isinstance(out, bytes))
+        self.assertIsInstance(out, bytes)
         if sys.platform.startswith("win"):
             self.assertEqual(
                 out, b'c\x00o\x00u\x00t\x001\x00t\x00o\x00u\x00t\x002\x00')
@@ -38,7 +38,7 @@ class TestOutputCapture(ExtTestCase):
             print("tout2")
 
         fout, out, err = capture_output(callf, lang="py")
-        self.assertTrue(isinstance(out, str))
+        self.assertIsInstance(out, str)
         self.assertEqual(out, 'cout1\ntout2\n')
         self.assertEqual(err, '')
         self.assertEmpty(fout)
@@ -50,7 +50,7 @@ class TestOutputCapture(ExtTestCase):
 
         res, out, err = capture_output(callf, lang="c")
         self.assertEmpty(res)
-        self.assertTrue(isinstance(out, bytes))
+        self.assertIsInstance(out, bytes)
         if sys.platform.startswith("win"):
             self.assertEqual(err, None)
             if __name__ == "__main__":
@@ -71,7 +71,7 @@ class TestOutputCapture(ExtTestCase):
             cprint("tout2")
 
         fout, out, err = capture_output(callf, lang="py")
-        self.assertTrue(isinstance(out, str))
+        self.assertIsInstance(out, str)
         self.assertEqual(out, '')
         self.assertEqual(err, '')
         self.assertEmpty(fout)
@@ -88,7 +88,7 @@ class TestOutputCapture(ExtTestCase):
             return (4, 5)
 
         fout, out, err = capture_output(callf, lang="py")
-        self.assertTrue(isinstance(out, str))
+        self.assertIsInstance(out, str)
         self.assertEqual(out, '')
         self.assertEqual(err, '')
         self.assertEqual(fout, (4, 5))
