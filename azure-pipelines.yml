@@ -39,9 +39,10 @@ jobs:
 #  - script: |
 #      python -u setup.py build_sphinx
 #    displayName: 'Builds Documentation'
+# Links: https://quay.io/organization/pypa, https://github.com/pypa/manylinux
   - script: |
       python -m pip install cibuildwheel
-      export CIBW_MANYLINUX_X86_64_IMAGE="manylinux_x_y"
+      export CIBW_MANYLINUX_X86_64_IMAGE="manylinux_2_24"
       export CIBW_BEFORE_BUILD="pip install ."
       export CIBW_BEFORE_BUILD="pip install pybind11 cython numpy scipy pyquickhelper"
       export CIBW_BUILD="cp39-manylinux_x86_64"
