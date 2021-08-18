@@ -29,10 +29,6 @@ cpyquickhelper: python + C++ in different ways
     :alt: MIT License
     :target: http://opensource.org/licenses/MIT
 
-.. image:: https://requires.io/github/sdpython/cpyquickhelper/requirements.svg?branch=master
-     :target: https://requires.io/github/sdpython/cpyquickhelper/requirements/?branch=master
-     :alt: Requirements Status
-
 .. image:: https://codecov.io/github/sdpython/cpyquickhelper/coverage.svg?branch=master
     :target: https://codecov.io/github/sdpython/cpyquickhelper?branch=master
 
