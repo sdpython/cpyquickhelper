@@ -41,6 +41,13 @@ jobs:
 #    displayName: 'Builds Documentation'
   - script: |
       python -m pip install cibuildwheel
+      export CIBW_MANYLINUX_X86_64_IMAGE="manylinux_x_y"
+      export CIBW_BEFORE_BUILD="pip install ."
+      export CIBW_BEFORE_BUILD="pip install pybind11 cython numpy scipy pyquickhelper"
+      export CIBW_BUILD="cp39-manylinux_x86_64"
+      python -m cibuildwheel --output-dir dist/wheelhouse39 --platform linux
+    displayName: 'Build Package manylinux_x_y'
+  - script: |
       export CIBW_MANYLINUX_X86_64_IMAGE="manylinux2014"
       export CIBW_BEFORE_BUILD="pip install ."
       export CIBW_BEFORE_BUILD="pip install pybind11 cython numpy scipy pyquickhelper"
