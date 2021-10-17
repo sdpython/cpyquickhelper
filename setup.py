@@ -231,6 +231,21 @@ def get_extensions():
         extra_compile_args=["-O3"],
         define_macros=define_macros)
 
+    ext_numbers = Extension(
+        'cpyquickhelper.profiling._event_profiler',
+        [os.path.join(root, 'cpyquickhelper/profiling/_event_profiler.cpp'),
+         os.path.join(root, 'cpyquickhelper/profiling/_event_profiler_python.cpp')],
+        extra_compile_args=extra_compile_args_numbers,
+        extra_link_args=extra_link_args,
+        include_dirs=[
+            # Path to pybind11 headers
+            get_pybind_include(),
+            get_pybind_include(user=True),
+            os.path.join(root, 'cpyquickhelper/profiling')
+        ],
+        language='c++',
+        define_macros=define_macros)
+
     # cythonize
 
     opts = dict(boundscheck=False, cdivision=True,
