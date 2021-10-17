@@ -47,7 +47,6 @@ class TestEventProfiler(ExtTestCase):
                     'name', 'filename', 'lineno', 'from_name',
                     'from_filename', 'from_line']
         self.assertEqual(list(df.columns), expected)
-        df.to_excel('r.xlsx')
 
     def test_profiling_20(self):
 
