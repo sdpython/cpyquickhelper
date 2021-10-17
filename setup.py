@@ -231,7 +231,7 @@ def get_extensions():
         extra_compile_args=["-O3"],
         define_macros=define_macros)
 
-    ext_numbers = Extension(
+    ext_profiling = Extension(
         'cpyquickhelper.profiling._event_profiler',
         [os.path.join(root, 'cpyquickhelper/profiling/_event_profiler.cpp'),
          os.path.join(root, 'cpyquickhelper/profiling/_event_profiler_python.cpp')],
@@ -270,7 +270,8 @@ def get_extensions():
             ext_thread, ext_stdhelper,
             ext_numbers, ext_benchmark,
             ext_benchmark_dot,
-            ext_benchmark_sum_type
+            ext_benchmark_sum_type,
+            ext_profiling
         ])
     return ext_modules
 
