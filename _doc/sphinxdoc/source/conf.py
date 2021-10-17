@@ -57,17 +57,28 @@ epkg_dictionary.update({
     'BLAS': 'http://www.netlib.org/blas/explore-html',
     'C': 'https://en.wikipedia.org/wiki/C_(programming_language)',
     'C++': 'https://en.wikipedia.org/wiki/C%2B%2B',
-    'DataFrame': 'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html',
-    'ExtensionArray': 'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.api.extensions.ExtensionArray.html',
+    'DataFrame':
+        'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html',
+    'ExtensionArray':
+        'https://pandas.pydata.org/pandas-docs/stable/generated/'
+        'pandas.api.extensions.ExtensionArray.html',
     'JIT': 'https://en.wikipedia.org/wiki/Just-in-time_compilation',
     'LAPACK': 'http://www.netlib.org/lapack/explore-html',
     'llvmlite': 'https://llvmlite.readthedocs.io/en/latest/index.html',
     'nuitka': 'http://nuitka.net/',
     'numba': 'https://numba.pydata.org/',
-    'PandasArray': 'https://pandas.pydata.org/docs/reference/api/pandas.arrays.PandasArray.html',
+    'palanteer': 'https://github.com/dfeneyrou/palanteer',
+    'PandasArray':
+        'https://pandas.pydata.org/docs/reference/api/'
+        'pandas.arrays.PandasArray.html',
     'pybind11': 'https://github.com/pybind/pybind11',
+    'pyinstrument': 'https://github.com/joerick/pyinstrument',
+    'PyMem_SetAllocator':
+        'https://docs.python.org/3/c-api/memory.html#c.PyMem_SetAllocator',
     'Pythran': 'https://pythran.readthedocs.io/en/latest/',
     'pythran': 'https://pythran.readthedocs.io/en/latest/',
-    'Series': 'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html',
+    'Series':
+        'https://pandas.pydata.org/pandas-docs/stable/'
+        'generated/pandas.Series.html',
     'SSE': 'https://fr.wikipedia.org/wiki/Streaming_SIMD_Extensions',
 })

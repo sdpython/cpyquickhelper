@@ -10,6 +10,14 @@ from cpyquickhelper.profiling import EventProfiler
 
 class TestEventProfiler(ExtTestCase):
 
+    def test_profiling_exc(self):
+        ev = EventProfiler()
+        self.assertRaise(lambda: ev.stop(), RuntimeError)
+        ev.start()
+        self.assertRaise(lambda: ev.start(), RuntimeError)
+        ev.stop()
+        self.assertRaise(lambda: ev.stop(), RuntimeError)
+
     def test_profiling(self):
 
         def f1(t):
@@ -19,7 +27,9 @@ class TestEventProfiler(ExtTestCase):
             f1(0.1)
 
         def f3():
+            li = [0 for i in range(0, 10000)]
             f1(0.2)
+            return li
 
         def f4():
             f2()
@@ -30,12 +40,14 @@ class TestEventProfiler(ExtTestCase):
         f4()
         ev.stop()
         res = ev.retrieve_raw_results()
-        self.assertEqual(res.shape[1], 3)
+        self.assertEqual(res.shape[1], ev.n_columns)
         df = ev.retrieve_results(False)
-        self.assertEqual(df.shape, (res.shape[0], 7))
-        expected = ['time', 'kind', 'name', 'filename',
-                    'lineno', 'from_name', 'from_line']
+        self.assertEqual(df.shape, (res.shape[0], 10))
+        expected = ['time', 'value1', 'value2', 'event',
+                    'name', 'filename', 'lineno', 'from_name',
+                    'from_filename', 'from_line']
         self.assertEqual(list(df.columns), expected)
+        df.to_excel('r.xlsx')
 
     def test_profiling_20(self):
 
@@ -58,11 +70,12 @@ class TestEventProfiler(ExtTestCase):
         ev.stop()
         res = ev.retrieve_raw_results()
         self.assertGreater(res.shape[0], 10)
-        self.assertEqual(res.shape[1], 3)
+        self.assertEqual(res.shape[1], ev.n_columns)
         df = ev.retrieve_results(False)
-        self.assertEqual(df.shape, (res.shape[0], 7))
-        expected = ['time', 'kind', 'name', 'filename',
-                    'lineno', 'from_name', 'from_line']
+        self.assertEqual(df.shape, (res.shape[0], 10))
+        expected = ['time', 'value1', 'value2', 'event',
+                    'name', 'filename', 'lineno', 'from_name',
+                    'from_filename', 'from_line']
         self.assertEqual(list(df.columns), expected)
 
 

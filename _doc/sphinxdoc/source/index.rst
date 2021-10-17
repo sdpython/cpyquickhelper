@@ -57,6 +57,7 @@ This library explores various technics to use
 
     api/index
     i_ex
+    gyexamples/index
     all_notebooks
     blog/blogindex
     i_index
