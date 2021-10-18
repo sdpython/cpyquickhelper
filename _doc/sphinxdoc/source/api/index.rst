@@ -9,3 +9,4 @@ API
     fastdata
     io
     numbers
+    profiling
