@@ -264,7 +264,8 @@ class EventProfiler:
             self._choose_mod(frame, None, clean_file_name, f_back=True)
             for frame in frames)
         df['from_line'] = list(
-            frame.f_back.f_lineno for frame in frames)
+            (-1 if frame.f_back is None else frame.f_back.f_lineno)
+            for frame in frames)
         return df
 
 
