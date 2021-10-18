@@ -10,7 +10,8 @@
 
 std::string CEventProfilerEvent::to_string() const {
     char buf[50];
-    sprintf(buf, "%lld,%lld,%lld,%lld,%lld", id_frame, event, time, value1, value2);
+    sprintf(buf, "%lld,%lld,%lld,%lld,%lld,%lld",
+            id_frame, id_arg, event, time, value1, value2);
     return buf;
 }
 

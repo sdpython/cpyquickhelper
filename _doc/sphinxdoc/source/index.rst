@@ -40,6 +40,18 @@ cpyquickhelper: python + C++ in different ways
     :target: http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
 
+.. image:: https://pepy.tech/badge/cpyquickhelper
+    :target: https://pypi.org/project/cpyquickhelper/
+    :alt: Downloads
+
+.. image:: https://img.shields.io/github/forks/sdpython/cpyquickhelper.svg
+    :target: https://github.com/sdpython/cpyquickhelper/
+    :alt: Forks
+
+.. image:: https://img.shields.io/github/stars/sdpython/cpyquickhelper.svg
+    :target: https://github.com/sdpython/cpyquickhelper/
+    :alt: Stars
+
 .. image:: https://img.shields.io/github/repo-size/sdpython/cpyquickhelper
     :target: https://github.com/sdpython/cpyquickhelper/
     :alt: size

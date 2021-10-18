@@ -18,12 +18,12 @@ The simple function to look at
 ++++++++++++++++++++++++++++++
 """
 
-from time import sleep
-from cpyquickhelper.profiling import EventProfiler
+import time
+from cpyquickhelper.profiling import EventProfiler, WithEventProfiler
 
 
 def f1(t):
-    sleep(t)
+    time.sleep(t)
 
 
 def f2():
@@ -63,3 +63,33 @@ def clean_name(name):
 
 df = ev.retrieve_results(clean_file_name=clean_name)
 df
+
+#########################################
+# Plotting
+# ++++++++
+
+df['cst'] = 1
+df['nev'] = df['cst'].cumsum()
+ax = df[['time', 'nev']].plot(
+    x='time', y='nev', title="Number of events / time")
+for i in range(1, df.shape[0]):
+    x = (df.loc[i - 1, 'time'] + df.loc[i, 'time']) / 2
+    y = df.loc[i, 'nev']
+    ax.text(x, y, df.loc[i - 1, 'name'], rotation=90, fontsize=8)
+
+
+##########################################
+# If the code raises an exception
+# +++++++++++++++++++++++++++++++
+#
+# The program crashes if the profiled code raises an exception
+# because the memory profiler is not restored before python extracts
+# the call stack. New allocations still get logged into an object with
+# was deleted. The exception must be caught or another syntax can be
+# used.
+
+wev = WithEventProfiler(clean_file_name=clean_name)
+with wev:
+    f4()
+
+wev.report

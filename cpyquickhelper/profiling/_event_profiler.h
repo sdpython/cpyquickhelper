@@ -14,6 +14,7 @@
 
 typedef struct CEventProfilerEvent {
     int64_t id_frame;
+    int64_t id_arg;
     int64_t event;
         // 0: nothing
         // 1: call
@@ -60,7 +61,7 @@ class CEventProfiler {
         const CEventProfilerEvent& operator[](int64_t p) const { return _buffer[p]; }
         const std::vector<CEventProfilerEvent>::const_iterator begin() const { return _buffer.begin(); }
         const std::vector<CEventProfilerEvent>::const_iterator end() const { return _buffer.end(); }
-        bool LogEvent(int64_t id_frame, int64_t event, int64_t value1, int64_t value2) {
+        bool LogEvent(int64_t id_frame, int64_t id_arg, int64_t event, int64_t value1, int64_t value2) {
             if (_last_position >= (uint64_t)_buffer.size())
                 throw std::runtime_error("CEventProfiler has a full cache.");
             std::chrono::time_point<std::chrono::high_resolution_clock> tp =
@@ -76,6 +77,7 @@ class CEventProfiler {
             res = _last_position < _size;
             _mtx.unlock();
 
+            ev->id_arg = id_arg;
             ev->id_frame = id_frame;
             ev->event = event;
             ev->time = time;

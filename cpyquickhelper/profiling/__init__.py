@@ -3,4 +3,4 @@
 @brief Shortcut to *profiling*.
 """
 
-from .event_profiler import EventProfiler
+from .event_profiler import EventProfiler, WithEventProfiler
