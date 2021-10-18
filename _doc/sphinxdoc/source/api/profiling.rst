@@ -12,7 +12,6 @@ C++ classes
 
 .. autosignature:: cpyquickhelper.profiling._event_profiler.CEventProfiler
 
-
 Profiler
 ++++++++
 

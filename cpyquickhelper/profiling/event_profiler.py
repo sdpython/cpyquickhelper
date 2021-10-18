@@ -118,7 +118,7 @@ class EventProfiler:
         idf = id(frame)
         if idf not in self._frames:
             self._frames[idf] = frame
-        if type(arg) == type(open):
+        if type(arg) == type(open):  # pylint: disable=C0123
             ida = id(arg)
         else:
             ida = id(None)
