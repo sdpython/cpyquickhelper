@@ -47,6 +47,8 @@ class EventProfiler:
         'return': 2,
         'c_call': 3,
         'c_return': 4,
+        'exception': 5,
+        'c_exception': 6,
         'profiler_call': 10,
         'profiler_return': 11,
         'profiler_start': 100,

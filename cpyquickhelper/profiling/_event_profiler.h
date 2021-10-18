@@ -21,6 +21,8 @@ typedef struct CEventProfilerEvent {
         // 2: return
         // 3: c_call
         // 4: c_return
+        // 5: exception
+        // 6: c_exception
         // 10: profiler operation begin
         // 11: profiler operation end
         // 100: profiler starts
