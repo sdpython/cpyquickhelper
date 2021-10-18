@@ -202,8 +202,13 @@ class EventProfiler:
         function. This method returns its name.
         """
         if arg is None:
-            name = (frame.f_back.f_code.co_name if f_back
-                    else frame.f_code.co_name)
+            if f_back:
+                if frame.f_back is None:
+                    name = ''
+                else:
+                    name = frame.f_back.f_code.co_name
+            else:
+                name = frame.f_code.co_name
             return name
         return arg.__qualname__
 
@@ -215,9 +220,14 @@ class EventProfiler:
         function. This method returns its module.
         """
         if arg is None:
-            name = clean_name(frame.f_back.f_code.co_name if f_back
-                              else frame.f_code.co_name)
-            return name
+            if f_back:
+                if frame.f_back is None:
+                    name = ''
+                else:
+                    name = frame.f_back.f_code.co_filename
+            else:
+                name = frame.f_code.co_filename
+            return clean_name(name)
         return arg.__module__
 
     def retrieve_results(self, empty_cache=True, clean_file_name=None):
