@@ -188,7 +188,7 @@ class EventProfiler:
             else:
                 if ptr not in memo:
                     # The system is freeing a non-existing pointer.
-                    res[i, 5] = numpy.nan
+                    res[i, 5] = 0
                 else:
                     res[i, 5] = -memo[ptr]
                     del memo[ptr]
