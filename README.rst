@@ -39,9 +39,21 @@ cpyquickhelper: python + C++ in different ways
     :target: http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
 
+.. image:: https://pepy.tech/badge/cpyquickhelper/month
+    :target: https://pepy.tech/project/cpyquickhelper/month
+    :alt: Downloads
+
 .. image:: https://img.shields.io/github/repo-size/sdpython/cpyquickhelper
     :target: https://github.com/sdpython/cpyquickhelper/
     :alt: size
+
+.. image:: https://img.shields.io/github/forks/sdpython/cpyquickhelper.svg
+    :target: https://github.com/sdpython/cpyquickhelper/
+    :alt: Forks
+
+.. image:: https://img.shields.io/github/stars/sdpython/cpyquickhelper.svg
+    :target: https://github.com/sdpython/cpyquickhelper/
+    :alt: Stars
 
 *cpyquickhelper* is a template to create a module with
 C functions in different ways. It implements function
