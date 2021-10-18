@@ -24,8 +24,8 @@ class EventProfiler:
     There are two pieces:
 
     * A C++ class which logs every event into a bug buffer,
-      every event is described by five int64 (id_frame, event, timestamp,
-      value1, value2).
+      every event is described by five int64 (id_frame, id_arg, event,
+      timestamp, value1, value2).
     * A python class which wraps the first one.
 
     Function calls are caught by using :func:`sys.setprofile`.
@@ -118,7 +118,7 @@ class EventProfiler:
         idf = id(frame)
         if idf not in self._frames:
             self._frames[idf] = frame
-        if hasattr(arg, '__qualname__'):
+        if type(arg) == type(open):
             ida = id(arg)
         else:
             ida = id(None)
@@ -176,7 +176,7 @@ class EventProfiler:
             self._empty_cache()
         res = numpy.vstack(self._events)
         # Filling information about the size of freed buffer.
-        # id_frame, event, time, value1, value2
+        # id_frame, id_arg, event, time, value1, value2
         memo = {}
         for i in range(res.shape[0]):
             event = res[i, 2]
