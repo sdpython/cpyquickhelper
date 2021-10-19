@@ -144,7 +144,7 @@ class TestEventProfiler(ExtTestCase):
 
     def test_debug_c(self):
         N = 100000
-        ev = EventProfilerDebug(impl='c')
+        ev = EventProfilerDebug(impl='pybind11')
         ev.start()
         begin = perf_counter()
         for _ in range(N):
@@ -159,6 +159,38 @@ class TestEventProfiler(ExtTestCase):
         self.assertNotEmpty(msg)
         if __name__ == "__main__":
             print(msg)
+
+    def test_profiling_c(self):
+
+        def f1(t):
+            sleep(t)
+
+        def f2():
+            f1(0.1)
+
+        def f3():
+            li = [0 for i in range(0, 10000)]
+            f1(0.2)
+            return li
+
+        def f4():
+            f2()
+            f3()
+
+        ev = EventProfiler(impl='pybind11')
+        ev.start()
+        f4()
+        ev.stop()
+        res = ev.retrieve_raw_results()
+        self.assertEqual(res.shape[1], ev.n_columns)
+        df = ev.retrieve_results(False)
+        self.assertEqual(df.shape, (res.shape[0], 10))
+        expected = ['time', 'value1', 'value2', 'event',
+                    'name', 'mod', 'lineno', 'from_name',
+                    'from_mod', 'from_line']
+        self.assertEqual(list(df.columns), expected)
+        self.assertIn('sleep', set(df['name']))
+        self.assertIn('time', set(df['mod']))
 
 
 if __name__ == "__main__":

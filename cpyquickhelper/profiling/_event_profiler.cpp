@@ -15,8 +15,8 @@ std::string CEventProfilerEvent::to_string() const {
 }
 
 
-std::map<std::string, int64_t> CEventProfiler::_get_mapping() const {
-    std::map<std::string, int64_t> ev;
+std::unordered_map<std::string, int64_t> CEventProfiler::_get_mapping() {
+    std::unordered_map<std::string, int64_t> ev;
     ev["call"] = 1;
     ev["return"] = 2;
     ev["c_call"] = 3;
@@ -37,8 +37,17 @@ std::map<std::string, int64_t> CEventProfiler::_get_mapping() const {
 
 
 void CEventProfiler::delete_pyobj() {
+    _mtx.lock();
     _mem_frame.clear();
     _mem_arg.clear();
+    _mtx.unlock();
+}
+
+
+CEventProfiler::~CEventProfiler() {
+    if (_mem_frame.size() > 0 || _mem_arg.size() > 0)
+        throw std::runtime_error(
+            "Method delete must be called explicitely. There are remaining python objects to free.");
 }
 
 
