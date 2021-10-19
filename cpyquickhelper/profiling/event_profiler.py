@@ -76,6 +76,12 @@ class EventProfiler:
         self._buffer = CEventProfiler(size)
         self._events = []
         self._impl = impl
+        self._copy_cache = False
+        self._cache_copy = numpy.empty((size, self._buffer.n_columns()),
+                                       dtype=numpy.int64)
+        if impl == 'pybind11':
+            # self._buffer.register_empty_cache(self._empty_cache)
+            self._buffer.register_pyinstance(self)
 
     @property
     def n_columns(self):
@@ -95,6 +101,7 @@ class EventProfiler:
                 "The profiler was already started. It cannot be done again.")
         self._frames[0] = inspect.currentframe()
         self._started = True
+        self._copy_cache = False
         self._setup_profiler()
         self._buffer.log_event(-1, -1, 100, 0, 0)
         self._buffer.start()
@@ -116,33 +123,6 @@ class EventProfiler:
         self._buffer.delete()
         self._started = False
 
-    def log_event(self, frame, event, arg):
-        """
-        Logs an event in the database.
-
-        :param frame: (frame), see :mod:`inspect`
-        :param event: (str)
-            kind of event
-        :param value1: (int)
-            additional value to the event
-        :param value2: (int)
-            additional value to the event
-        :param arg: None or...
-        """
-        idf = id(frame)
-        if idf not in self._frames:
-            self._frames[idf] = frame
-        if type(arg) == type(open):  # pylint: disable=C0123
-            ida = id(arg)
-        else:
-            ida = id(None)
-        if ida not in self._args:
-            self._args[ida] = arg
-        r = self._buffer.log_event(
-            idf, ida, EventProfiler._event_mapping[event], 0, 0)
-        if not r:
-            self._empty_cache()
-
     def _setup_profiler(self):
         """
         This relies on :func:`sys.setprofile` and :func:`sys.getprofile`.
@@ -163,28 +143,45 @@ class EventProfiler:
         sys.setprofile(self._prof)
         self._prof = None
 
+    def log_event(self, frame, event, arg):
+        """
+        Logs an event in the database.
+
+        :param frame: (frame), see :mod:`inspect`
+        :param event: (str)
+            kind of event
+        :param arg: None or...
+        """
+        idf = id(frame)
+        if idf not in self._frames:
+            self._frames[idf] = frame
+        if type(arg) == type(open):  # pylint: disable=C0123
+            ida = id(arg)
+        else:
+            ida = id(None)
+        if ida not in self._args:
+            self._args[ida] = arg
+        r = self._buffer.log_event(
+            idf, ida, EventProfiler._event_mapping[event], 0, 0)
+        if not r:
+            self._empty_cache()
+
     def _empty_cache(self):
         """
-        Empties the cache.
+        Empties the cache. This function logs a couple of
+        events. The cache must contains enough place to
+        log them.
         """
-        if self._started:
-            self._buffer.log_event(-1, -1, 10, 0, 0)
-        self._buffer.lock()
-        size = len(self._buffer)
-        if size == 0:
-            self._buffer.unlock()
-            if self._started:
-                self._buffer.log_event(-1, -1, 11, 0, 0)
-            return 0
-        store = numpy.empty(
-            (size, self._buffer.n_columns()), dtype=numpy.int64)
-        self._buffer.dump(store, False)
-        self._buffer.clear(False)
-        self._buffer.unlock()
-
-        self._events.append(store)
-        if self._started:
-            self._buffer.log_event(-1, -1, 11, store.shape[0], 0)
+        if self._copy_cache:
+            raise RuntimeError(
+                "Profiling cache being copied. Increase the size of the cache.")
+        self._copy_cache = True
+        size = self._buffer.dump_and_clear(self._cache_copy, True)
+        # We hope here this function will not be called by another
+        # thread. That would another thread was able to fill
+        # the cache while it is being copied.
+        self._events.append(self._cache_copy[:size].copy())
+        self._copy_cache = False
         return size
 
     def retrieve_raw_results(self, empty_cache=True):
@@ -355,6 +352,7 @@ class EventProfilerDebug(EventProfiler):
                 "The profiler was already started. It cannot be done again.")
         self._frames[0] = inspect.currentframe()
         self._started = True
+        self._copy_cache = False
         self._buffer.log_event(-1, -1, 100, 0, 0)
 
     def stop(self):

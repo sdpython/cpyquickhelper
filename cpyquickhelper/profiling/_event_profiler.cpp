@@ -66,7 +66,7 @@ std::string CEventProfiler::__repr__() const {
 }
 
 
-int64_t CEventProfiler::dump(int64_t* buffer, int64_t size, bool lock) {
+int64_t CEventProfiler::dump_and_clear(int64_t* buffer, int64_t size, bool lock) {
     if (lock)
         _mtx.lock();
     int64_t cpy_size = sizeof(CEventProfilerEvent) * _last_position;
@@ -75,7 +75,9 @@ int64_t CEventProfiler::dump(int64_t* buffer, int64_t size, bool lock) {
             "Buffer is not big enough: ", size * (int64_t)sizeof(int64_t),
             " >= ", cpy_size, " (copy buffer size)."));
     memcpy(buffer, _buffer.data(), cpy_size);
+    int64_t ret = _last_position;
+    _last_position = 0;
     if (lock)
         _mtx.unlock();
-    return cpy_size;
+    return ret;
 }

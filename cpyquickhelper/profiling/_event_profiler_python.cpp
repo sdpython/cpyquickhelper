@@ -5,6 +5,7 @@
 #include <pybind11/operators.h>
 #include <pybind11/stl.h>
 #include <pybind11/numpy.h>
+#include <pybind11/functional.h>
 
 namespace py = pybind11;
 
@@ -78,9 +79,15 @@ C++ buffer for the CEventProfiler.)pbdoc"
 	pyev.def("__repr__", &CEventProfiler::__repr__, "usual");
     pyev.def("__len__", &CEventProfiler::size, "usual");
 
+	pyev.def("register_pyinstance",
+             [](CEventProfiler &self, py::object f) {
+                f.inc_ref();
+                self.register_pyinstance((void*)f.ptr());
+             }, "Registers the python instance with holds this one.");
+
     pyev.def("__iter__", [](CEventProfiler &v) {
-             return py::make_iterator(v.begin(), v.end());
-        }, py::keep_alive<0, 1>()); /* Keep vector alive while iterator is used */
+                return py::make_iterator(v.begin(), v.end());
+             }, py::keep_alive<0, 1>()); /* Keep vector alive while iterator is used */
 
     pyev.def("__getitem__", &CEventProfiler::operator[],
              "Returns the ith bytes of the container.");
@@ -94,14 +101,14 @@ C++ buffer for the CEventProfiler.)pbdoc"
     pyev.def("unlock", &CEventProfiler::unlock, "Unlock the profiler.");
     pyev.def("clear", &CEventProfiler::clear, "Empties the buffer.");
     
-    pyev.def("dump",
+    pyev.def("dump_and_clear",
              [](CEventProfiler& self,
                py::array_t<int64_t, py::array::c_style | py::array::forcecast>& buffer,
                bool lock) -> int64_t {
                 py::buffer_info b_buffer = buffer.request();
                 int64_t* ptr = static_cast<int64_t*>(b_buffer.ptr);
-                return self.dump(ptr, buffer.size(), lock);
-             }, "Copies the buffer into an array.");
+                return self.dump_and_clear(ptr, buffer.size(), lock);
+             }, "Copies the buffer into an array and clears it.");
     
     pyev.def("start",
              [](CEventProfiler& self) {
@@ -134,9 +141,10 @@ C++ buffer for the CEventProfiler.)pbdoc"
                     arg.inc_ref(); // Py_INCREF(add);
                 if (!res) {
                     // empty cache
-                    throw std::runtime_error(MakeString(
-                        "Callback function not implemented yet (size=",
-                        self.size(), ")."));
+                    PyObject* obj = (PyObject*)self.get_pyinstance();
+                    py::handle h(obj);
+                    auto meth = h.attr("_empty_cache");
+                    meth();
                 }
              }, "Logs an evant faster.");
 
@@ -151,6 +159,9 @@ C++ buffer for the CEventProfiler.)pbdoc"
                     h.dec_ref();
                 }
                 self.delete_pyobj();
+                PyObject* obj = (PyObject*)self.get_pyinstance();
+                py::handle h(obj);
+                h.dec_ref();
              }, "Decrefs all the stored objects.");
 
     pyev.def("get_saved_maps",

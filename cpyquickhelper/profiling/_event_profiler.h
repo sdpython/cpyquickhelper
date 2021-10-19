@@ -6,12 +6,13 @@
 #define undef__CRT_SECURE_NO_WARNINGS 1
 #endif
 
-#include <string>
-#include <vector>
-#include <mutex>
 #include <chrono>
+#include <functional>
 #include <iostream>
+#include <mutex>
+#include <string>
 #include <unordered_map>
+#include <vector>
 #include "make_string.hpp"
 
 
@@ -51,17 +52,23 @@ class CEventProfiler {
         uint64_t _size;
         std::unordered_map<std::string, int64_t> _event_mapping;
         std::mutex _mtx;
+        void* pyinstance;
     public:
 
         static std::unordered_map<std::string, int64_t> _get_mapping();
         int64_t get_event(const std::string& event) { return _event_mapping[event]; }
 
-        CEventProfiler(int64_t size) : _buffer(size), _last_position(0), _size(size-2) {
+        CEventProfiler(int64_t size) : _buffer(size), _last_position(0), _size(size-10) {
             _event_mapping = _get_mapping();
+            pyinstance = NULL;
         }
         
         ~CEventProfiler();
 
+        void register_pyinstance(void* f) {
+            pyinstance = f;
+        }
+        
         void clear(bool lock) {
             if (lock)
                 _mtx.lock();
@@ -76,17 +83,19 @@ class CEventProfiler {
 
         std::string __str__() const;
         std::string __repr__() const;
-        int64_t size() const { return (int64_t)_last_position; }
-        int n_columns() const { return sizeof(CEventProfilerEvent) / sizeof(int64_t); }
-        void lock() { _mtx.lock(); }
-        void unlock() { _mtx.unlock(); }
-        const CEventProfilerEvent& operator[](int64_t p) const { return _buffer[p]; }
+        inline void* get_pyinstance() const { return pyinstance; }
+        inline int64_t size() const { return (int64_t)_last_position; }
+        inline int n_columns() const { return sizeof(CEventProfilerEvent) / sizeof(int64_t); }
+        inline void lock() { _mtx.lock(); }
+        inline void unlock() { _mtx.unlock(); }
+        inline const CEventProfilerEvent& operator[](int64_t p) const { return _buffer[p]; }
 
         const std::vector<CEventProfilerEvent>::const_iterator begin() const { return _buffer.begin(); }
         const std::vector<CEventProfilerEvent>::const_iterator end() const { return _buffer.end(); }
-        int64_t dump(int64_t* buffer, int64_t size, bool lock);
+        int64_t dump_and_clear(int64_t* buffer, int64_t size, bool lock);
 
-        bool LogEvent(int64_t id_frame, int64_t id_arg, int64_t event, int64_t value1, int64_t value2) {
+        inline bool LogEvent(int64_t id_frame, int64_t id_arg, int64_t event,
+                             int64_t value1, int64_t value2) {
             if (_last_position >= (uint64_t)_buffer.size())
                 throw std::runtime_error(MakeString(
                     "CEventProfiler has a full cache (last_position_=",
@@ -113,8 +122,8 @@ class CEventProfiler {
             return res;
         }
 
-        bool cLogEvent(void* frame, void* arg,
-                       int64_t event, bool &add_frame, bool& add_arg) {
+        inline bool cLogEvent(void* frame, void* arg,
+                              int64_t event, bool &add_frame, bool& add_arg) {
             if (_last_position >= (uint64_t)_buffer.size())
                 throw std::runtime_error(MakeString(
                     "CEventProfiler has a full cache (last_position_=",
