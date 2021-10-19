@@ -46,8 +46,9 @@ void CEventProfiler::delete_pyobj() {
 
 CEventProfiler::~CEventProfiler() {
     if (_mem_frame.size() > 0 || _mem_arg.size() > 0)
-        throw std::runtime_error(
-            "Method delete must be called explicitely. There are remaining python objects to free.");
+        throw std::runtime_error(MakeString(
+            "Method delete must be called explicitely. There are ",
+            _mem_frame.size(), " remaining python objects to free."));
 }
 
 
@@ -70,7 +71,9 @@ int64_t CEventProfiler::dump(int64_t* buffer, int64_t size, bool lock) {
         _mtx.lock();
     int64_t cpy_size = sizeof(CEventProfilerEvent) * _last_position;
     if (size * (int64_t)sizeof(int64_t) < cpy_size)
-        throw std::runtime_error("Buffer is not big enough.");
+        throw std::runtime_error(MakeString(
+            "Buffer is not big enough: ", size * (int64_t)sizeof(int64_t),
+            " >= ", cpy_size, " (copy buffer size)."));
     memcpy(buffer, _buffer.data(), cpy_size);
     if (lock)
         _mtx.unlock();

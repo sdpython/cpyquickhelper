@@ -132,9 +132,11 @@ C++ buffer for the CEventProfiler.)pbdoc"
                     frame.inc_ref(); // Py_INCREF(frame);
                 if (add_arg)
                     arg.inc_ref(); // Py_INCREF(add);
-                if (res) {
+                if (!res) {
                     // empty cache
-                    throw std::runtime_error("Callback function not implemented yet.");
+                    throw std::runtime_error(MakeString(
+                        "Callback function not implemented yet (size=",
+                        self.size(), ")."));
                 }
              }, "Logs an evant faster.");
 

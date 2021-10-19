@@ -12,6 +12,7 @@
 #include <chrono>
 #include <iostream>
 #include <unordered_map>
+#include "make_string.hpp"
 
 
 typedef struct CEventProfilerEvent {
@@ -87,7 +88,9 @@ class CEventProfiler {
 
         bool LogEvent(int64_t id_frame, int64_t id_arg, int64_t event, int64_t value1, int64_t value2) {
             if (_last_position >= (uint64_t)_buffer.size())
-                throw std::runtime_error("CEventProfiler has a full cache.");
+                throw std::runtime_error(MakeString(
+                    "CEventProfiler has a full cache (last_position_=",
+                    _last_position, " buffer.size=", _buffer.size(), "."));
             std::chrono::time_point<std::chrono::high_resolution_clock> tp =
                 std::chrono::high_resolution_clock::now();
             auto time_a = std::chrono::duration_cast<std::chrono::nanoseconds>(tp.time_since_epoch());
@@ -113,7 +116,9 @@ class CEventProfiler {
         bool cLogEvent(void* frame, void* arg,
                        int64_t event, bool &add_frame, bool& add_arg) {
             if (_last_position >= (uint64_t)_buffer.size())
-                throw std::runtime_error("CEventProfiler has a full cache.");
+                throw std::runtime_error(MakeString(
+                    "CEventProfiler has a full cache (last_position_=",
+                    _last_position, " buffer.size=", _buffer.size(), "."));
             std::chrono::time_point<std::chrono::high_resolution_clock> tp =
                 std::chrono::high_resolution_clock::now();
             auto time_a = std::chrono::duration_cast<std::chrono::nanoseconds>(tp.time_since_epoch());

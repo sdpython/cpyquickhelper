@@ -144,7 +144,7 @@ class TestEventProfiler(ExtTestCase):
 
     def test_debug_c(self):
         N = 100000
-        ev = EventProfilerDebug(impl='pybind11')
+        ev = EventProfilerDebug(impl='pybind11', size=10000000)
         ev.start()
         begin = perf_counter()
         for _ in range(N):
