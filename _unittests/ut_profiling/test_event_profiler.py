@@ -2,15 +2,18 @@
 @brief      test log(time=3s)
 """
 import unittest
-from time import sleep
+import inspect
+from time import sleep, perf_counter
 from pyquickhelper.pycode import ExtTestCase
-from cpyquickhelper.profiling import EventProfiler, WithEventProfiler
+from cpyquickhelper.profiling import (
+    EventProfiler, WithEventProfiler)
+from cpyquickhelper.profiling.event_profiler import EventProfilerDebug
 
 
 class TestEventProfiler(ExtTestCase):
 
     def test_profiling_exc(self):
-        ev = EventProfiler()
+        ev = EventProfiler(impl='python')
         self.assertRaise(lambda: ev.stop(), RuntimeError)
         ev.start()
         self.assertRaise(lambda: ev.start(), RuntimeError)
@@ -34,7 +37,7 @@ class TestEventProfiler(ExtTestCase):
             f2()
             f3()
 
-        ev = EventProfiler()
+        ev = EventProfiler(impl='python')
         ev.start()
         f4()
         ev.stop()
@@ -64,7 +67,7 @@ class TestEventProfiler(ExtTestCase):
             f2()
             f3()
 
-        ev = EventProfiler(20)
+        ev = EventProfiler(20, impl='python')
         ev.start()
         f4()
         ev.stop()
@@ -90,7 +93,7 @@ class TestEventProfiler(ExtTestCase):
             except RuntimeError as e:
                 return str(e)
 
-        ev = EventProfiler()
+        ev = EventProfiler(impl='python')
         ev.start()
         catch_exc()
         ev.stop()
@@ -104,7 +107,7 @@ class TestEventProfiler(ExtTestCase):
         def fsleep():
             sleep(0.1)
 
-        prof = WithEventProfiler()
+        prof = WithEventProfiler(impl='python')
         with prof:
             fsleep()
         df = prof.report
@@ -117,11 +120,45 @@ class TestEventProfiler(ExtTestCase):
             raise RuntimeError("TESTISSUE")
 
         try:
-            prof = WithEventProfiler()
+            prof = WithEventProfiler(impl='python')
             with prof:
                 fraise()
         except RuntimeError as e:
             self.assertEqual(str(e), 'TESTISSUE')
+
+    def test_debug(self):
+        N = 100000
+        ev = EventProfilerDebug(impl='python')
+        ev.start()
+        begin = perf_counter()
+        for _ in range(N):
+            ev.log_event(inspect.currentframe(), 'call', None)
+            ev.log_event(inspect.currentframe(), 'return', None)
+        end = perf_counter()
+        ev.stop()
+        duration = end - begin
+        msg = "%1.6f microsecond" % (duration / N * 1e6)
+        self.assertNotEmpty(msg)
+        if __name__ == "__main__":
+            print(msg)
+
+    def test_debug_c(self):
+        N = 100000
+        ev = EventProfilerDebug(impl='c')
+        ev.start()
+        begin = perf_counter()
+        for _ in range(N):
+            ev._buffer.c_log_event(  # pylint: disable=W0212
+                inspect.currentframe(), 'call', None)
+            ev._buffer.c_log_event(  # pylint: disable=W0212
+                inspect.currentframe(), 'return', None)
+        end = perf_counter()
+        ev.stop()
+        duration = end - begin
+        msg = "%1.6f microsecond" % (duration / N * 1e6)
+        self.assertNotEmpty(msg)
+        if __name__ == "__main__":
+            print(msg)
 
 
 if __name__ == "__main__":

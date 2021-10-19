@@ -17,6 +17,8 @@ class EventProfiler:
     of use.
 
     :param size: size of the buffer to store events
+    :param impl: different implementation of the same
+        function (`'python'`, `'c'`)
 
     The profiler stores every event about function calls and returns,
     and memory allocation. It does not give the time spent in every function
@@ -60,13 +62,14 @@ class EventProfiler:
         'realloc_free': 1004,
     }
 
-    def __init__(self, size=1000000):
+    def __init__(self, size=1000000, impl='python'):
         self._started = False
         self._prof = None
         self._frames = {-1: inspect.currentframe()}
         self._args = {-1: None, 0: None, id(None): None}
         self._buffer = CEventProfiler(size)
         self._events = []
+        self._impl = impl
 
     @property
     def n_columns(self):
@@ -98,6 +101,8 @@ class EventProfiler:
             raise RuntimeError(
                 "The profiler was not started. It must be done first.")
         self._buffer.stop()
+        # make a copy of all frames
+        self._buffer.delete()
         self._buffer.log_event(-1, -1, 101, 0, 0)
         self._restore_profiler()
         self._started = False
@@ -134,7 +139,13 @@ class EventProfiler:
         This relies on :func:`sys.setprofile` and :func:`sys.getprofile`.
         """
         self._prof = sys.getprofile()
-        sys.setprofile(self.log_event)
+        if self._impl == 'python':
+            sys.setprofile(self.log_event)
+        elif self._impl == 'c':
+            sys.setprofile(self._buffer.c_log_event)
+        else:
+            raise ValueError(
+                "Unexpected value for impl=%r." % self._impl)
 
     def _restore_profiler(self):
         """
@@ -286,16 +297,19 @@ class WithEventProfiler:
     :param size: size of the buffer to store events
     :param clean_file_name: function uses to clean or shorten the file name
         saved in the report.
+    :param impl: different implementation of the same
+        function (`'python'`, `'c'`)
     """
 
-    def __init__(self, size=1000000, clean_file_name=None):
+    def __init__(self, size=1000000, clean_file_name=None, impl='python'):
         self.size = size
         self.clean_file_name = clean_file_name
         self.report_ = None
         self.prof_ = None
+        self.impl = impl
 
     def __enter__(self):
-        self.prof_ = EventProfiler(size=self.size)
+        self.prof_ = EventProfiler(size=self.size, impl=self.impl)
         self.prof_.start()
 
     def __exit__(self, typ, value, traceback):
@@ -307,3 +321,30 @@ class WithEventProfiler:
     def report(self):
         """Returns the profiling report as a dataframe."""
         return self.report_
+
+
+class EventProfilerDebug(EventProfiler):
+    """
+    One class to measure time wasted by profiling.
+    """
+
+    def start(self):
+        """
+        Starts the profiling without enabling it.
+        """
+        if self._started:
+            raise RuntimeError(
+                "The profiler was already started. It cannot be done again.")
+        self._frames[0] = inspect.currentframe()
+        self._started = True
+        self._buffer.log_event(-1, -1, 100, 0, 0)
+
+    def stop(self):
+        """
+        Stops the unstarted profiling.
+        """
+        if not self._started:
+            raise RuntimeError(
+                "The profiler was not started. It must be done first.")
+        self._buffer.log_event(-1, -1, 101, 0, 0)
+        self._started = False

@@ -1,3 +1,3 @@
 
-Examples
-========
+Gallery of Examples
+===================

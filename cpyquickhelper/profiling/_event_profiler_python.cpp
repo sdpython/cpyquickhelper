@@ -76,7 +76,6 @@ C++ buffer for the CEventProfiler.)pbdoc"
 		.def("__str__", &CEventProfiler::__str__, "usual")
 		.def("__repr__", &CEventProfiler::__repr__, "usual")
         .def("__len__", &CEventProfiler::size, "usual")
-        .def("__len__", &CEventProfiler::size, "usual")
         .def("__iter__", [](CEventProfiler &v) {
             return py::make_iterator(v.begin(), v.end());
         }, py::keep_alive<0, 1>()) /* Keep vector alive while iterator is used */
@@ -112,6 +111,33 @@ C++ buffer for the CEventProfiler.)pbdoc"
                 PyMem_SetAllocator(PYMEM_DOMAIN_RAW, &static_allocator.old_allocator);
                 static_allocator.event_profiler = NULL;
             }, "Stops the memory profiler.")
+        .def("c_log_event",
+            [](CEventProfiler& self, py::object frame /*PyFrameObject*/,
+                    const std::string &s_event, py::object arg /*PyObject*/) {
+                bool add_frame, add_arg;
+                int64_t i_event = self.get_event(s_event);
+                bool res = self.cLogEvent((int64_t)frame.ptr(), (void*)frame.ptr(), 
+                                          (int64_t)arg.ptr(), (void*) arg.ptr(),
+                                          i_event, add_frame, add_arg);
+                if (add_frame)
+                    frame.inc_ref(); // Py_INCREF(frame);
+                if (add_arg)
+                    arg.inc_ref(); // Py_INCREF(add);
+                if (res) {
+                    // empty cache
+                }
+            }, "Logs an evant faster.")
+        .def("delete", [] (CEventProfiler& self) {
+            for(auto it: self.mem_frame()) {
+                py::handle h((PyObject*)it.second);
+                h.dec_ref();
+            }
+            for(auto it: self.mem_arg()) {
+                py::handle h((PyObject*)it.second);
+                h.dec_ref();
+            }
+            self.delete_pyobj();
+        }, "Decrefs all the stored objects.")
 		;
 }
 
