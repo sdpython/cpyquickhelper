@@ -56,7 +56,14 @@ void profiled_free(void *ctx, void *ptr) {
 PYBIND11_MODULE(_event_profiler, m) {
 	m.doc() = "Implements a profiler to log events.";
 
-    py::class_<CEventProfilerEvent> (m, "CEventProfilerEvent")
+    py::class_<CEventProfilerEvent> (m, "CEventProfilerEvent", 
+    #if defined(__APPLE__)
+    "Description of an event logged by the the class @see cl CEventProfiler."
+    #else
+    R"pbdoc(
+Description of an event logged by the the class @see cl CEventProfiler.)pbdoc"
+    #endif
+    )
         .def_readwrite("id_frame", &CEventProfilerEvent::id_frame, "frame id")
         .def_readwrite("id_arg", &CEventProfilerEvent::id_frame, "arg id")
         .def_readwrite("event", &CEventProfilerEvent::event, "event kind")
@@ -67,10 +74,10 @@ PYBIND11_MODULE(_event_profiler, m) {
 
 	py::class_<CEventProfiler> pyev (m, "CEventProfiler", 
     #if defined(__APPLE__)
-    "C++ buffer for the EventProfiler."
+    "C++ buffer for @see cl EventProfiler."
     #else
     R"pbdoc(
-C++ buffer for the CEventProfiler.)pbdoc"
+C++ buffer for @see cl EventProfiler.)pbdoc"
     #endif
         );
     
