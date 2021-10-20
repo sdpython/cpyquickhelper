@@ -17,6 +17,8 @@ class EventProfiler:
     of use.
 
     :param size: size of the buffer to store events
+    :param impl: different implementation of the same
+        function (`'python'`, `'pybind11'`)
 
     The profiler stores every event about function calls and returns,
     and memory allocation. It does not give the time spent in every function
@@ -40,6 +42,12 @@ class EventProfiler:
         The default memory allocator is not restored and any allocation
         is logged into a buffer which was deleted. The exception must be
         caught or class @see cl WithEventProfiler must be used.
+
+    About parameter *impl*, the question is related to the implementation
+    of method :meth:`log_event
+    <cpyquickhelper.profiling.event_profiler.EventProfiler.log_event>`.
+    A call to the python implementation takes 2-3 microseconds, a call
+    to the :epkg:`pybind11` implementation takes 1-2 microseconds.
     """
 
     _event_mapping = {
@@ -60,13 +68,20 @@ class EventProfiler:
         'realloc_free': 1004,
     }
 
-    def __init__(self, size=1000000):
+    def __init__(self, size=1000000, impl='python'):
         self._started = False
         self._prof = None
         self._frames = {-1: inspect.currentframe()}
         self._args = {-1: None, 0: None, id(None): None}
         self._buffer = CEventProfiler(size)
         self._events = []
+        self._impl = impl
+        self._copy_cache = False
+        self._cache_copy = numpy.empty((size, self._buffer.n_columns()),
+                                       dtype=numpy.int64)
+        if impl == 'pybind11':
+            # self._buffer.register_empty_cache(self._empty_cache)
+            self._buffer.register_pyinstance(self)
 
     @property
     def n_columns(self):
@@ -86,6 +101,7 @@ class EventProfiler:
                 "The profiler was already started. It cannot be done again.")
         self._frames[0] = inspect.currentframe()
         self._started = True
+        self._copy_cache = False
         self._setup_profiler()
         self._buffer.log_event(-1, -1, 100, 0, 0)
         self._buffer.start()
@@ -97,10 +113,35 @@ class EventProfiler:
         if not self._started:
             raise RuntimeError(
                 "The profiler was not started. It must be done first.")
+        self._restore_profiler()
         self._buffer.stop()
         self._buffer.log_event(-1, -1, 101, 0, 0)
-        self._restore_profiler()
+        if self._impl == 'pybind11':
+            map_frame, map_arg = self._buffer.get_saved_maps()
+            self._frames.update(map_frame)
+            self._args.update(map_arg)
+        self._buffer.delete()
         self._started = False
+
+    def _setup_profiler(self):
+        """
+        This relies on :func:`sys.setprofile` and :func:`sys.getprofile`.
+        """
+        self._prof = sys.getprofile()
+        if self._impl == 'python':
+            sys.setprofile(self.log_event)
+        elif self._impl == 'pybind11':
+            sys.setprofile(self._buffer.c_log_event)
+        else:
+            raise ValueError(
+                "Unexpected value for impl=%r." % self._impl)
+
+    def _restore_profiler(self):
+        """
+        This relies on :func:`sys.setprofile` and :func:`sys.getprofile`.
+        """
+        sys.setprofile(self._prof)
+        self._prof = None
 
     def log_event(self, frame, event, arg):
         """
@@ -109,10 +150,6 @@ class EventProfiler:
         :param frame: (frame), see :mod:`inspect`
         :param event: (str)
             kind of event
-        :param value1: (int)
-            additional value to the event
-        :param value2: (int)
-            additional value to the event
         :param arg: None or...
         """
         idf = id(frame)
@@ -129,39 +166,22 @@ class EventProfiler:
         if not r:
             self._empty_cache()
 
-    def _setup_profiler(self):
-        """
-        This relies on :func:`sys.setprofile` and :func:`sys.getprofile`.
-        """
-        self._prof = sys.getprofile()
-        sys.setprofile(self.log_event)
-
-    def _restore_profiler(self):
-        """
-        This relies on :func:`sys.setprofile` and :func:`sys.getprofile`.
-        """
-        sys.setprofile(self._prof)
-        self._prof = None
-
     def _empty_cache(self):
         """
-        Empties the cache.
+        Empties the cache. This function logs a couple of
+        events. The cache must contains enough place to
+        log them.
         """
-        self._buffer.log_event(-1, -1, 10, 0, 0)
-        self._buffer.lock()
-        size = len(self._buffer)
-        if size == 0:
-            self._buffer.unlock()
-            self._buffer.log_event(-1, -1, 11, 0, 0)
-            return 0
-        store = numpy.empty(
-            (size, self._buffer.n_columns()), dtype=numpy.int64)
-        self._buffer.dump(store, False)
-        self._buffer.clear(False)
-        self._buffer.unlock()
-
-        self._events.append(store)
-        self._buffer.log_event(-1, -1, 11, store.shape[0], 0)
+        if self._copy_cache:
+            raise RuntimeError(
+                "Profiling cache being copied. Increase the size of the cache.")
+        self._copy_cache = True
+        size = self._buffer.dump_and_clear(self._cache_copy, True)
+        # We hope here this function will not be called by another
+        # thread. That would another thread was able to fill
+        # the cache while it is being copied.
+        self._events.append(self._cache_copy[:size].copy())
+        self._copy_cache = False
         return size
 
     def retrieve_raw_results(self, empty_cache=True):
@@ -210,7 +230,10 @@ class EventProfiler:
             else:
                 name = frame.f_code.co_name
             return name
-        return arg.__qualname__
+        try:
+            return arg.__qualname__
+        except AttributeError:
+            return arg.__class__.__name__
 
     def _choose_mod(self, frame, arg, clean_name, f_back=False):
         """
@@ -228,7 +251,10 @@ class EventProfiler:
             else:
                 name = frame.f_code.co_filename
             return clean_name(name)
-        return arg.__module__
+        try:
+            return arg.__module__
+        except AttributeError:
+            return arg.__class__.__module__
 
     def retrieve_results(self, empty_cache=True, clean_file_name=None):
         """
@@ -284,18 +310,21 @@ class WithEventProfiler:
     even if an exception was raised.
 
     :param size: size of the buffer to store events
+    :param impl: different implementation of the same
+        function (`'python'`, `'pybind11'`)
     :param clean_file_name: function uses to clean or shorten the file name
         saved in the report.
     """
 
-    def __init__(self, size=1000000, clean_file_name=None):
+    def __init__(self, size=1000000, impl='python', clean_file_name=None):
         self.size = size
         self.clean_file_name = clean_file_name
         self.report_ = None
         self.prof_ = None
+        self.impl = impl
 
     def __enter__(self):
-        self.prof_ = EventProfiler(size=self.size)
+        self.prof_ = EventProfiler(size=self.size, impl=self.impl)
         self.prof_.start()
 
     def __exit__(self, typ, value, traceback):
@@ -307,3 +336,31 @@ class WithEventProfiler:
     def report(self):
         """Returns the profiling report as a dataframe."""
         return self.report_
+
+
+class EventProfilerDebug(EventProfiler):
+    """
+    One class to measure time wasted by profiling.
+    """
+
+    def start(self):
+        """
+        Starts the profiling without enabling it.
+        """
+        if self._started:
+            raise RuntimeError(
+                "The profiler was already started. It cannot be done again.")
+        self._frames[0] = inspect.currentframe()
+        self._started = True
+        self._copy_cache = False
+        self._buffer.log_event(-1, -1, 100, 0, 0)
+
+    def stop(self):
+        """
+        Stops the unstarted profiling.
+        """
+        if not self._started:
+            raise RuntimeError(
+                "The profiler was not started. It must be done first.")
+        self._buffer.log_event(-1, -1, 101, 0, 0)
+        self._started = False

@@ -19,7 +19,10 @@ The simple function to look at
 """
 
 import time
-from cpyquickhelper.profiling import EventProfiler, WithEventProfiler
+import inspect
+from cpyquickhelper.profiling import (
+    EventProfiler, WithEventProfiler)
+from cpyquickhelper.profiling.event_profiler import EventProfilerDebug
 
 
 def f1(t):
@@ -93,3 +96,39 @@ with wev:
     f4()
 
 wev.report
+
+##########################################
+# Profiling cost
+# ++++++++++++++
+#
+# Logging an events takes a few microseconds so
+# A class not profiling but still logging is available
+# to measure the cost of the profiling.
+
+
+def measure_implementation(impl):
+    N = 100000
+    ev = EventProfilerDebug(impl=impl)
+    ev.start()
+    begin = time.perf_counter()
+
+    if impl == 'python':
+        for _ in range(N):
+            ev.log_event(inspect.currentframe(), 'call', None)
+            ev.log_event(inspect.currentframe(), 'return', None)
+    else:
+        for _ in range(N):
+            ev._buffer.c_log_event(
+                inspect.currentframe(), 'call', None)
+            ev._buffer.c_log_event(
+                inspect.currentframe(), 'return', None)
+
+    end = time.perf_counter()
+    ev.stop()
+    duration = end - begin
+    msg = "%s: %1.6f microsecond" % (impl, duration / N * 1e6)
+    return msg
+
+
+print(measure_implementation('python'))
+print(measure_implementation('pybind11'))
