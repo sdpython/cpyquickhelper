@@ -15,7 +15,7 @@ class PyCContainer {
         PyCContainer(py::array_t<int64_t, py::array::c_style | py::array::forcecast> array, bool copy=true);
         PyCContainer(py::array_t<double, py::array::c_style | py::array::forcecast> array, bool copy=true);
         PyCContainer(py::array_t<float, py::array::c_style | py::array::forcecast> array, bool copy=true);
-        PyCContainer(PyCContainer container, bool copy=true);
+        PyCContainer(PyCContainer* container, bool copy=true);
 
         ContainerType dtype() const { return _container.dtype() ; }
         size_t size() const { return _container.size() ; }
@@ -61,8 +61,8 @@ PyCContainer::PyCContainer(py::array_t<float, py::array::c_style | py::array::fo
 }
 
 
-PyCContainer::PyCContainer(PyCContainer container, bool copy) :
-    _container(container.size(), container.data(), container.dtype(),
+PyCContainer::PyCContainer(PyCContainer* container, bool copy) :
+    _container(container->size(), container->data(), container->dtype(),
                copy, copy) {
     // If !copy and the underlying array is deleted, this could the program to crash.
 }
@@ -111,7 +111,7 @@ PYBIND11_MODULE(custom_container_python, m) {
                   "Copies the floats into the container.",
                   py::arg("value"), py::arg("copy")=true);
 
-    container.def(py::init<PyCContainer, bool>(), "Copies or borrow the container into another one.",
+    container.def(py::init<PyCContainer*, bool>(), "Copies or borrow the container into another one.",
                   py::arg("value"), py::arg("copy")=true);
 
     container.def_property_readonly("dtype", &PyCContainer::dtype, "Returns the type of every elements of the container.");
