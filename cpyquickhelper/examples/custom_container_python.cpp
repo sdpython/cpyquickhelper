@@ -12,10 +12,10 @@ namespace py = pybind11;
 class PyCContainer {
     public:
         PyCContainer(const std::string& bytes, bool copy);
-        PyCContainer(py::array_t<int64_t, py::array::c_style | py::array::forcecast> array, bool copy=true);
-        PyCContainer(py::array_t<double, py::array::c_style | py::array::forcecast> array, bool copy=true);
-        PyCContainer(py::array_t<float, py::array::c_style | py::array::forcecast> array, bool copy=true);
-        PyCContainer(PyCContainer* container, bool copy=true);
+        PyCContainer(py::array_t<int64_t, py::array::c_style | py::array::forcecast> array, bool copy);
+        PyCContainer(py::array_t<double, py::array::c_style | py::array::forcecast> array, bool copy);
+        PyCContainer(py::array_t<float, py::array::c_style | py::array::forcecast> array, bool copy);
+        PyCContainer(PyCContainer* container, bool copy);
 
         ContainerType dtype() const { return _container.dtype() ; }
         size_t size() const { return _container.size() ; }
