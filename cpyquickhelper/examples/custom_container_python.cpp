@@ -61,7 +61,7 @@ PyCContainer::PyCContainer(py::array_t<float, py::array::c_style | py::array::fo
 }
 
 
-PyCContainer::PyCContainer(PyCContainer& container, bool copy) :
+PyCContainer::PyCContainer(PyCContainer container, bool copy) :
     _container(container.size(), container.data(), container.dtype(),
                copy, copy) {
     // If !copy and the underlying array is deleted, this could the program to crash.
