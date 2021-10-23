@@ -163,6 +163,9 @@ class CEventProfiler {
         }
 };
 
+
+void* create_CEventProfiler(int64_t size);
+
 #if defined(undef_CRT_SECURE_NO_WARNINGS)
 #undef _CRT_SECURE_NO_WARNINGS
 #endif

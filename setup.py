@@ -234,6 +234,7 @@ def get_extensions():
     ext_profiling = Extension(
         'cpyquickhelper.profiling._event_profiler',
         [os.path.join(root, 'cpyquickhelper/profiling/_event_profiler.cpp'),
+         os.path.join(root, 'cpyquickhelper/profiling/_event_profiler_allocator.cpp'),
          os.path.join(root, 'cpyquickhelper/profiling/_event_profiler_python.cpp')],
         extra_compile_args=extra_compile_args_numbers,
         extra_link_args=extra_link_args,
@@ -254,7 +255,8 @@ def get_extensions():
 
     try:
         from Cython.Build import cythonize
-        ext_modules = cythonize([ext_blas], compiler_directives=opts)
+        ext_modules = cythonize([ext_blas],
+                                compiler_directives=opts)
     except ImportError:
         # Cython is not installed.
         warnings.warn(
