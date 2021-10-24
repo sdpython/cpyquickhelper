@@ -14,6 +14,7 @@ class TestMissing(ExtTestCase):
         obj = WeightedSeriesDtype()
         s = str(obj)
         self.assertEqual(s, "WeightedDouble")
+        self.assertEqual(obj.name, "WeightedDouble")
         t = obj.type()  # pylint: disable=E1102
         self.assertNotEmpty(t)
         n = t.name

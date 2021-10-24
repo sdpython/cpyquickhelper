@@ -98,7 +98,7 @@ class CEventProfiler {
                              int64_t value1, int64_t value2) {
             if (_last_position >= (uint64_t)_buffer.size())
                 throw std::runtime_error(MakeString(
-                    "CEventProfiler has a full cache (last_position_=",
+                    "CEventProfiler has a full cache (1) (last_position_=",
                     _last_position, " buffer.size=", _buffer.size(), "."));
             std::chrono::time_point<std::chrono::high_resolution_clock> tp =
                 std::chrono::high_resolution_clock::now();
@@ -126,7 +126,7 @@ class CEventProfiler {
                               int64_t event, bool &add_frame, bool& add_arg) {
             if (_last_position >= (uint64_t)_buffer.size())
                 throw std::runtime_error(MakeString(
-                    "CEventProfiler has a full cache (last_position_=",
+                    "CEventProfiler has a full cache (2) (last_position_=",
                     _last_position, " buffer.size=", _buffer.size(), "."));
             std::chrono::time_point<std::chrono::high_resolution_clock> tp =
                 std::chrono::high_resolution_clock::now();
