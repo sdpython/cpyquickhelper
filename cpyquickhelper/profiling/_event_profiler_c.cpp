@@ -9,7 +9,7 @@ static CEventProfiler * _static_profiler = NULL;
 static PyObject* _profiling_start(PyObject* Py_UNUSED(self), PyObject* args) {
     int size;
     bool debug;
-    if(!PyArg_ParseTuple(args, "Ip", &size, &debug)) {
+    if(!PyArg_ParseTuple(args, "ip", &size, &debug)) {
         PyErr_SetString(
             PyExc_TypeError, "Unable to decode the parameters. (int, bool) are expected.");
         return 0;
