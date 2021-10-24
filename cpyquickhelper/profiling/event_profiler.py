@@ -90,7 +90,7 @@ class EventProfiler:
         if self._buffer is None:
             nc = _profiling_n_columns()
         else:
-            nc = self._buffer.n_columns()
+            nc = self.n_columns
         self._cache_copy = numpy.empty((size, nc), dtype=numpy.int64)
         if impl == 'pybind11':
             self._buffer.register_pyinstance(self)
@@ -103,7 +103,7 @@ class EventProfiler:
         by @see meth retrieve_raw_results.
         """
         if self._buffer is not None:
-            return self._buffer.n_columns()
+            return CEventProfiler.n_columns()
         return _profiling_n_columns()
 
     def start(self):
