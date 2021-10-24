@@ -21,6 +21,12 @@ static PyObject* _profiling_start(PyObject* Py_UNUSED(self), PyObject* args) {
         return 0;
     }
 
+    if (size < 20) {
+        PyErr_SetString(
+            PyExc_RuntimeError, "CEventProfiler cannot start, size must >= 20.");
+        return 0;
+    }
+
     PyGILState_STATE state = PyGILState_Ensure();
 
     _static_profiler = new CEventProfiler(size);
