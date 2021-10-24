@@ -41,6 +41,27 @@ class TestCustomContainer(ExtTestCase):
         li = [cc[i] for i in range(s)]
         self.assertEqual(li, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64])
 
+    def test_int64(self):
+        by = numpy.array([0, 2], dtype=numpy.int64)
+        cc = PyCContainer(by)
+        dt = cc.dtype
+        self.assertEqual(str(dt), "ContainerType.INT64")
+        s = cc.size
+        self.assertEqual(s, 16)
+        li = [cc[i] for i in range(s)]
+        self.assertEqual(li, [0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0])
+
+    def test_tuple(self):
+        arrays = [numpy.ones((100, 100)) * i for i in range(0, 100)]
+        pycs = [PyCContainer(a, True) for a in arrays]
+
+        def copy_to_tuple(pycs):
+            return tuple(map(lambda x: PyCContainer(x, False), pycs))
+
+        res = copy_to_tuple(pycs)
+        self.assertEqual(len(res), 100)
+        self.assertIsInstance(res, tuple)
+
 
 if __name__ == "__main__":
     unittest.main()

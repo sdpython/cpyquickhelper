@@ -7,43 +7,46 @@
 #endif
 
 #include <string>
+#include <exception>
+
 
 typedef enum {
-    VOID=0,
-    BYTE=1,
-    FLOAT=2,
-    DOUBLE=3,
+    CT_VOID=0,
+    CT_BYTE=1,
+    CT_FLOAT=2,
+    CT_DOUBLE=3,
+    CT_INT64=4,
 } ContainerType;
 
 
-class CustomContainer
-{
+class CustomContainer {
     public:
         
-    CustomContainer(size_t size=0, void *p=NULL,
-                    ContainerType type=ContainerType::VOID,
-                    bool copy=false, bool del=true);
-    ~CustomContainer();
-    
-    bool empty();
-    size_t size();
-    void * data();
-    ContainerType dtype();
-    unsigned char operator [](size_t index);
+        CustomContainer(size_t size=0, void *p=NULL,
+                        ContainerType type=ContainerType::CT_VOID,
+                        bool copy=false, bool del=true);
+        ~CustomContainer();
+        
+        bool empty() const;
+        size_t size() const;
+        void* data() const;
+        ContainerType dtype() const;
+        unsigned char operator [](size_t index) const;
     
     private:
         
-    ContainerType _type;
-    void *_data;
-    size_t _size;
-    bool _del;
+        ContainerType _type;
+        void *_data;
+        size_t _size;
+        bool _del;
 };
 
-inline bool CustomContainer::empty() { return _size == 0; }
-inline size_t CustomContainer::size() { return _size; }
-inline void * CustomContainer::data() { return _data; }
-inline ContainerType CustomContainer::dtype() { return _type; }
-inline unsigned char CustomContainer::operator [](size_t index) { return *((unsigned char*)_data + index); }
+
+inline bool CustomContainer::empty() const { return _size == 0; }
+inline size_t CustomContainer::size() const { return _size; }
+inline void * CustomContainer::data() const { return _data; }
+inline ContainerType CustomContainer::dtype() const { return _type; }
+inline unsigned char CustomContainer::operator [](size_t index) const { return *((unsigned char*)_data + index); }
 
 
 #if defined(undef_CRT_SECURE_NO_WARNINGS)
