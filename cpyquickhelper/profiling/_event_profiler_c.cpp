@@ -7,9 +7,9 @@ static CEventProfiler * _static_profiler = NULL;
 
 
 static PyObject* _profiling_start(PyObject* Py_UNUSED(self), PyObject* args) {
-    int size;
+    PyObject* osize;
     bool debug;
-    if(!PyArg_ParseTuple(args, "ip", &size, &debug)) {
+    if(!PyArg_ParseTuple(args, "Op", &osize, &debug)) {
         PyErr_SetString(
             PyExc_TypeError, "Unable to decode the parameters. (int, bool) are expected.");
         return 0;
@@ -21,6 +21,8 @@ static PyObject* _profiling_start(PyObject* Py_UNUSED(self), PyObject* args) {
         return 0;
     }
 
+    int64_t size = PyLong_AsLongLong(osize);
+    Py_DECREF(osize);
     if (size < 20) {
         PyErr_SetString(
             PyExc_RuntimeError, "CEventProfiler cannot start, size must >= 20.");

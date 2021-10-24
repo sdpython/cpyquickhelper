@@ -121,7 +121,7 @@ class EventProfiler:
             self._buffer.log_event(-1, -1, 100, 0, 0)
             self._buffer.start()
         else:
-            _profiling_start(self._size, False)
+            _profiling_start(int(self._size), False)
             self._setup_profiler()
             _profiling_register_pyinstance(self)
 
