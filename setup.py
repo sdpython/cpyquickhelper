@@ -234,7 +234,8 @@ def get_extensions():
     ext_profiling = Extension(
         'cpyquickhelper.profiling._event_profiler',
         [os.path.join(root, 'cpyquickhelper/profiling/_event_profiler.cpp'),
-         os.path.join(root, 'cpyquickhelper/profiling/_event_profiler_allocator.cpp'),
+         os.path.join(
+             root, 'cpyquickhelper/profiling/_event_profiler_allocator.cpp'),
          os.path.join(root, 'cpyquickhelper/profiling/_event_profiler_python.cpp')],
         extra_compile_args=extra_compile_args_numbers,
         extra_link_args=extra_link_args,
@@ -250,7 +251,8 @@ def get_extensions():
     ext_profiling_c = Extension(
         'cpyquickhelper.profiling._event_profiler_c',
         [os.path.join(root, 'cpyquickhelper/profiling/_event_profiler.cpp'),
-         os.path.join(root, 'cpyquickhelper/profiling/_event_profiler_allocator.cpp'),
+         os.path.join(
+             root, 'cpyquickhelper/profiling/_event_profiler_allocator.cpp'),
          os.path.join(root, 'cpyquickhelper/profiling/_event_profiler_c.cpp')],
         extra_compile_args=extra_compile_args_numbers,
         extra_link_args=extra_link_args,

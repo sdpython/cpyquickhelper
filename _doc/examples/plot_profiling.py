@@ -23,6 +23,9 @@ import inspect
 from cpyquickhelper.profiling import (
     EventProfiler, WithEventProfiler)
 from cpyquickhelper.profiling.event_profiler import EventProfilerDebug
+from cpyquickhelper.profiling._event_profiler_c import (
+    _profiling_start, _profiling_stop,
+    _profiling_log_event, _profiling_delete)
 
 
 def f1(t):
@@ -108,23 +111,37 @@ wev.report
 
 def measure_implementation(impl):
     N = 100000
-    ev = EventProfilerDebug(impl=impl)
-    ev.start()
-    begin = time.perf_counter()
 
     if impl == 'python':
+        ev = EventProfilerDebug(impl=impl)
+        ev.start()
+        begin = time.perf_counter()
         for _ in range(N):
             ev.log_event(inspect.currentframe(), 'call', None)
             ev.log_event(inspect.currentframe(), 'return', None)
+        end = time.perf_counter()
+        ev.stop()
+    elif impl == 'c':
+        _profiling_start(10000000, True)
+        begin = time.perf_counter()
+        for _ in range(N):
+            _profiling_log_event(inspect.currentframe(), 'call', None)
+            _profiling_log_event(inspect.currentframe(), 'return', None)
+        end = time.perf_counter()
+        _profiling_delete()
+        _profiling_stop()
     else:
+        ev = EventProfilerDebug(impl=impl)
+        ev.start()
+        begin = time.perf_counter()
         for _ in range(N):
             ev._buffer.c_log_event(
                 inspect.currentframe(), 'call', None)
             ev._buffer.c_log_event(
                 inspect.currentframe(), 'return', None)
+        end = time.perf_counter()
+        ev.stop()
 
-    end = time.perf_counter()
-    ev.stop()
     duration = end - begin
     msg = "%s: %1.6f microsecond" % (impl, duration / N * 1e6)
     return msg
@@ -132,3 +149,10 @@ def measure_implementation(impl):
 
 print(measure_implementation('python'))
 print(measure_implementation('pybind11'))
+print(measure_implementation('c'))
+
+
+###########################################
+# The fastest implementation uses Python C API and can be enabled
+# by using `EventProfiler(impl='c')`. This implementation
+# relies on function from `l-api-c-profiler`.

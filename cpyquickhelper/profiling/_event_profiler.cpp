@@ -7,9 +7,6 @@
 #include <iostream>
 #include <cstring>
 
-void* create_CEventProfiler(int64_t size) {
-    return new CEventProfiler(size);
-}
 
 std::string CEventProfilerEvent::to_string() const {
     char buf[50];

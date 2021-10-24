@@ -85,7 +85,7 @@ class CEventProfiler {
         std::string __repr__() const;
         inline void* get_pyinstance() const { return pyinstance; }
         inline int64_t size() const { return (int64_t)_last_position; }
-        inline int n_columns() const { return sizeof(CEventProfilerEvent) / sizeof(int64_t); }
+        static int n_columns() { return sizeof(CEventProfilerEvent) / sizeof(int64_t); }
         inline void lock() { _mtx.lock(); }
         inline void unlock() { _mtx.unlock(); }
         inline const CEventProfilerEvent& operator[](int64_t p) const { return _buffer[p]; }
@@ -163,8 +163,6 @@ class CEventProfiler {
         }
 };
 
-
-void* create_CEventProfiler(int64_t size);
 
 #if defined(undef_CRT_SECURE_NO_WARNINGS)
 #undef _CRT_SECURE_NO_WARNINGS
