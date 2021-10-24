@@ -21,7 +21,22 @@ static PyObject* _profiling_start(PyObject* Py_UNUSED(self), PyObject* args) {
         return 0;
     }
 
+    PyGILState_STATE state = PyGILState_Ensure();
+
     _static_profiler = new CEventProfiler(size);
+
+    MemoryAllocator& static_allocator = get_static_allocator();
+    static_allocator.event_profiler = _static_profiler;
+    PyMem_GetAllocator(PYMEM_DOMAIN_RAW, &static_allocator.old_allocator);
+    static_allocator.new_allocator.ctx = static_allocator.old_allocator.ctx;
+    static_allocator.new_allocator.malloc = profiled_malloc;
+    static_allocator.new_allocator.calloc = profiled_calloc;
+    static_allocator.new_allocator.realloc = profiled_realloc;
+    static_allocator.new_allocator.free = profiled_free;
+    PyMem_SetAllocator(PYMEM_DOMAIN_RAW, &static_allocator.new_allocator);
+
+    PyGILState_Release(state);
+
     Py_RETURN_NONE;
 }
 
@@ -37,9 +52,14 @@ static PyObject* _profiling_stop(PyObject* Py_UNUSED(self), PyObject* args) {
             PyExc_RuntimeError, "CEventProfiler not empty.");
         return 0;
     }
-    
+
+    MemoryAllocator& static_allocator = get_static_allocator();
+    PyMem_SetAllocator(PYMEM_DOMAIN_RAW, &static_allocator.old_allocator);
+    static_allocator.event_profiler = NULL;
+
     delete _static_profiler;
     _static_profiler = NULL;
+
     Py_RETURN_NONE;
 }
 
@@ -158,13 +178,17 @@ static PyObject* _profiling_dump_and_clear(PyObject* Py_UNUSED(self), PyObject* 
     int64_t size;
     bool lock;
     
+    PyGILState_STATE state = PyGILState_Ensure();
     if(!PyArg_ParseTuple(args, "LLp", &ptr, &size, &lock)) {
+        PyGILState_Release(state);
         PyErr_SetString(
             PyExc_TypeError, "Unable to decode the parameters. (void*, int64_t, bool) are expected.");
         return 0;
     }
     int64_t copied = _static_profiler->dump_and_clear(ptr, size, lock);
-    return PyLong_FromLongLong(copied);
+    PyObject* res = PyLong_FromLongLong(copied);
+    PyGILState_Release(state);
+    return res;
 }
 
 
@@ -176,13 +200,14 @@ static PyObject* _profiling_register_pyinstance(PyObject* Py_UNUSED(self), PyObj
     }
 
     PyObject* obj;
+    PyGILState_STATE state = PyGILState_Ensure();
     
     if(!PyArg_ParseTuple(args, "O", &obj)) {
+        PyGILState_Release(state);
         PyErr_SetString(
             PyExc_TypeError, "Unable to decode the parameters. (PyObject*) is expected.");
         return 0;
     }
-    PyGILState_STATE state = PyGILState_Ensure();
     Py_INCREF(obj);
     PyGILState_Release(state);
     
