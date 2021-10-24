@@ -7,9 +7,8 @@ static CEventProfiler * _static_profiler = NULL;
 
 
 static PyObject* _profiling_start(PyObject* Py_UNUSED(self), PyObject* args) {
-    PyObject* osize;
-    bool debug;
-    if(!PyArg_ParseTuple(args, "Op", &osize, &debug)) {
+    int size, debug;
+    if(!PyArg_ParseTuple(args, "ii", &size, &debug)) {
         PyErr_SetString(
             PyExc_TypeError, "Unable to decode the parameters. (int, bool) are expected.");
         return 0;
@@ -21,8 +20,6 @@ static PyObject* _profiling_start(PyObject* Py_UNUSED(self), PyObject* args) {
         return 0;
     }
 
-    int64_t size = PyLong_AsLongLong(osize);
-    Py_DECREF(osize);
     if (size < 20) {
         PyErr_SetString(
             PyExc_RuntimeError, "CEventProfiler cannot start, size must >= 20.");
@@ -183,11 +180,10 @@ static PyObject* _profiling_dump_and_clear(PyObject* Py_UNUSED(self), PyObject* 
     }
 
     int64_t* ptr;
-    int64_t size;
-    bool lock;
+    int size, lock;
     
     PyGILState_STATE state = PyGILState_Ensure();
-    if(!PyArg_ParseTuple(args, "LLp", &ptr, &size, &lock)) {
+    if(!PyArg_ParseTuple(args, "Lii", &ptr, &size, &lock)) {
         PyGILState_Release(state);
         PyErr_SetString(
             PyExc_TypeError, "Unable to decode the parameters. (void*, int64_t, bool) are expected.");

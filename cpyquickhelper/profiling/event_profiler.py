@@ -121,7 +121,7 @@ class EventProfiler:
             self._buffer.log_event(-1, -1, 100, 0, 0)
             self._buffer.start()
         else:
-            _profiling_start(int(self._size), False)
+            _profiling_start(int(self._size), 0)
             self._setup_profiler()
             _profiling_register_pyinstance(self)
 
@@ -210,7 +210,7 @@ class EventProfiler:
                 'data'][0]
             # self._cache_copy.__array_struct__
             size = _profiling_dump_and_clear(
-                ptr, self._cache_copy.size, True)
+                ptr, self._cache_copy.size, 1)
         else:
             size = self._buffer.dump_and_clear(self._cache_copy, True)
         # We hope here this function will not be called by another
