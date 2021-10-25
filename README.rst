@@ -78,14 +78,45 @@ for every event such as functions call or returns, memory allocations.
 
 ::
 
+    import io
+    import numpy
     from cpyquickhelper.profiling import EventProfiler
+
+    def custom_array(N):
+        a = numpy.zeros((N, N))
+        a[:, 0] = 1
+        a[0, :] = 1
+        return a
 
     ev = EventProfiler(impl='c')
     ev.start()
-    # your code...
+
+    custom_array(3)
+
     ev.stop()
 
     df = ev.retrieve_results()  # DataFrame
+    st = io.StringIO()
+    df.to_csv(st, index=False)
+    print(st.getvalue().replace("\r", ""))
+
+::
+
+    time,value1,value2,event,name,mod,lineno,from_name,from_mod,from_line
+    822467345556400,0,0,return,_setup_profiler,cpyquickhelper/profiling/event_profiler.py,153,start,cpyquickhelper/profiling/event_profiler.py,126
+    822467345566700,0,0,c_call,_profiling_register_pyinstance,cpyquickhelper.profiling._event_profiler_c,109,_profiling_register_pyinstance,k.py,19
+    822467345569000,0,0,c_return,_profiling_register_pyinstance,cpyquickhelper.profiling._event_profiler_c,109,_profiling_register_pyinstance,k.py,19
+    822467345569700,0,0,return,start,cpyquickhelper/profiling/event_profiler.py,109,<module>,k.py,19
+    822467345575100,0,0,call,custom_array,k.py,5,<module>,k.py,19
+    822467345579600,0,0,c_call,zeros,numpy,5,zeros,k.py,19
+    822467345584300,2698130437280,32,malloc,start,cpyquickhelper/profiling/event_profiler.py,109,<module>,k.py,19
+    822467345590500,0,0,c_return,zeros,numpy,5,zeros,k.py,19
+    822467345598200,0,0,free,start,cpyquickhelper/profiling/event_profiler.py,109,<module>,k.py,19
+    822467345600400,0,0,free,start,cpyquickhelper/profiling/event_profiler.py,109,<module>,k.py,19
+    822467345600900,0,0,return,ndarray,numpy,5,ndarray,k.py,19
+    822467345603200,0,0,call,stop,cpyquickhelper/profiling/event_profiler.py,128,<module>,k.py,19
+    822467345604900,0,0,call,_restore_profiler,cpyquickhelper/profiling/event_profiler.py,168,stop,cpyquickhelper/profiling/event_profiler.py,151
+    822467345605600,0,0,c_call,setprofile,sys,168,setprofile,cpyquickhelper/profiling/event_profiler.py,151
 
 **Links:**
 
