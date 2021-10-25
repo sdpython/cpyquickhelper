@@ -3,8 +3,10 @@
 
 .. _l-example-event-profling:
 
-Event Profiling
-===============
+EventProfiler
+=============
+
+.. index:: event, profiling, profiler
 
 Many profilers propose to see how long a program stays
 in a function (see :mod:`cProfile`, :epkg:`pyinstrument`,
@@ -156,3 +158,12 @@ print(measure_implementation('c'))
 # The fastest implementation uses Python C API and can be enabled
 # by using `EventProfiler(impl='c')`. This implementation
 # relies on function from `l-api-c-profiler`.
+#
+# EventProfiler with C implementation
+# +++++++++++++++++++++++++++++++++++
+
+wev = WithEventProfiler(clean_file_name=clean_name, impl='c')
+with wev:
+    f4()
+
+wev.report

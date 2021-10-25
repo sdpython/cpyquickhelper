@@ -27,7 +27,7 @@ class TestEventProfiler(ExtTestCase):
     def test_profiling(self):
 
         def f1(t):
-            sleep(t)
+            sleep(abs(t))
 
         def f2():
             f1(0.1)
@@ -55,6 +55,28 @@ class TestEventProfiler(ExtTestCase):
         self.assertEqual(list(df.columns), expected)
         self.assertIn('sleep', set(df['name']))
         self.assertIn('time', set(df['mod']))
+
+    def test_profiling_exc2(self):
+
+        def f3():
+            try:
+                raise RuntimeError("EXC")
+            except RuntimeError as e:
+                return e
+
+        def f4():
+            return f3()
+
+        ev = EventProfiler(impl='python')
+        ev.start()
+        f4()
+        ev.stop()
+        df = ev.retrieve_results()
+        expected = ['time', 'value1', 'value2', 'event',
+                    'name', 'mod', 'lineno', 'from_name',
+                    'from_mod', 'from_line']
+        self.assertEqual(list(df.columns), expected)
+        self.assertIn('f3', set(df.name))
 
     def test_profiling_20(self):
 
@@ -330,5 +352,5 @@ class TestEventProfiler(ExtTestCase):
 
 
 if __name__ == "__main__":
-    # TestEventProfiler().test_profiling_c()
+    # TestEventProfiler().test_profiling_exc()
     unittest.main()

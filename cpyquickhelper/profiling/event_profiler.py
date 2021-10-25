@@ -162,7 +162,7 @@ class EventProfiler:
         elif self._impl == 'c':
             sys.setprofile(_profiling_log_event)
         else:
-            raise ValueError(
+            raise ValueError(  # pragma: no cover
                 "Unexpected value for impl=%r." % self._impl)
 
     def _restore_profiler(self):
@@ -202,8 +202,9 @@ class EventProfiler:
         log them.
         """
         if self._copy_cache:
-            raise RuntimeError(
-                "Profiling cache being copied. Increase the size of the cache.")
+            raise RuntimeError(  # pragma: no cover
+                "Profiling cache being copied. "
+                "Increase the size of the cache.")
         self._copy_cache = True
         if self._buffer is None:
             ptr = self._cache_copy.__array_interface__[  # pylint: disable=E1101
@@ -259,10 +260,8 @@ class EventProfiler:
         """
         if arg is None:
             if f_back:
-                if frame.f_back is None:
-                    name = ''
-                else:
-                    name = frame.f_back.f_code.co_name
+                name = ('' if frame.f_back is None else
+                        frame.f_back.f_code.co_name)
             else:
                 name = frame.f_code.co_name
             return name
@@ -280,10 +279,8 @@ class EventProfiler:
         """
         if arg is None:
             if f_back:
-                if frame.f_back is None:
-                    name = ''
-                else:
-                    name = frame.f_back.f_code.co_filename
+                name = ('' if frame.f_back is None else
+                        frame.f_back.f_code.co_filename)
             else:
                 name = frame.f_code.co_filename
             return clean_name(name)
@@ -384,7 +381,7 @@ class EventProfilerDebug(EventProfiler):
         Starts the profiling without enabling it.
         """
         if self._started:
-            raise RuntimeError(
+            raise RuntimeError(  # pragma: no cover
                 "The profiler was already started. It cannot be done again.")
         self._frames[0] = inspect.currentframe()
         self._started = True
@@ -396,7 +393,7 @@ class EventProfilerDebug(EventProfiler):
         Stops the unstarted profiling.
         """
         if not self._started:
-            raise RuntimeError(
+            raise RuntimeError(  # pragma: no cover
                 "The profiler was not started. It must be done first.")
         self._buffer.log_event(-1, -1, 101, 0, 0)
         self._started = False

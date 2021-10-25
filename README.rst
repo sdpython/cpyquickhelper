@@ -73,17 +73,19 @@ C functions in different ways. It implements function
      'min_exec': 3.635883331298828e-06, 'max_exec': 5.776062607765198e-06,
      'repeat': 10, 'number': 50, 'context_size': 240}
 
-On Windows, the following exception might happen:
+It also implements an event profiler: it logs the timestamp
+for every event such as functions call or returns, memory allocations.
 
 ::
 
-    LINK : fatal error LNK1158: impossible d'exécuter 'rc.exe'
+    from cpyquickhelper.profiling import EventProfiler
 
-Which might be resolved with the following line before building it:
+    ev = EventProfiler(impl='c')
+    ev.start()
+    # your code...
+    ev.stop()
 
-::
-
-    set PATH=%PATH%;C:\Program Files (x86)\Windows Kits\10\bin\10.0.16299.0\x64
+    df = ev.retrieve_results()  # DataFrame
 
 **Links:**
 

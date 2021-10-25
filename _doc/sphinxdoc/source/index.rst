@@ -62,7 +62,12 @@ cpyquickhelper: python + C++ in different ways
 :ref:`blog <ap-main-0>`
 
 This library explores various technics to use
-:epkg:`C` or :epkg:`C++` functions in :epkg:`Python`.
+:epkg:`C` or :epkg:`C++` functions in :epkg:`Python`. The code
+shows examples on how to link with :epkg:`pybind11` or :epkg:`cython`,
+how to call :epkg:`BLAS` or :epkg:`LAPACK` function from *cython* code
+available through :epkg:`scipy`.
+It also implement an event profiler based on the direct Python API
+(see :ref:`l-example-event-profling`).
 
 .. toctree::
     :maxdepth: 1
@@ -74,18 +79,19 @@ This library explores various technics to use
     blog/blogindex
     i_index
 
-Links on how to use :epkg:`C` in :epkg:`Python` extension:
+The following links mixing :epkg:`C` and :epkg:`Python` may be useful:
+`Extending Python with C or C++
+<https://docs.python.org/3/extending/extending.html>`_,
+`Building C and C++ Extensions with distutils
+<https://docs.python.org/3/extending/building.html#building-c-and-c-extensions-with-distutils>`_.
 
-* `Extending Python with C or C++ <https://docs.python.org/3/extending/extending.html>`_
-* `Building C and C++ Extensions with distutils <https://docs.python.org/3/extending/building.html#building-c-and-c-extensions-with-distutils>`_
-* `Building Extensions For Python 3.5 <https://stevedower.id.au/blog/building-for-python-3-5/>`_
-
-The produced code might be quite verbose.
-One possible option is :epkg:`pybind11` which
-speeds up the writing of functions binding :epkg:`C` objects
-with :epkg:`Python` objects. The interface also speeds up
-the development of functions taking array and matrices
-from :epkg:`numpy` as inputs or outputs.
+Interesting features:
+:func:`edit_distance_string <cpyquickhelper.algorithms.edit_distance.edit_distance_string>`,
+:class:`PyCContainer <cpyquickhelper.examples.custom_container_python.PyCContainer>`,
+:func:`get_simd_available_option <cpyquickhelper.numbers.cbenchmark.get_simd_available_option>`,
+:func:`check_speed <cpyquickhelper.numbers.speed_measure.check_speed>`,
+:func:`measure_time <cpyquickhelper.numbers.speed_measure.measure_time>`,
+:class:`EventProfiler <cpyquickhelper.profiling.event_profiler.EventProfiler>`.
 
 +----------------------+---------------------+---------------------+--------------------+------------------------+------------------------------------------------+
 | :ref:`l-modules`     |  :ref:`l-functions` | :ref:`l-classes`    | :ref:`l-methods`   | :ref:`l-staticmethods` | :ref:`l-properties`                            |
