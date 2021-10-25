@@ -234,7 +234,26 @@ def get_extensions():
     ext_profiling = Extension(
         'cpyquickhelper.profiling._event_profiler',
         [os.path.join(root, 'cpyquickhelper/profiling/_event_profiler.cpp'),
+         os.path.join(
+             root, 'cpyquickhelper/profiling/_event_profiler_allocator.cpp'),
          os.path.join(root, 'cpyquickhelper/profiling/_event_profiler_python.cpp')],
+        extra_compile_args=extra_compile_args_numbers,
+        extra_link_args=extra_link_args,
+        include_dirs=[
+            # Path to pybind11 headers
+            get_pybind_include(),
+            get_pybind_include(user=True),
+            os.path.join(root, 'cpyquickhelper/profiling')
+        ],
+        language='c++',
+        define_macros=define_macros)
+
+    ext_profiling_c = Extension(
+        'cpyquickhelper.profiling._event_profiler_c',
+        [os.path.join(root, 'cpyquickhelper/profiling/_event_profiler.cpp'),
+         os.path.join(
+             root, 'cpyquickhelper/profiling/_event_profiler_allocator.cpp'),
+         os.path.join(root, 'cpyquickhelper/profiling/_event_profiler_c.cpp')],
         extra_compile_args=extra_compile_args_numbers,
         extra_link_args=extra_link_args,
         include_dirs=[
@@ -254,7 +273,8 @@ def get_extensions():
 
     try:
         from Cython.Build import cythonize
-        ext_modules = cythonize([ext_blas], compiler_directives=opts)
+        ext_modules = cythonize([ext_blas],
+                                compiler_directives=opts)
     except ImportError:
         # Cython is not installed.
         warnings.warn(
@@ -271,7 +291,8 @@ def get_extensions():
             ext_numbers, ext_benchmark,
             ext_benchmark_dot,
             ext_benchmark_sum_type,
-            ext_profiling
+            ext_profiling,
+            ext_profiling_c
         ])
     return ext_modules
 

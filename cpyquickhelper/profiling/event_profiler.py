@@ -7,6 +7,12 @@ import inspect
 import numpy
 import pandas
 from ._event_profiler import CEventProfiler  # pylint: disable=E0611
+from ._event_profiler_c import (  # pylint: disable=E0611
+    _profiling_start, _profiling_stop,
+    _profiling_n_columns, _profiling_log_event,
+    _profiling_delete, _profiling_get_saved_maps,
+    _profiling_dump_and_clear,
+    _profiling_register_pyinstance)
 
 
 class EventProfiler:
@@ -18,7 +24,7 @@ class EventProfiler:
 
     :param size: size of the buffer to store events
     :param impl: different implementation of the same
-        function (`'python'`, `'pybind11'`)
+        function (`'python'`, `'pybind11'`, `'c'`)
 
     The profiler stores every event about function calls and returns,
     and memory allocation. It does not give the time spent in every function
@@ -73,14 +79,20 @@ class EventProfiler:
         self._prof = None
         self._frames = {-1: inspect.currentframe()}
         self._args = {-1: None, 0: None, id(None): None}
-        self._buffer = CEventProfiler(size)
+        if impl != 'c':
+            self._buffer = CEventProfiler(size)
+        else:
+            self._buffer = None
+            self._size = size
         self._events = []
         self._impl = impl
         self._copy_cache = False
-        self._cache_copy = numpy.empty((size, self._buffer.n_columns()),
-                                       dtype=numpy.int64)
+        if self._buffer is None:
+            nc = _profiling_n_columns()
+        else:
+            nc = self.n_columns
+        self._cache_copy = numpy.empty((size, nc), dtype=numpy.int64)
         if impl == 'pybind11':
-            # self._buffer.register_empty_cache(self._empty_cache)
             self._buffer.register_pyinstance(self)
 
     @property
@@ -90,7 +102,9 @@ class EventProfiler:
         in memory. This corresponds to the number of columns returned
         by @see meth retrieve_raw_results.
         """
-        return self._buffer.n_columns()
+        if self._buffer is not None:
+            return CEventProfiler.n_columns()
+        return _profiling_n_columns()
 
     def start(self):
         """
@@ -102,9 +116,14 @@ class EventProfiler:
         self._frames[0] = inspect.currentframe()
         self._started = True
         self._copy_cache = False
-        self._setup_profiler()
-        self._buffer.log_event(-1, -1, 100, 0, 0)
-        self._buffer.start()
+        if self._buffer is not None:
+            self._setup_profiler()
+            self._buffer.log_event(-1, -1, 100, 0, 0)
+            self._buffer.start()
+        else:
+            _profiling_start(int(self._size), 0)
+            self._setup_profiler()
+            _profiling_register_pyinstance(self)
 
     def stop(self):
         """
@@ -114,13 +133,21 @@ class EventProfiler:
             raise RuntimeError(
                 "The profiler was not started. It must be done first.")
         self._restore_profiler()
-        self._buffer.stop()
-        self._buffer.log_event(-1, -1, 101, 0, 0)
-        if self._impl == 'pybind11':
-            map_frame, map_arg = self._buffer.get_saved_maps()
+        if self._buffer is not None:
+            self._buffer.stop()
+            self._buffer.log_event(-1, -1, 101, 0, 0)
+            if self._impl == 'pybind11':
+                map_frame, map_arg = self._buffer.get_saved_maps()
+                self._frames.update(map_frame)
+                self._args.update(map_arg)
+            self._buffer.delete()
+        else:
+            map_frame, map_arg = _profiling_get_saved_maps()
+            self._empty_cache()
+            _profiling_delete()
+            _profiling_stop()
             self._frames.update(map_frame)
             self._args.update(map_arg)
-        self._buffer.delete()
         self._started = False
 
     def _setup_profiler(self):
@@ -132,6 +159,8 @@ class EventProfiler:
             sys.setprofile(self.log_event)
         elif self._impl == 'pybind11':
             sys.setprofile(self._buffer.c_log_event)
+        elif self._impl == 'c':
+            sys.setprofile(_profiling_log_event)
         else:
             raise ValueError(
                 "Unexpected value for impl=%r." % self._impl)
@@ -176,9 +205,16 @@ class EventProfiler:
             raise RuntimeError(
                 "Profiling cache being copied. Increase the size of the cache.")
         self._copy_cache = True
-        size = self._buffer.dump_and_clear(self._cache_copy, True)
+        if self._buffer is None:
+            ptr = self._cache_copy.__array_interface__[  # pylint: disable=E1101
+                'data'][0]
+            # self._cache_copy.__array_struct__
+            size = _profiling_dump_and_clear(
+                ptr, self._cache_copy.size, 1)
+        else:
+            size = self._buffer.dump_and_clear(self._cache_copy, True)
         # We hope here this function will not be called by another
-        # thread. That would another thread was able to fill
+        # thread which could be able to fill
         # the cache while it is being copied.
         self._events.append(self._cache_copy[:size].copy())
         self._copy_cache = False
@@ -192,7 +228,7 @@ class EventProfiler:
             stores it in a numpy array before
         :return: numpy array
         """
-        if empty_cache:
+        if empty_cache and self._buffer is not None:
             self._empty_cache()
         res = numpy.vstack(self._events)
         # Filling information about the size of freed buffer.

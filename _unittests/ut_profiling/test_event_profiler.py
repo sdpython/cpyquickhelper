@@ -9,6 +9,9 @@ from pyquickhelper.pycode import ExtTestCase
 from cpyquickhelper.profiling import (
     EventProfiler, WithEventProfiler)
 from cpyquickhelper.profiling.event_profiler import EventProfilerDebug
+from cpyquickhelper.profiling._event_profiler_c import (  # pylint: disable=E0611
+    _profiling_start, _profiling_stop, _profiling_delete,
+    _profiling_log_event)
 
 
 class TestEventProfiler(ExtTestCase):
@@ -138,12 +141,12 @@ class TestEventProfiler(ExtTestCase):
         end = perf_counter()
         ev.stop()
         duration = end - begin
-        msg = "evpy: %1.6f microsecond" % (duration / N * 1e6)
+        msg = "evppy: %1.6f microsecond" % (duration / N * 1e6)
         self.assertNotEmpty(msg)
         if __name__ == "__main__":
             print(msg)
 
-    def test_debug_c(self):
+    def test_debug_pybind11(self):
         N = 100000
         ev = EventProfilerDebug(impl='pybind11', size=10000000)
         ev.start()
@@ -156,7 +159,23 @@ class TestEventProfiler(ExtTestCase):
         end = perf_counter()
         ev.stop()
         duration = end - begin
-        msg = "evc+: %1.6f microsecond" % (duration / N * 1e6)
+        msg = "evcpy+: %1.6f microsecond" % (duration / N * 1e6)
+        self.assertNotEmpty(msg)
+        if __name__ == "__main__":
+            print(msg)
+
+    def test_debug_c(self):
+        N = 100000
+        _profiling_start(10000000, True)
+        begin = perf_counter()
+        for _ in range(N):
+            _profiling_log_event(inspect.currentframe(), 'call', None)
+            _profiling_log_event(inspect.currentframe(), 'return', None)
+        end = perf_counter()
+        _profiling_delete()
+        _profiling_stop()
+        duration = end - begin
+        msg = "evcap+: %1.6f microsecond" % (duration / N * 1e6)
         self.assertNotEmpty(msg)
         if __name__ == "__main__":
             print(msg)
@@ -179,7 +198,7 @@ class TestEventProfiler(ExtTestCase):
         if __name__ == "__main__":
             print(msg)
 
-    def test_profiling_c(self):
+    def test_profiling_pybind11(self):
 
         def f1(t):
             sleep(t)
@@ -211,6 +230,72 @@ class TestEventProfiler(ExtTestCase):
         self.assertIn('sleep', set(df['name']))
         self.assertIn('time', set(df['mod']))
 
+    @unittest.skipIf(
+        True, reason="Crashes because unable to call a method from python.")
+    def test_profiling_pybind11_20(self):
+
+        def f1(t):
+            sleep(t)
+
+        def f2():
+            f1(0.1)
+
+        def f3():
+            li = [0 for i in range(0, 10000)]
+            f1(0.2)
+            return li
+
+        def f4():
+            f2()
+            f3()
+
+        ev = EventProfiler(impl='pybind11', size=20)
+        ev.start()
+        f4()
+        ev.stop()
+        res = ev.retrieve_raw_results()
+        self.assertEqual(res.shape[1], ev.n_columns)
+        df = ev.retrieve_results(False)
+        self.assertEqual(df.shape, (res.shape[0], 10))
+        expected = ['time', 'value1', 'value2', 'event',
+                    'name', 'mod', 'lineno', 'from_name',
+                    'from_mod', 'from_line']
+        self.assertEqual(list(df.columns), expected)
+        self.assertIn('sleep', set(df['name']))
+        self.assertIn('time', set(df['mod']))
+
+    def test_profiling_c(self):
+
+        def f1(t):
+            sleep(t)
+
+        def f2():
+            f1(0.1)
+
+        def f3():
+            li = [0 for i in range(0, 10000)]
+            f1(0.2)
+            return li
+
+        def f4():
+            f2()
+            f3()
+
+        ev = EventProfiler(impl='c')
+        ev.start()
+        f4()
+        ev.stop()
+        res = ev.retrieve_raw_results()
+        self.assertEqual(res.shape[1], ev.n_columns)
+        df = ev.retrieve_results(False)
+        self.assertEqual(df.shape, (res.shape[0], 10))
+        expected = ['time', 'value1', 'value2', 'event',
+                    'name', 'mod', 'lineno', 'from_name',
+                    'from_mod', 'from_line']
+        self.assertEqual(list(df.columns), expected)
+        self.assertIn('sleep', set(df['name']))
+        self.assertIn('time', set(df['mod']))
+
     def test_profiling_c_20(self):
 
         def f1(t):
@@ -228,7 +313,7 @@ class TestEventProfiler(ExtTestCase):
             f2()
             f3()
 
-        ev = EventProfiler(impl='pybind11', size=220)
+        ev = EventProfiler(impl='c', size=20)
         ev.start()
         f4()
         ev.stop()
@@ -245,4 +330,5 @@ class TestEventProfiler(ExtTestCase):
 
 
 if __name__ == "__main__":
+    # TestEventProfiler().test_profiling_c()
     unittest.main()

@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cstring>
 
+
 std::string CEventProfilerEvent::to_string() const {
     char buf[50];
     sprintf(buf, "%lld,%lld,%lld,%lld,%lld,%lld",
@@ -81,3 +82,4 @@ int64_t CEventProfiler::dump_and_clear(int64_t* buffer, int64_t size, bool lock)
         _mtx.unlock();
     return ret;
 }
+

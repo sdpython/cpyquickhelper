@@ -85,7 +85,7 @@ class CEventProfiler {
         std::string __repr__() const;
         inline void* get_pyinstance() const { return pyinstance; }
         inline int64_t size() const { return (int64_t)_last_position; }
-        inline int n_columns() const { return sizeof(CEventProfilerEvent) / sizeof(int64_t); }
+        static int n_columns() { return sizeof(CEventProfilerEvent) / sizeof(int64_t); }
         inline void lock() { _mtx.lock(); }
         inline void unlock() { _mtx.unlock(); }
         inline const CEventProfilerEvent& operator[](int64_t p) const { return _buffer[p]; }
@@ -98,7 +98,7 @@ class CEventProfiler {
                              int64_t value1, int64_t value2) {
             if (_last_position >= (uint64_t)_buffer.size())
                 throw std::runtime_error(MakeString(
-                    "CEventProfiler has a full cache (last_position_=",
+                    "CEventProfiler has a full cache (1) (last_position_=",
                     _last_position, " buffer.size=", _buffer.size(), "."));
             std::chrono::time_point<std::chrono::high_resolution_clock> tp =
                 std::chrono::high_resolution_clock::now();
@@ -126,7 +126,7 @@ class CEventProfiler {
                               int64_t event, bool &add_frame, bool& add_arg) {
             if (_last_position >= (uint64_t)_buffer.size())
                 throw std::runtime_error(MakeString(
-                    "CEventProfiler has a full cache (last_position_=",
+                    "CEventProfiler has a full cache (2) (last_position_=",
                     _last_position, " buffer.size=", _buffer.size(), "."));
             std::chrono::time_point<std::chrono::high_resolution_clock> tp =
                 std::chrono::high_resolution_clock::now();
@@ -162,6 +162,7 @@ class CEventProfiler {
             return res;
         }
 };
+
 
 #if defined(undef_CRT_SECURE_NO_WARNINGS)
 #undef _CRT_SECURE_NO_WARNINGS

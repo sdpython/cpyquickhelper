@@ -1,4 +1,5 @@
 #include "_event_profiler.h"
+#include "_event_profiler_allocator.h"
 
 #ifndef SKIP_PYTHON
 #include <pybind11/pybind11.h>
@@ -8,49 +9,6 @@
 #include <pybind11/functional.h>
 
 namespace py = pybind11;
-
-
-typedef struct MemoryAllocator {
-    PyMemAllocatorEx old_allocator;
-    PyMemAllocatorEx new_allocator;
-    CEventProfiler* event_profiler;
-    MemoryAllocator() { event_profiler = NULL; }
-} _MemoryAllocator ;
-
-
-static MemoryAllocator static_allocator;
-
-
-void* profiled_malloc(void *ctx, size_t size) {
-    void* ptr = static_allocator.old_allocator.malloc(ctx, size);
-    static_allocator.event_profiler->LogEvent(
-        0, 0, 1000, (int64_t)ptr, (int64_t)size);
-    return ptr;
-}
-
-
-void* profiled_calloc(void *ctx, size_t nelem, size_t elsize) {
-    void* ptr = static_allocator.old_allocator.calloc(ctx, nelem, elsize);
-    static_allocator.event_profiler->LogEvent(
-        0, 0, 1001, (int64_t)ptr, (int64_t)(elsize * nelem));
-    return ptr;
-}
-
-
-void* profiled_realloc(void *ctx, void* old_ptr, size_t new_size) {
-    void* ptr = static_allocator.old_allocator.realloc(ctx, old_ptr, new_size);
-    static_allocator.event_profiler->LogEvent(
-        0, 0, 1004, (int64_t)old_ptr, (int64_t)0);
-    static_allocator.event_profiler->LogEvent(
-        0, 0, 1002, (int64_t)ptr, (int64_t)new_size);
-    return ptr;
-}
-
-
-void profiled_free(void *ctx, void *ptr) {
-    static_allocator.event_profiler->LogEvent(0, 0, 1003, (int64_t)ptr, 0);
-    static_allocator.old_allocator.free(ctx, ptr);
-}
 
 
 PYBIND11_MODULE(_event_profiler, m) {
@@ -119,6 +77,7 @@ C++ buffer for @see cl EventProfiler.)pbdoc"
     
     pyev.def("start",
              [](CEventProfiler& self) {
+                MemoryAllocator& static_allocator = get_static_allocator();
                 static_allocator.event_profiler = &self;
                 PyMem_GetAllocator(PYMEM_DOMAIN_RAW, &static_allocator.old_allocator);
                 static_allocator.new_allocator.ctx = static_allocator.old_allocator.ctx;
@@ -131,6 +90,7 @@ C++ buffer for @see cl EventProfiler.)pbdoc"
     
     pyev.def("stop",
              [](CEventProfiler& self) {
+                MemoryAllocator& static_allocator = get_static_allocator();
                 PyMem_SetAllocator(PYMEM_DOMAIN_RAW, &static_allocator.old_allocator);
                 static_allocator.event_profiler = NULL;
              }, "Stops the memory profiler.");
