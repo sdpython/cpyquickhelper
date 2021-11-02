@@ -59,6 +59,7 @@ epkg_dictionary.update({
     'C++': 'https://en.wikipedia.org/wiki/C%2B%2B',
     'DataFrame':
         'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html',
+    'DLPack': 'https://github.com/dmlc/dlpack',
     'ExtensionArray':
         'https://pandas.pydata.org/pandas-docs/stable/generated/'
         'pandas.api.extensions.ExtensionArray.html',
