@@ -221,6 +221,47 @@ static PyObject* _profiling_register_pyinstance(PyObject* Py_UNUSED(self), PyObj
 }
 
 
+void* get_dummy_capsule() {
+    static uint32_t _dummy_capsule_ptr[128];
+    for(int n = 0; n < 128; ++n)
+        _dummy_capsule_ptr[n] = n;
+    return (void*)_dummy_capsule_ptr;
+}
+
+
+PyObject* DummyCapsule(PyObject* Py_UNUSED(self), PyObject* args) {
+    const char* name;
+    if(!PyArg_ParseTuple(args, "s", &name)) {
+        PyErr_SetString(PyExc_TypeError, "Unable to decode the parameters. (str) are expected.");
+        return 0;
+    }
+    return PyCapsule_New(get_dummy_capsule(), name, NULL);
+}
+
+
+PyObject* GetMemoryContent(PyObject* Py_UNUSED(self), PyObject* args) {
+    PyObject* caps;
+    const char* name;
+    int size;
+    if(!PyArg_ParseTuple(args, "Osi", &caps, &name, &size)) {
+        PyErr_SetString(
+            PyExc_TypeError, "Unable to decode the parameters. (capsule, str, int) are expected.");
+        return 0;
+    }
+
+    void* ptr = PyCapsule_GetPointer(caps, name);
+    if (ptr == 0) {
+        PyErr_SetString(PyExc_ValueError, "Capsule pointer is null.");
+        return 0;
+    }
+    
+    std::vector<uint32_t> res(size / sizeof(uint32_t));
+    memcpy(res.data(), ptr, size);
+    
+    return PyBytes_FromStringAndSize((char*)res.data(), size);
+}
+
+
 static PyMethodDef module_methods[] = {
     {"_profiling_start", _profiling_start, METH_VARARGS,
         "Starts the profiler. "
@@ -254,6 +295,19 @@ static PyMethodDef module_methods[] = {
         "Registers an object called when the buffer is full. This one "
         "should call @see fn _profiling_dump_and_clear to empty the cached.\n\n"
         ":param fct: instance of the python object implementing method `_empty_cache`"},
+
+    {"dummy_capsule", DummyCapsule, METH_VARARGS,
+        "Returns a dummy capsule with 128 uint32_t.\n\n"
+        ":param name: name of the capsule's pointer\n"
+        ":return: capsule"},
+    {"get_memory_content", GetMemoryContent, METH_VARARGS,
+        "Returns the content of the memory between addresses "
+        "[ptr, ptr+size[ where ptr is the pointer held by the capsule.\n\n"
+        ":param caps: capsule\n"
+        ":param name: pointer's name\n"
+        ":param size: size in bytes\n"
+        ":return: array of uint32_t"},
+        
     {0, 0, 0, 0} // End of list
 };
 
