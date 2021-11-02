@@ -5,6 +5,15 @@ cpyquickhelper.profiling
 .. contents::
     :local:
 
+Capsules
+++++++++
+
+Not really related to profiling but maybe useful.
+
+.. autosignature:: cpyquickhelper.profiling._event_profiler_c.dummy_capsule
+
+.. autosignature:: cpyquickhelper.profiling._event_profiler_c.get_memory_content
+
 C++ classes
 +++++++++++
 
