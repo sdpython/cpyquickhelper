@@ -44,12 +44,12 @@ jobs:
       python -m pip install cibuildwheel
       export CIBW_MANYLINUX_X86_64_IMAGE=quay.io/pypa/manylinux2014_x86_64:latest
       export CIBW_BEFORE_BUILD="pip install pybind11 cython numpy scipy pyquickhelper"
-      export CIBW_BUILD="cp37-manylinux_x86_64 cp38-manylinux_x86_64 cp39-manylinux_x86_64"
+      export CIBW_BUILD="cp37-manylinux_x86_64 cp38-manylinux_x86_64"
       python -m cibuildwheel --output-dir dist/wheelhouse --platform linux
     displayName: 'Build Package manylinux2014'
   - script: |
       python -m pip install cibuildwheel
-      export CIBW_MANYLINUX_X86_64_IMAGE="manylinux_2_24"
+      export CIBW_MANYLINUX_X86_64_IMAGE="quay.io/pypa/manylinux_2_24_x86_64:latest"
       export CIBW_BEFORE_BUILD="pip install pybind11 cython numpy scipy pyquickhelper"
       export CIBW_BUILD="cp39-manylinux_x86_64"
       python -m cibuildwheel --output-dir dist/wheelhouse39 --platform linux

@@ -26,6 +26,20 @@ class PyDLPackContainer: public DLPackContainer {
 };
 
 
+static void DlpackCapsuleDestructor(PyObject* data) {
+    DLManagedTensor* dlmanaged_tensor = (DLManagedTensor*)PyCapsule_GetPointer(data, "dltensor");
+    if (dlmanaged_tensor) {
+        // The dlmanaged_tensor has not been consumed, call deleter ourselves.
+        dlmanaged_tensor->deleter(const_cast<DLManagedTensor*>(dlmanaged_tensor));
+    }
+    else {
+        // The dlmanaged_tensor has been consumed,
+        // PyCapsule_GetPointer has set an error indicator.
+        PyErr_Clear();
+    }
+}
+
+
 PYBIND11_MODULE(dlpack_container_python, m) {
 	m.doc() = "Implements a container following DLPack structure (see :eplg:`DLPack`).";
 
@@ -107,6 +121,45 @@ PYBIND11_MODULE(dlpack_container_python, m) {
     container.def_property_readonly("data_size", &DLPackContainer::data_size,
         "Returns the data size (shape_size multiplied by the element type).");
     container.def_property_readonly("element_size", &DLPackContainer::element_size, "Element size.");
+    
+    // dlpack    
+    container.def("__dlpack__", [](PyDLPackContainer* self, py::object /* stream */) -> py::object {
+            return py::reinterpret_steal<py::object>(PyCapsule_New(self, "dltensor", DlpackCapsuleDestructor));
+        }, py::arg("stream")=py::none(),
+        "Returns a DLPack representing the container (part of __dlpack__ protocol). "
+        "This method does not copy the pointer shape, instead, "
+        "it copies the pointer value. The container must persist "
+        "until the dlpack structure is consumed.");
+
+    container.def("__dlpack_device__", [](PyDLPackContainer* self) -> py::tuple {
+            DLDevice device = self->device();
+            return py::make_tuple((int)device.device_type, device.device_id);
+        }, "Returns a tuple of integers, (device, device index) (part of __dlpack__ protocol).");
+
+    container.def_static("from_dlpack", [](py::object data) {
+            DLManagedTensor* dlpack = (DLManagedTensor*)PyCapsule_GetPointer(data.ptr(), "dltensor");
+        
+            std::function<void(void*)> deleter = [dlpack](void* p) {
+                dlpack->deleter(dlpack);
+                free(p);
+            };
+
+            DLPackContainer* cont = new DLPackContainer(
+                        dlpack->dl_tensor.ndim,
+                        dlpack->dl_tensor.shape,
+                        dlpack->dl_tensor.data,
+                        (DLDataTypeCode)dlpack->dl_tensor.dtype.code,
+                        dlpack->dl_tensor.dtype.bits,
+                        dlpack->dl_tensor.dtype.lanes,
+                        dlpack->dl_tensor.device.device_type,
+                        dlpack->dl_tensor.device.device_id,
+                        NULL, //(deleter_fct)deleter,
+                        false);
+
+            // Make sure this capsule will never be used again.
+            PyCapsule_SetName(data.ptr(), "used_dltensor");
+            return (PyDLPackContainer*)cont;
+        });
 }
 
 #endif
