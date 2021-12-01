@@ -8,6 +8,8 @@ from scipy.linalg.lapack import dgelss as scipy_dgelss  # pylint: disable=E0611
 from pyquickhelper.pycode import ExtTestCase
 from cpyquickhelper.numbers.direct_blas_lapack import dgelss  # pylint: disable=E0611
 from cpyquickhelper.numbers.direct_blas_lapack import cblas_ddot, cblas_sdot  # pylint: disable=E0611
+from cpyquickhelper.numbers.direct_blas_lapack import (  # pylint: disable=E0611
+    cblas_daxpy, cblas_saxpy, cblas_daxpy_void, cblas_saxpy_void)
 
 
 class TestDirectBlasLapack(ExtTestCase):
@@ -58,6 +60,38 @@ class TestDirectBlasLapack(ExtTestCase):
         dot1 = A @ B
         dot2 = cblas_sdot(A, B)
         self.assertAlmostEqual(dot1, dot2)
+
+    def test_daxpy(self):
+        A = numpy.array([1., 2., 3.], dtype=numpy.float64)
+        B = numpy.array([-1., -2.2, 5], dtype=numpy.float64)
+        C = B + A * 5
+        cblas_daxpy(A, B, 5)
+        self.assertEqualArray(C, B)
+
+    def test_saxpy(self):
+        A = numpy.array([1., 2., 3.], dtype=numpy.float32)
+        B = numpy.array([-1., -2.2, 5], dtype=numpy.float32)
+        C = B + A * 5
+        cblas_saxpy(A, B, 5)
+        self.assertEqualArray(C, B)
+
+    def test_daxpy_void(self):
+        A = numpy.array([1., 2., 3.], dtype=numpy.float64)
+        B = numpy.array([-1., -2.2, 5], dtype=numpy.float64)
+        C = B + A * 5
+        pA, _ = A.__array_interface__['data']
+        pB, _ = B.__array_interface__['data']
+        cblas_daxpy_void(3, pA, pB, 5)
+        self.assertEqualArray(C, B)
+
+    def test_saxpy_void(self):
+        A = numpy.array([1., 2., 3.], dtype=numpy.float32)
+        B = numpy.array([-1., -2.2, 5], dtype=numpy.float32)
+        C = B + A * 5
+        pA, _ = A.__array_interface__['data']
+        pB, _ = B.__array_interface__['data']
+        cblas_saxpy_void(3, pA, pB, 5)
+        self.assertEqualArray(C, B)
 
 
 if __name__ == "__main__":
