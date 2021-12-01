@@ -79,8 +79,8 @@ class TestDirectBlasLapack(ExtTestCase):
         A = numpy.array([1., 2., 3.], dtype=numpy.float64)
         B = numpy.array([-1., -2.2, 5], dtype=numpy.float64)
         C = B + A * 5
-        pA, _ = A.__array_interface__['data']
-        pB, _ = B.__array_interface__['data']
+        pA, _ = A.__array_interface__['data']  # pylint: disable=E1101
+        pB, _ = B.__array_interface__['data']  # pylint: disable=E1101
         cblas_daxpy_void(3, pA, pB, 5)
         self.assertEqualArray(C, B)
 
@@ -88,8 +88,8 @@ class TestDirectBlasLapack(ExtTestCase):
         A = numpy.array([1., 2., 3.], dtype=numpy.float32)
         B = numpy.array([-1., -2.2, 5], dtype=numpy.float32)
         C = B + A * 5
-        pA, _ = A.__array_interface__['data']
-        pB, _ = B.__array_interface__['data']
+        pA, _ = A.__array_interface__['data']  # pylint: disable=E1101
+        pB, _ = B.__array_interface__['data']  # pylint: disable=E1101
         cblas_saxpy_void(3, pA, pB, 5)
         self.assertEqualArray(C, B)
 
