@@ -6,16 +6,20 @@ import sys
 from timeit import Timer
 
 
-def measure_time(stmt, context, repeat=10, number=50, div_by_number=False):
+def measure_time(stmt, context, repeat=10, number=50, div_by_number=False,
+                 max_time=None):
     """
     Measures a statement and returns the results as a dictionary.
 
-    @param      stmt            string
-    @param      context         variable to know in a dictionary
-    @param      repeat          average over *repeat* experiment
-    @param      number          number of executions in one row
-    @param      div_by_number   divide by the number of executions
-    @return                     dictionary
+    :param stmt: string
+    :param context: variable to know in a dictionary
+    :param repeat: average over *repeat* experiment
+    :param number: number of executions in one row
+    :param div_by_number: divide by the number of executions
+    :param max_time: execute the statement until the total goes
+        beyond this time (approximatively), *repeat* is ignored,
+        *div_by_number* must be set to True
+    :return: dictionary
 
     .. runpython::
         :showcode:
@@ -26,21 +30,63 @@ def measure_time(stmt, context, repeat=10, number=50, div_by_number=False):
         res = measure_time("cos(x)", context=dict(cos=cos, x=5.))
         print(res)
 
-    See `Timer.repeat <https://docs.python.org/3/library/timeit.html?timeit.Timer.repeat>`_
+    See `Timer.repeat <https://docs.python.org/3/library/
+    timeit.html?timeit.Timer.repeat>`_
     for a better understanding of parameter *repeat* and *number*.
     The function returns a duration corresponding to
     *number* times the execution of the main statement.
+
+    .. versionchanged:: 0.4
+        Parameter *max_time* was added.
     """
+    if not callable(stmt):
+        raise TypeError(
+            "stmt is not callable but is of type %r." % type(stmt))
     import numpy  # pylint: disable=C0415
     tim = Timer(stmt, globals=context)
-    res = numpy.array(tim.repeat(repeat=repeat, number=number))
-    if div_by_number:
-        res /= number
-    mean = numpy.mean(res)
-    dev = numpy.mean(res ** 2)
-    dev = (dev - mean**2) ** 0.5
-    mes = dict(average=mean, deviation=dev, min_exec=numpy.min(res),
-               max_exec=numpy.max(res), repeat=repeat, number=number)
+
+    if max_time is not None:
+        if not div_by_number:
+            raise ValueError(
+                "div_by_number must be set to True of max_time is defined.")
+        i = 1
+        total_time = 0
+        results = []
+        while True:
+            for j in (1, 2):
+                number = i * j
+                time_taken = tim.timeit(number)
+                results.append((number, time_taken))
+                total_time += time_taken
+                if total_time >= max_time:
+                    break
+            if total_time >= max_time:
+                break
+            ratio = (max_time - total_time) / total_time
+            ratio = max(ratio, 1)
+            i = int(i * ratio)
+
+        res = numpy.array(results)
+        tw = res[:, 0].sum()
+        ttime = res[:, 1].sum()
+        mean = ttime / tw
+        ave = res[:, 1] / res[:, 0]
+        dev = (((ave - mean) ** 2 * res[:, 0]).sum() / tw) ** 0.5
+        mes = dict(average=mean, deviation=dev, min_exec=numpy.min(ave),
+                   max_exec=numpy.max(ave), repeat=1, number=tw,
+                   ttime=ttime)
+    else:
+        res = numpy.array(tim.repeat(repeat=repeat, number=number))
+        if div_by_number:
+            res /= number
+
+        mean = numpy.mean(res)
+        dev = numpy.mean(res ** 2)
+        dev = (dev - mean**2) ** 0.5
+        mes = dict(average=mean, deviation=dev, min_exec=numpy.min(res),
+                   max_exec=numpy.max(res), repeat=repeat, number=number,
+                   ttime=res.sum())
+
     if 'values' in context:
         if hasattr(context['values'], 'shape'):
             mes['size'] = context['values'].shape[0]
@@ -120,9 +166,8 @@ def check_speed(dims=[100000], repeat=10, number=50, fLOG=print):  # pylint: dis
     for i in dims:
         values = vect[:i].copy()
         for fct in fcts:
-            ct = {fct.__name__: fct}
-            ct['values'] = values
-            t = measure_time("{0}(values)".format(fct.__name__),
+            ct = {"fct": fct, 'values': values}
+            t = measure_time(lambda f=fct, v=values: f(v),
                              repeat=repeat, number=number, context=ct)
             t['name'] = fct.__name__
             if fLOG:

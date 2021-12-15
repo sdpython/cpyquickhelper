@@ -1,5 +1,6 @@
+# pylint: disable=W0611,E0611
 """
-@brief      test log(time=3s)
+@brief      test log(time=4s)
 """
 
 import unittest
@@ -9,17 +10,17 @@ import pandas
 from pyquickhelper.pycode import ExtTestCase
 from pyquickhelper.loghelper import noLOG
 from cpyquickhelper.numbers import check_speed
-from cpyquickhelper.numbers.cbenchmark import get_simd_available_option  # pylint: disable=W0611, E0611
-from cpyquickhelper.numbers.cbenchmark_dot import measure_scenario_A, measure_scenario_B  # pylint: disable=W0611, E0611
-from cpyquickhelper.numbers.cbenchmark_dot import measure_scenario_C, measure_scenario_D  # pylint: disable=W0611, E0611
-from cpyquickhelper.numbers.cbenchmark_dot import measure_scenario_E, measure_scenario_F  # pylint: disable=W0611, E0611
-from cpyquickhelper.numbers.cbenchmark_dot import measure_scenario_G, measure_scenario_H  # pylint: disable=W0611, E0611
-from cpyquickhelper.numbers.cbenchmark_dot import measure_scenario_I, measure_scenario_J  # pylint: disable=W0611, E0611
-from cpyquickhelper.numbers.cbenchmark_dot import vector_dot_product, empty_vector_dot_product  # pylint: disable=W0611, E0611
-from cpyquickhelper.numbers.cbenchmark_dot import vector_dot_product16, vector_dot_product16_sse  # pylint: disable=W0611, E0611
-from cpyquickhelper.numbers.cbenchmark_dot import vector_dot_product16_nofcall  # pylint: disable=W0611, E0611
-from cpyquickhelper.numbers.cbenchmark_dot import vector_dot_product16_avx512  # pylint: disable=W0611, E0611
-from cpyquickhelper.numbers.cbenchmark_dot import vector_dot_product_openmp  # pylint: disable=W0611, E0611
+from cpyquickhelper.numbers.cbenchmark import get_simd_available_option
+from cpyquickhelper.numbers.cbenchmark_dot import measure_scenario_A, measure_scenario_B
+from cpyquickhelper.numbers.cbenchmark_dot import measure_scenario_C, measure_scenario_D
+from cpyquickhelper.numbers.cbenchmark_dot import measure_scenario_E, measure_scenario_F
+from cpyquickhelper.numbers.cbenchmark_dot import measure_scenario_G, measure_scenario_H
+from cpyquickhelper.numbers.cbenchmark_dot import measure_scenario_I, measure_scenario_J
+from cpyquickhelper.numbers.cbenchmark_dot import vector_dot_product, empty_vector_dot_product
+from cpyquickhelper.numbers.cbenchmark_dot import vector_dot_product16, vector_dot_product16_sse
+from cpyquickhelper.numbers.cbenchmark_dot import vector_dot_product16_nofcall
+from cpyquickhelper.numbers.cbenchmark_dot import vector_dot_product16_avx512
+from cpyquickhelper.numbers.cbenchmark_dot import vector_dot_product_openmp
 
 
 class TestCBenchmarkDot(ExtTestCase):
