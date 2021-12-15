@@ -57,6 +57,7 @@ epkg_dictionary.update({
     'BLAS': 'http://www.netlib.org/blas/explore-html',
     'C': 'https://en.wikipedia.org/wiki/C_(programming_language)',
     'C++': 'https://en.wikipedia.org/wiki/C%2B%2B',
+    'cython': 'https://cython.org/',
     'DataFrame':
         'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html',
     'ExtensionArray':
