@@ -60,6 +60,7 @@ epkg_dictionary.update({
     'cython': 'https://cython.org/',
     'DataFrame':
         'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html',
+    'DLPack': 'https://github.com/dmlc/dlpack',
     'ExtensionArray':
         'https://pandas.pydata.org/pandas-docs/stable/generated/'
         'pandas.api.extensions.ExtensionArray.html',
