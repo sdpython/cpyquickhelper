@@ -5,9 +5,16 @@
 History
 =======
 
-current - 2021-10-18 - 0.00Mb
+current - 2021-12-15 - 0.00Mb
 =============================
 
+* #33: Adds parameter max_time to measure_time to measure a statement for a fixed duration (2021-12-15)
+* #32: Adds function axpy (2021-12-02)
+* #30: Adds function dummy_capsule, get_memory_content (2021-11-02)
+* #29: Refactoring of C code (2021-10-25)
+* #28: Experiments with custom container holding a pointer on a buffer. (2021-10-24)
+* #27: Enable build for python 3.10 (2021-10-20)
+* #26: Try C++ implementation of profiler hook (2021-10-20)
 * #25: Implements a custom profiler (2021-10-18)
 * #24: Update azure-pipelines.yml to build on python 3.9 (2021-08-18)
 
