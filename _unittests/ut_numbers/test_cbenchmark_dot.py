@@ -1,6 +1,6 @@
 # pylint: disable=W0611,E0611
 """
-@brief      test log(time=3s)
+@brief      test log(time=4s)
 """
 
 import unittest
@@ -10,7 +10,7 @@ import pandas
 from pyquickhelper.pycode import ExtTestCase
 from pyquickhelper.loghelper import noLOG
 from cpyquickhelper.numbers import check_speed
-from cpyquickhelper.numbers.cbenchmark import get_simd_available_option  
+from cpyquickhelper.numbers.cbenchmark import get_simd_available_option
 from cpyquickhelper.numbers.cbenchmark_dot import measure_scenario_A, measure_scenario_B
 from cpyquickhelper.numbers.cbenchmark_dot import measure_scenario_C, measure_scenario_D
 from cpyquickhelper.numbers.cbenchmark_dot import measure_scenario_E, measure_scenario_F

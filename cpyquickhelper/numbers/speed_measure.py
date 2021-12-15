@@ -167,7 +167,7 @@ def check_speed(dims=[100000], repeat=10, number=50, fLOG=print):  # pylint: dis
         values = vect[:i].copy()
         for fct in fcts:
             ct = {"fct": fct, 'values': values}
-            t = measure_time(lambda v=values: fct(v),
+            t = measure_time(lambda f=fct, v=values: f(v),
                              repeat=repeat, number=number, context=ct)
             t['name'] = fct.__name__
             if fLOG:
