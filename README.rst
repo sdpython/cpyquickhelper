@@ -64,7 +64,7 @@ C functions in different ways. It implements function
     from cpyquickhelper.numbers import measure_time
     from math import cos
 
-    res = measure_time("cos(x)", context=dict(cos=cos, x=5.))
+    res = measure_time(lambda: cos(0.5))
     print(res)
 
 ::
