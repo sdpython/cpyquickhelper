@@ -6,7 +6,7 @@ import sys
 from timeit import Timer
 
 
-def measure_time(stmt, context, repeat=10, number=50, div_by_number=False,
+def measure_time(stmt, context=None, repeat=10, number=50, div_by_number=False,
                  max_time=None):
     """
     Measures a statement and returns the results as a dictionary.
