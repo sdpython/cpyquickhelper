@@ -42,6 +42,9 @@ def measure_time(stmt, context=None, repeat=10, number=50, div_by_number=False,
     if not callable(stmt):
         raise TypeError(
             "stmt is not callable but is of type %r." % type(stmt))
+    if context is None:
+        context = {}
+
     import numpy  # pylint: disable=C0415
     tim = Timer(stmt, globals=context)
 
