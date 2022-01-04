@@ -6,6 +6,7 @@
 #include <thread>
 #include <iterator>
 #include <iostream>
+#include <sys/types.h>
 #include "make_string.hpp"
 
 #ifndef SKIP_PYTHON
@@ -14,11 +15,6 @@
 #include <pybind11/stl.h>
 #include <pybind11/numpy.h>
 //#include <numpy/arrayobject.h>
-
-#if defined(_MSC_VER)
-#include <BaseTsd.h>
-typedef SSIZE_T ssize_t;
-#endif
 
 namespace py = pybind11;
 #endif
