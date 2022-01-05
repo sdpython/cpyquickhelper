@@ -24,8 +24,8 @@ double edit_distance(const py::array_t<int32_t, py::array::c_style | py::array::
                      double cmp_cost,
                      py::array_t<double, py::array::c_style | py::array::forcecast>& dist,
                      py::array_t<int32_t, py::array::c_style | py::array::forcecast>& pred) {
-    ssize_t n1 = seq1.size() + 1;
-    ssize_t n2 = seq2.size() + 1;
+    size_t n1 = seq1.size() + 1;
+    size_t n2 = seq2.size() + 1;
     ssize_t size = n1 * n2;
     if (dist.size() < size)
         throw std::runtime_error(MakeString(
