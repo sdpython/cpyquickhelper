@@ -19,34 +19,34 @@ class TestOutputCapture(ExtTestCase):
     def test_output_capture(self):
         def callf():
             cprint("cout1")
-            cprint("tout2")
+            cprint("zout2")
 
         res, out, err = capture_output(callf, lang="c")
         self.assertEmpty(res)
         self.assertIsInstance(out, bytes)
         if sys.platform.startswith("win"):
             self.assertEqual(
-                out, b'c\x00o\x00u\x00t\x001\x00t\x00o\x00u\x00t\x002\x00')
+                out, b'c\x00o\x00u\x00t\x001\x00z\x00o\x00u\x00t\x002\x00')
         else:
             self.assertEqual(
-                out, b'cout1tout2')
+                out, b'cout1zout2')
         self.assertEqual(err, None)
 
     def test_output_capture_py(self):
         def callf():
             print("cout1")
-            print("tout2")
+            print("bout2")
 
         fout, out, err = capture_output(callf, lang="py")
         self.assertIsInstance(out, str)
-        self.assertEqual(out, 'cout1\ntout2\n')
+        self.assertEqual(out, 'cout1\nbout2\n')
         self.assertEqual(err, '')
         self.assertEmpty(fout)
 
     def test_py_output_capture_c(self):
         def callf():
             print("cout1")
-            print("tout2")
+            print("aout2")
 
         res, out, err = capture_output(callf, lang="c")
         self.assertEmpty(res)
@@ -55,21 +55,21 @@ class TestOutputCapture(ExtTestCase):
             if sys.platform.startswith("win"):
                 self.assertEqual(err, None)
                 if __name__ == "__main__":
-                    self.assertEqual(out, b'cout1\r\ntout2\r\n')
+                    self.assertEqual(out, b'cout1\r\naout2\r\n')
                 else:
-                    self.assertTrue(out.endswith(b'cout1\r\ntout2\r\n'))
+                    self.assertTrue(out.endswith(b'cout1\r\naout2\r\n'))
             else:
                 self.assertEqual(err, None)
                 if __name__ == "__main__":
-                    self.assertEqual(out, b'cout1tout2')
+                    self.assertEqual(out, b'cout1aout2')
                 else:
-                    if not out.endswith(b'cout1\ntout2\n'):
+                    if not out.endswith(b'cout1\naout2\n'):
                         raise AssertionError("###{0}###".format(out))
 
     def test_c_output_capture_py(self):
         def callf():
             cprint("cout1")
-            cprint("tout2")
+            cprint("fout2")
 
         fout, out, err = capture_output(callf, lang="py")
         self.assertIsInstance(out, str)
@@ -85,7 +85,7 @@ class TestOutputCapture(ExtTestCase):
     def test_c_output_capture_py_tuple(self):
         def callf():
             cprint("cout1")
-            cprint("tout2")
+            cprint("gout2")
             return (4, 5)
 
         fout, out, err = capture_output(callf, lang="py")
@@ -97,7 +97,7 @@ class TestOutputCapture(ExtTestCase):
     def test_c_output_capture_py_error2(self):
         def callf():
             cprint("cout1")
-            cprint("tout2")
+            cprint("hout2")
             return (4, 5)
 
         self.assertRaise(lambda: capture_output(callf, lang="h"), ValueError)

@@ -6,6 +6,7 @@
 #include <thread>
 #include <iterator>
 #include <iostream>
+#include <sys/types.h>
 #include "make_string.hpp"
 
 #ifndef SKIP_PYTHON
@@ -23,9 +24,9 @@ double edit_distance(const py::array_t<int32_t, py::array::c_style | py::array::
                      double cmp_cost,
                      py::array_t<double, py::array::c_style | py::array::forcecast>& dist,
                      py::array_t<int32_t, py::array::c_style | py::array::forcecast>& pred) {
-    ssize_t n1 = seq1.size() + 1;
-    ssize_t n2 = seq2.size() + 1;
-    ssize_t size = n1 * n2;
+    size_t n1 = seq1.size() + 1;
+    size_t n2 = seq2.size() + 1;
+    size_t size = n1 * n2;
     if (dist.size() < size)
         throw std::runtime_error(MakeString(
             "dist has an unexpected size ", dist.size(), " < ", size, "."));
@@ -44,11 +45,11 @@ double edit_distance(const py::array_t<int32_t, py::array::c_style | py::array::
     std::fill(p_dist, p_dist + size, (double)size);
     std::fill(p_pred, p_pred + size, 0);
 
-    for(ssize_t i = 0; i < n1; ++i) {
+    for(size_t i = 0; i < n1; ++i) {
         p_dist[i * n2] = (int32_t)i;
         p_pred[i * n2] = 1;
     }
-    for(ssize_t j = 0; j < n2; ++j) {
+    for(size_t j = 0; j < n2; ++j) {
         p_dist[j] = (int32_t)j;
         p_pred[j] = 2;
     }
@@ -57,8 +58,8 @@ double edit_distance(const py::array_t<int32_t, py::array::c_style | py::array::
     double c, d;
     size_t ind;
     int32_t p;
-    for(ssize_t i = 1; i < n1; ++i) {
-        for(ssize_t j = 1; j < n2; ++j) {
+    for(size_t i = 1; i < n1; ++i) {
+        for(size_t j = 1; j < n2; ++j) {
             ind = i * n2 + j;
             c = p_dist[ind];
 
