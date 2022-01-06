@@ -14,15 +14,13 @@
 #define STD_ERR_FD (fileno(stderr))
 #endif
 
-void StdCaptureStatic::InitNoLock()
-{
+void StdCaptureStatic::InitNoLock() {
 	setvbuf(stdout, NULL, _IONBF, 0);
 	setvbuf(stderr, NULL, _IONBF, 0);
 	initialized = true;
 }
 
-void StdCaptureStatic::Init()
-{
+void StdCaptureStatic::Init() {
 	// make stdout & stderr streams unbuffered
 	// so that we don't need to flush the streams
 	// before capture and after capture 
@@ -31,8 +29,7 @@ void StdCaptureStatic::Init()
 	InitNoLock();
 }
 
-void StdCaptureStatic::BeginCapture()
-{
+void StdCaptureStatic::BeginCapture() {
 	std::lock_guard<std::mutex> lock(m_mutex);
 	if (!initialized)
 		InitNoLock();
@@ -50,14 +47,12 @@ void StdCaptureStatic::BeginCapture()
 #endif
 }
 
-bool StdCaptureStatic::IsCapturing()
-{
+bool StdCaptureStatic::IsCapturing() {
 	std::lock_guard<std::mutex> lock(m_mutex);
 	return m_capturing;
 }
 
-void StdCaptureStatic::EndCapture()
-{
+void StdCaptureStatic::EndCapture() {
 	std::lock_guard<std::mutex> lock(m_mutex);
 	if (!m_capturing)
 		return;
@@ -71,8 +66,7 @@ void StdCaptureStatic::EndCapture()
 	unsigned char buf[bufSize];
 	int bytesRead = 0;
 	bool fd_blocked(false);
-	do
-	{
+	do {
 		bytesRead = 0;
 		fd_blocked = false;
 #ifdef _MSC_VER
@@ -102,15 +96,13 @@ void StdCaptureStatic::EndCapture()
 	m_capturing = false;
 }
 
-void StdCaptureStatic::GetCapture(std::vector<unsigned char>& out, std::vector<unsigned char>& err)
-{
+void StdCaptureStatic::GetCapture(std::vector<unsigned char>& out, std::vector<unsigned char>& err) {
 	std::lock_guard<std::mutex> lock(m_mutex);
 	out = m_captured;
     err = m_captured_err;
 }
 
-int StdCaptureStatic::secure_dup(int src)
-{
+int StdCaptureStatic::secure_dup(int src) {
 	int ret = -1;
 	bool fd_blocked = false;
 	do
@@ -123,8 +115,7 @@ int StdCaptureStatic::secure_dup(int src)
 	return ret;
 }
 
-void StdCaptureStatic::secure_pipe(int * pipes)
-{
+void StdCaptureStatic::secure_pipe(int * pipes) {
 	int ret = -1;
 	bool fd_blocked = false;
 	do
@@ -139,8 +130,7 @@ void StdCaptureStatic::secure_pipe(int * pipes)
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	} while (ret < 0);
 }
-void StdCaptureStatic::secure_dup2(int src, int dest)
-{
+void StdCaptureStatic::secure_dup2(int src, int dest) {
 	int ret = -1;
 	bool fd_blocked = false;
 	do
@@ -152,8 +142,7 @@ void StdCaptureStatic::secure_dup2(int src, int dest)
 	} while (ret < 0);
 }
 
-void StdCaptureStatic::secure_close(int & fd)
-{
+void StdCaptureStatic::secure_close(int & fd) {
 	int ret = -1;
 	bool fd_blocked = false;
 	do

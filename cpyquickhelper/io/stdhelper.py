@@ -75,6 +75,6 @@ def capture_output(function_to_call, lang="py"):
     """
     if lang == "py":
         return capture_output_py(function_to_call)
-    elif lang == "c":
+    if lang == "c":
         return capture_output_c(function_to_call)
     raise ValueError("lang must be 'py' or 'c' not '{0}'".format(lang))

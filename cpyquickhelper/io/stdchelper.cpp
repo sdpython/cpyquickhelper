@@ -4,6 +4,9 @@
 
 #include "stdcapture.hpp"
 #include <stdio.h>
+#include <iostream>
+// needed for Python>=3.10
+#define PY_SSIZE_T_CLEAN
 #include "Python.h"
 
 struct module_state {
@@ -17,36 +20,33 @@ struct module_state {
 //////////// python function //////////////////
 ///////////////////////////////////////////////
 
-static PyObject* begin_capture(PyObject *self, PyObject *unused)
-{
+static PyObject* begin_capture(PyObject *self, PyObject *unused) {
     StdCaptureStatic::BeginCapture();
     PyObject* res = Py_None;
     Py_INCREF(res);
     return res;
 }
 
-static PyObject* end_capture(PyObject *self, PyObject *unused)
-{
+static PyObject* end_capture(PyObject *self, PyObject *unused) {
     StdCaptureStatic::EndCapture();
     PyObject* res = Py_None;
     Py_INCREF(res);
     return res;
 }
 
-static PyObject* get_capture(PyObject *self, PyObject *unused)
-{
+static PyObject* get_capture(PyObject *self, PyObject *unused) {
     std::vector<unsigned char> out, err;
     StdCaptureStatic::GetCapture(out, err);
     PyObject * message;
     message = Py_BuildValue("y#", out.data(), out.size());
-    if (message == NULL)
-        throw new std::runtime_error("Wrong conversion into bytes array.");
-    Py_INCREF(message);
+    if (message == NULL) {
+        throw std::runtime_error("Wrong conversion into bytes array.");
+    }
+    // Py_INCREF(message);
     return message;
 }
 
-static PyObject* cprint(PyObject *self, PyObject* unicode)
-{
+static PyObject* cprint(PyObject *self, PyObject* unicode) {
     if (unicode == NULL) {
         struct module_state *st = GETSTATE(self);
         PyErr_SetString(st->error, "Null pointer is not allowed.");    
@@ -110,8 +110,7 @@ extern "C" {
 
 
 PyObject * 
-PyInit_stdchelper(void)
-{
+PyInit_stdchelper(void) {
     PyObject* m ;
     m = PyModule_Create(&moduledef);
     if (m == NULL)
