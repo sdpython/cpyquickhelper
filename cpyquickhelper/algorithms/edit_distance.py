@@ -35,7 +35,7 @@ def edit_distance_string(s1, s2, cmp_cost=1.):
         elif p == 1:
             i -= 1
         else:
-            raise RuntimeError(
+            raise RuntimeError(  # pragma: no cover
                 "Unexpected value for p=%d at position=%r." % (p, (i, j)))
         p = pred[i, j]
     return d, list(reversed(equals))

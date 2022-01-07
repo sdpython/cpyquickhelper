@@ -24,6 +24,14 @@ class TestMeasureTime(ExtTestCase):
             fct, context={"fct": fct}, div_by_number=True, number=1000)
         self.assertIn("average", res)
 
+    def test_vector_count_none(self):
+        def fct():
+            X = numpy.ones((1000, 5))
+            return X
+        res = measure_time(
+            fct, context=None, div_by_number=False, number=100)
+        self.assertIn("average", res)
+
     def test_vector_count_exc(self):
         def fct():
             X = numpy.ones((1000, 5))

@@ -5,7 +5,6 @@
 import unittest
 import numpy
 import pandas
-from pyquickhelper.loghelper import fLOG
 from pyquickhelper.pycode import ExtTestCase
 from cpyquickhelper.fastdata import df2array, df2arrays
 
@@ -13,11 +12,6 @@ from cpyquickhelper.fastdata import df2array, df2arrays
 class TestPandasNumpy(ExtTestCase):
 
     def test_df2array(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         df = pandas.DataFrame([dict(a=3.4, b=5.6), dict(a=3.5, b=5.7)])
         arr = df2array(df)
         self.assertIsInstance(arr, numpy.ndarray)
@@ -41,11 +35,6 @@ class TestPandasNumpy(ExtTestCase):
         self.assertEqual(arr.dtype, object)
 
     def test_df2arrays(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         df = pandas.DataFrame(
             [dict(a=3.4, b=5.6, c="e"), dict(a=3.5, b=5.7, c="r")])
         arr = df2arrays(df)
