@@ -5,7 +5,12 @@
 History
 =======
 
-current - 2021-12-15 - 0.00Mb
+current - 2022-01-07 - 0.00Mb
+=============================
+
+* #34: Switches CI to python 3.10 (2022-01-06)
+
+0.3.398 - 2021-12-15 - 0.16Mb
 =============================
 
 * #33: Adds parameter max_time to measure_time to measure a statement for a fixed duration (2021-12-15)
