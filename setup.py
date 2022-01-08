@@ -292,10 +292,7 @@ def get_extensions():
 
     ext_fast_dict_c = Extension(
         'cpyquickhelper.fastdata.fast_dict_c',
-        [os.path.join(root, 'cpyquickhelper/fastdata/fast_dict_c.cpp'),
-         os.path.join(
-             root, 'cpyquickhelper/fastdata/fast_dict_c.cpp'),
-         os.path.join(root, 'cpyquickhelper/fastdata/fast_dict_c.cpp')],
+        [os.path.join(root, 'cpyquickhelper/fastdata/fast_dict_c.cpp')],
         extra_compile_args=extra_compile_args_numbers,
         extra_link_args=extra_link_args,
         include_dirs=[
