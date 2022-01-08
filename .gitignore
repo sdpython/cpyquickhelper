@@ -281,3 +281,4 @@ _doc/sphinxdoc/source/phdoc_static/viz.js
 bb.bat
 cpyquickhelper/fastdata/fast_dict_cpy.c
 cpyquickhelper/fastdata/fast_dict_cpy.cpp
+_unittests/unittests.out
