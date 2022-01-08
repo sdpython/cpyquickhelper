@@ -290,6 +290,23 @@ def get_extensions():
         language='c++',
         define_macros=define_macros)
 
+    ext_fast_dict_c = Extension(
+        'cpyquickhelper.fastdata.fast_dict_c',
+        [os.path.join(root, 'cpyquickhelper/fastdata/fast_dict_c.cpp'),
+         os.path.join(
+             root, 'cpyquickhelper/fastdata/fast_dict_c.cpp'),
+         os.path.join(root, 'cpyquickhelper/fastdata/fast_dict_c.cpp')],
+        extra_compile_args=extra_compile_args_numbers,
+        extra_link_args=extra_link_args,
+        include_dirs=[
+            # Path to pybind11 headers
+            get_pybind_include(),
+            get_pybind_include(user=True),
+            os.path.join(root, 'cpyquickhelper/fastdata')
+        ],
+        language='c++',
+        define_macros=define_macros)
+
     # cythonize
 
     opts = dict(boundscheck=False, cdivision=True,
@@ -318,7 +335,8 @@ def get_extensions():
             ext_benchmark_dot,
             ext_benchmark_sum_type,
             ext_profiling,
-            ext_profiling_c
+            ext_profiling_c,
+            ext_fast_dict_c
         ])
     return ext_modules
 
