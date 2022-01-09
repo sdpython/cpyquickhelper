@@ -82,6 +82,8 @@ jobs:
     displayName: 'Platform'
   - script: python -u setup.py build_ext --inplace
     displayName: 'Build inplace'
+  - script: python setup.py install
+    displayName: 'install the package'
   - script: pytest _unittests
     displayName: 'Runs Unit Tests'
   - script: |
