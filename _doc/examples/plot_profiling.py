@@ -11,7 +11,8 @@ EventProfiler
 Many profilers propose to see how long a program stays
 in a function (see :mod:`cProfile`, :epkg:`pyinstrument`,
 :epkg:`palanteer`). This one logs events. It merges function calls
-and memory allocations.
+and memory allocations. We compare the insertion and the search
+of many elements.
 
 .. contents::
     :local:
