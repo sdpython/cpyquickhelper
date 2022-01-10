@@ -5,6 +5,7 @@ jupyter
 jupyter_sphinx>=0.2.0
 jyquickhelper
 matplotlib
+nbconvert>=6.0.3,!=6.3.0,!=6.4.0,!=6.5.0
 numpy>=1.16
 pandas>=1.0
 pillow
