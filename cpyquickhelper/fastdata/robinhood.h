@@ -614,7 +614,7 @@ struct pair {
         , second(std::forward<U2>(b)) {}
 
     template <typename... U1, typename... U2>
-    // MSVC 2015 produces error "C2476: ‘constexpr’ constructor does not initialize all members"
+    // MSVC 2015 produces error "C2476: 'constexprâ€™'constructor does not initialize all members"
     // if this constructor is constexpr
 #if !ROBIN_HOOD(BROKEN_CONSTEXPR)
     constexpr
