@@ -33,7 +33,7 @@ from cpyquickhelper.fastdata.fast_dict_c import (
 from pyquickhelper.pycode.profiling import profile, profile2graph
 
 
-data = [("*" * (i // 2), i, i) for i in range(0, 100)]
+data = [("*" * (i // 2), i, i) for i in range(0, 1000)]
 fcts = []
 
 
