@@ -66,15 +66,15 @@ jobs:
     vmImage: 'windows-latest'
   strategy:
     matrix:
-      Python310-Windows:
-        python.version: '3.10'
+      Python39-Windows:
+        python.version: '3.9'
     maxParallel: 3
   steps:
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '$(python.version)'
       architecture: 'x64'
-  - script: python -m pip install --upgrade pip setuptools wheel
+  - script: python -m pip install --upgrade pip setuptools wheel pytest
     displayName: 'Install tools'
   - script: pip install -r requirements.txt
     displayName: 'Install Requirements'
@@ -82,7 +82,9 @@ jobs:
     displayName: 'Platform'
   - script: python -u setup.py build_ext --inplace
     displayName: 'Build inplace'
-  - script: python -u setup.py unittests
+  - script: python setup.py install
+    displayName: 'install the package'
+  - script: pytest _unittests --ignore-glob=**/test_run_notebooks.py
     displayName: 'Runs Unit Tests'
   - script: |
       python -m pip install cibuildwheel

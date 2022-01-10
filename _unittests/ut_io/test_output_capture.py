@@ -7,8 +7,6 @@ import unittest
 from inspect import signature, isbuiltin, isfunction, _signature_fromstr, Signature
 from pyquickhelper.pycode import ExtTestCase, skipif_appveyor
 from pyquickhelper.helpgen import rst2html
-from pyquickhelper.sphinxext.import_object_helper import (
-    import_any_object, import_object)
 import cpyquickhelper
 from cpyquickhelper.io.stdhelper import capture_output
 from cpyquickhelper.io.stdchelper import cprint  # pylint: disable=E0611
@@ -108,6 +106,8 @@ class TestOutputCapture(ExtTestCase):
 
     @skipif_appveyor("Miktex is not installed.")
     def test_signature(self):
+        from pyquickhelper.sphinxext.import_object_helper import (
+            import_any_object, import_object)
         self.assertRaise(lambda: signature(cprint), ValueError)
         self.assertTrue(isbuiltin(cprint))
         self.assertFalse(isfunction(cprint))

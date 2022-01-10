@@ -38,6 +38,7 @@ package_dir = {k: os.path.join('.', k.replace(".", "/")) for k in packages}
 package_data = {
     project_var_name + ".algorithms": ["*.cpp", "*.hpp"],
     project_var_name + ".examples": ["*.cpp", "*.hpp", "*.h"],
+    project_var_name + ".fastdata": ["*.cpp", "*.hpp", "*.pyx"],
     project_var_name + ".io": ["*.cpp", "*.hpp"],
     project_var_name + ".numbers": ["*.cpp", "*.h", "*.pyx"],
     project_var_name + ".parallel": ["*.cpp", "*.hpp"],
@@ -130,6 +131,30 @@ def get_extensions():
         ],
         language='c++',
         define_macros=define_macros)
+
+    ext_fast_dict = Extension(
+        'cpyquickhelper.fastdata.fast_dict',
+        [os.path.join(root, 'cpyquickhelper/fastdata/fast_dict.cpp')],
+        extra_compile_args=extra_compile_args_numbers,
+        extra_link_args=extra_link_args,
+        include_dirs=[
+            # Path to pybind11 headers
+            get_pybind_include(),
+            get_pybind_include(user=True),
+            os.path.join(root, 'cpyquickhelper/fastdata')
+        ],
+        language='c++',
+        define_macros=define_macros)
+
+    pattern1 = "cpyquickhelper.fastdata.%s"
+    name = 'fast_dict_cpy'
+    ext_fast_dict_cpy = Extension(
+        pattern1 % name,
+        ['cpyquickhelper/fastdata/%s.pyx' % name],
+        include_dirs=[numpy.get_include()],
+        extra_compile_args=["-O3"],
+        define_macros=define_macros,
+        language="c++")
 
     ext_thread = Extension(
         'cpyquickhelper.parallel.threader',
@@ -265,6 +290,20 @@ def get_extensions():
         language='c++',
         define_macros=define_macros)
 
+    ext_fast_dict_c = Extension(
+        'cpyquickhelper.fastdata.fast_dict_c',
+        [os.path.join(root, 'cpyquickhelper/fastdata/fast_dict_c.cpp')],
+        extra_compile_args=extra_compile_args_numbers,
+        extra_link_args=extra_link_args,
+        include_dirs=[
+            # Path to pybind11 headers
+            get_pybind_include(),
+            get_pybind_include(user=True),
+            os.path.join(root, 'cpyquickhelper/fastdata')
+        ],
+        language='c++',
+        define_macros=define_macros)
+
     # cythonize
 
     opts = dict(boundscheck=False, cdivision=True,
@@ -273,7 +312,7 @@ def get_extensions():
 
     try:
         from Cython.Build import cythonize
-        ext_modules = cythonize([ext_blas],
+        ext_modules = cythonize([ext_blas, ext_fast_dict_cpy],
                                 compiler_directives=opts)
     except ImportError:
         # Cython is not installed.
@@ -284,6 +323,7 @@ def get_extensions():
     # setup
     if ext_modules is not None:
         ext_modules.extend([
+            ext_fast_dict,
             ext_edit_distance_c,
             ext_slowcode,
             ext_custom_container,
@@ -292,7 +332,8 @@ def get_extensions():
             ext_benchmark_dot,
             ext_benchmark_sum_type,
             ext_profiling,
-            ext_profiling_c
+            ext_profiling_c,
+            ext_fast_dict_c
         ])
     return ext_modules
 

@@ -7,7 +7,7 @@ import os
 import unittest
 import platform
 from pyquickhelper.loghelper import fLOG
-from pyquickhelper.pycode import ExtTestCase, skipif_appveyor
+from pyquickhelper.pycode import ExtTestCase
 from pyquickhelper.ipythonhelper import test_notebook_execution_coverage
 import cpyquickhelper
 
@@ -16,6 +16,8 @@ class TestRunNotebooksPython(ExtTestCase):
 
     @unittest.skipIf(platform.system().lower() == "darwin",
                      reason="no openmp")
+    @unittest.skipIf(platform.system().lower() == "windows",
+                     reason="bug in pytest")
     def test_run_notebooks_branching(self):
         fLOG(
             __file__,
@@ -31,7 +33,8 @@ class TestRunNotebooksPython(ExtTestCase):
         test_notebook_execution_coverage(
             __file__, "branching", folder, 'cpyquickhelper', fLOG=fLOG)
 
-    @skipif_appveyor("unstable issue")
+    @unittest.skipIf(platform.system().lower() == "windows",
+                     reason="bug in pytest")
     def test_run_notebooks_nobranching(self):
         fLOG(
             __file__,
