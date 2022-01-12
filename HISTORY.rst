@@ -5,7 +5,13 @@
 History
 =======
 
-current - 2022-01-07 - 0.00Mb
+current - 2022-01-12 - 0.00Mb
+=============================
+
+* #36: Restores the use of strings in measure_time (2022-01-12)
+* #35: Investigates pybind11 overhead (2022-01-10)
+
+0.3.404 - 2022-01-07 - 8.84Mb
 =============================
 
 * #34: Switches CI to python 3.10 (2022-01-06)
