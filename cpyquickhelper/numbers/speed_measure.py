@@ -39,14 +39,18 @@ def measure_time(stmt, context=None, repeat=10, number=50, div_by_number=False,
     .. versionchanged:: 0.4
         Parameter *max_time* was added.
     """
-    if not callable(stmt):
+    if not callable(stmt) and not isinstance(stmt, str):
         raise TypeError(
-            "stmt is not callable but is of type %r." % type(stmt))
+            "stmt is not callable or a string but is of type %r."
+            "" % type(stmt))
     if context is None:
         context = {}
 
     import numpy  # pylint: disable=C0415
-    tim = Timer(stmt, globals=context)
+    if isinstance(stmt, str):
+        tim = Timer(stmt, globals=context)
+    else:
+        tim = Timer(stmt)
 
     if max_time is not None:
         if not div_by_number:

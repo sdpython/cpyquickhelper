@@ -24,6 +24,20 @@ class TestMeasureTime(ExtTestCase):
             fct, context={"fct": fct}, div_by_number=True, number=1000)
         self.assertIn("average", res)
 
+    def test_vector_count_str(self):
+        def fct():
+            X = numpy.ones((1000, 5))
+            return X
+        res = measure_time(
+            "fct", context={"fct": fct}, div_by_number=False, number=100)
+        self.assertIn("average", res)
+        res = measure_time(
+            "fct", context={"fct": fct}, div_by_number=True, number=100)
+        self.assertIn("average", res)
+        res = measure_time(
+            "fct", context={"fct": fct}, div_by_number=True, number=1000)
+        self.assertIn("average", res)
+
     def test_vector_count_none(self):
         def fct():
             X = numpy.ones((1000, 5))
@@ -38,8 +52,8 @@ class TestMeasureTime(ExtTestCase):
             return X
         self.assertRaise(
             lambda: measure_time(
-                "fct", context={"fct": fct}, div_by_number=False, max_time=1),
-            TypeError)
+                "fct", context=None, div_by_number=False, max_time=1),
+            ValueError)
         self.assertRaise(
             lambda: measure_time(
                 fct, context={"fct": fct}, div_by_number=False, max_time=1),
