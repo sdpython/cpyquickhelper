@@ -90,9 +90,6 @@ class TestWeightedSeries(ExtTestCase):
         n2 = WeightedDouble(3, 2)
         ser = WeightedSeries([n1, n2])
         df = DataFrame(data=dict(wd=ser, x=[6., 7.]))
-        s = str(df).replace("\n", " ").replace(" ", "_")
-        self.assertEqual(
-            s, "_____________wd____x_0__1.000000_(1)__6.0_1__3.000000_(2)__7.0")
         self.assertEqual(df.shape, (2, 2))
         df["A"] = df.wd + df.x
         e1 = WeightedDouble(7, 2)
