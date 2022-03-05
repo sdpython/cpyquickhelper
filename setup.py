@@ -17,7 +17,7 @@ readme = 'README.rst'
 history = "HISTORY.rst"
 requirements = None
 
-KEYWORDS = project_var_name + ', Xavier Dupré'
+KEYWORDS = [project_var_name, 'Xavier Dupré', 'teachings']
 DESCRIPTION = """Module with C functions. No precise purpose yet."""
 CLASSIFIERS = [
     'Programming Language :: Python :: 3',
