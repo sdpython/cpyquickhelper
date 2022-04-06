@@ -61,10 +61,12 @@ PYBIND11_MODULE(vector_container_python, m) {
 :param v: numpy array
         )pbdoc", py::arg("content"));
 
-    one_tensor.def_property_readonly("element_type", &OneTensorFloat::element_type, "Returns the type of every element of the tensor.");
+    one_tensor.def_property_readonly("element_type", &OneTensorFloat::element_type,
+                                     "Returns the type of every element of the tensor.");
     one_tensor.def_property_readonly("version", &OneTensorFloat::version, "Returns the version.");
     one_tensor.def_property_readonly("shape", &OneTensorFloat::shape, "Returns the tensor shape.");
-    one_tensor.def("__getitem__", [](const OneTensorFloat& tensor, int64_t index) { return tensor.data()[index]; }, "Returns the ith element of the container.");
+    one_tensor.def("__getitem__", [](const OneTensorFloat& tensor, int64_t index) { return tensor.data()[index]; },
+                   "Returns the ith element of the container.");
     one_tensor.def("__len__", [](const OneTensorFloat& tensor) { return tensor.size(); }, "Returns the length of the tensor.");
 
     // OneTensor2
@@ -87,10 +89,12 @@ PYBIND11_MODULE(vector_container_python, m) {
 :param v: numpy array
         )pbdoc", py::arg("content"));
 
-    one_tensor2.def_property_readonly("element_type", &OneTensorFloat2::element_type, "Returns the type of every element of the tensor.");
+    one_tensor2.def_property_readonly("element_type", &OneTensorFloat2::element_type,
+                                      "Returns the type of every element of the tensor.");
     one_tensor2.def_property_readonly("version", &OneTensorFloat2::version, "Returns the version.");
     one_tensor2.def_property_readonly("shape", &OneTensorFloat2::shape, "Returns the tensor shape.");
-    one_tensor2.def("__getitem__", [](const OneTensorFloat2& tensor, int64_t index) { return tensor.data()[index]; }, "Returns the ith element of the container.");
+    one_tensor2.def("__getitem__", [](const OneTensorFloat2& tensor, int64_t index) { return tensor.data()[index]; },
+                    "Returns the ith element of the container.");
     one_tensor2.def("__len__", [](const OneTensorFloat2& tensor) { return tensor.size(); }, "Returns the length of the tensor.");
 
     // vector of vectors
