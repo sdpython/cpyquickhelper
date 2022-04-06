@@ -66,12 +66,12 @@ class RandomTensorVector {
     public:
         RandomTensorVector(int64_t n_vectors, int64_t n_dims) {
             values_.resize(n_vectors);
-            auto d1 = static_cast<VT::value_type>(RAND_MAX);
+            auto d1 = static_cast<typename VT::value_type>(RAND_MAX);
             for (int64_t i = 0; i < n_vectors; ++i) {
                 values_[i].reserve(n_dims);
                 for (int64_t j = 0; j < n_dims; ++j) {
                     auto h = rand();
-                    auto h1 = static_cast<VT::value_type>(h);
+                    auto h1 = static_cast<typename VT::value_type>(h);
                     values_[i].emplace_back(h1 / d1);
                 }
             }
