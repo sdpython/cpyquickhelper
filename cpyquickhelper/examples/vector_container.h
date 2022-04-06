@@ -56,7 +56,7 @@ class OneTensor {
 
 
 template <>
-inline OneTensor<float>::OneTensor(): dims_(), data_(), data_type_(1) { }
+inline OneTensor<float>::OneTensor(): data_type_(1), dims_(), data_() { }
 
 
 template <typename VT>
@@ -69,7 +69,9 @@ class RandomTensorVector {
             for (int64_t i = 0; i < n_vectors; ++i) {
                 values_[i].reserve(n_dims);
                 for (int64_t j = 0; j < n_dims; ++j) {
-                    values_[i].emplace_back((VT::value_type)rand() / (VT::value_type)RAND_MAX);
+                    auto h = rand();
+                    auto r = ((VT::value_type)h) / ((VT::value_type)RAND_MAX);
+                    values_[i].emplace_back(r);
                 }
             }
         }

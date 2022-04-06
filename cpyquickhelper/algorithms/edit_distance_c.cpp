@@ -27,10 +27,10 @@ double edit_distance(const py::array_t<int32_t, py::array::c_style | py::array::
     size_t n1 = seq1.size() + 1;
     size_t n2 = seq2.size() + 1;
     size_t size = n1 * n2;
-    if (dist.size() < size)
+    if ((size_t)dist.size() < size)
         throw std::runtime_error(MakeString(
             "dist has an unexpected size ", dist.size(), " < ", size, "."));
-    if (pred.size() < size)
+    if ((size_t)pred.size() < size)
         throw std::runtime_error(MakeString(
             "pred has an unexpected size ", pred.size(), " < ", size, "."));
 
