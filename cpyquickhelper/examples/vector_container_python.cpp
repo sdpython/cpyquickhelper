@@ -34,12 +34,43 @@ class RandomTensorVectorFloat2: public RandomTensorVector<OneTensorFloat2> {
             RandomTensorVector<OneTensorFloat2>(n_vectors, n_dims) {}
 };
 
+template <typename PT>
+class ConstReferencePointer {
+    protected:
+        const PT* ptr_;
+    public:
+        ConstReferencePointer(): ptr_(NULL) { }
+        ConstReferencePointer(const ConstReferencePointer<PT>& c): ptr_(c.ptr_) {}
+        ConstReferencePointer(const PT* ptr): ptr_(ptr) {}
+};
+
+
+class TensorVectorConstReferencePointer: public ConstReferencePointer<std::vector<OneTensorFloat>> {
+    public:
+        TensorVectorConstReferencePointer(): ConstReferencePointer<std::vector<OneTensorFloat>>() { }
+        TensorVectorConstReferencePointer(const TensorVectorConstReferencePointer& c): ConstReferencePointer<std::vector<OneTensorFloat>>(c) {}
+        TensorVectorConstReferencePointer(const std::vector<OneTensorFloat>* ptr): ConstReferencePointer<std::vector<OneTensorFloat>>(ptr) {}
+};
+
+
+class TensorVectorConstReferencePointer2: public ConstReferencePointer<std::vector<OneTensorFloat2>> {
+    public:
+        TensorVectorConstReferencePointer2(): ConstReferencePointer<std::vector<OneTensorFloat2>>() { }
+        TensorVectorConstReferencePointer2(const TensorVectorConstReferencePointer2& c): ConstReferencePointer<std::vector<OneTensorFloat2>>(c) {}
+        TensorVectorConstReferencePointer2(const std::vector<OneTensorFloat2>* ptr): ConstReferencePointer<std::vector<OneTensorFloat2>>(ptr) {}
+};
+
 
 PYBIND11_MAKE_OPAQUE(std::vector<OneTensorFloat>);
 
 
 PYBIND11_MODULE(vector_container_python, m) {
 	m.doc() = "Looks into two ways to export an array of objects (vectors here).";
+
+    // Reference
+    
+    py::class_<TensorVectorConstReferencePointer> (m, "TensorVectorConstReferencePointer");
+    py::class_<TensorVectorConstReferencePointer2> (m, "TensorVectorConstReferencePointer2");
 
     // OneTensor
 
@@ -118,12 +149,16 @@ PYBIND11_MODULE(vector_container_python, m) {
         py::init<int64_t, int64_t>(), "Creates *n_vectors* random tensors of size *n_dims*.",
         py::arg("n_vectors"), py::arg("n_dims"));
     tv.def("get_tensor_vector", [](const RandomTensorVectorFloat& v) { return v.get(); });
+    tv.def("get_tensor_vector_ref", [](const RandomTensorVectorFloat& v) {
+        return TensorVectorConstReferencePointer(v.getp()); });
 
     py::class_<RandomTensorVectorFloat2> tv2(m, "RandomTensorVectorFloat2", "Random Tensors");
     tv2.def(
         py::init<int64_t, int64_t>(), "Creates *n_vectors* random tensors of size *n_dims*.",
         py::arg("n_vectors"), py::arg("n_dims"));
     tv2.def("get_tensor_vector", [](const RandomTensorVectorFloat2& v) { return v.get(); });
+    tv2.def("get_tensor_vector_ref", [](const RandomTensorVectorFloat2& v) {
+        return TensorVectorConstReferencePointer2(v.getp()); });
 }
 
 #endif
