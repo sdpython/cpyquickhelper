@@ -10,8 +10,6 @@
 #include <exception>
 #include <vector>
 #include <functional>
-#include <cstdlib>
-#include <stdlib.h>
 
 
 template <typename T>
@@ -40,7 +38,7 @@ class OneTensor {
                 size *= d;
             }
             data_.resize(size);
-            memcpy((void*)data_.data(), (const void*)data, (size_t)(sizeof(T) * size));
+            std::copy(data, data + size, data_.begin());
         }
         inline T& operator[](int64_t index) { return data_[index]; }
         inline int64_t element_type() const { return data_type_; }

@@ -69,8 +69,10 @@ PYBIND11_MODULE(vector_container_python, m) {
 
     // Reference
     
-    py::class_<TensorVectorConstReferencePointer> (m, "TensorVectorConstReferencePointer");
-    py::class_<TensorVectorConstReferencePointer2> (m, "TensorVectorConstReferencePointer2");
+    py::class_<TensorVectorConstReferencePointer>(m, "TensorVectorConstReferencePointer",
+                                                  "Reference on `std::vector<OneTensorFloat>`.");
+    py::class_<TensorVectorConstReferencePointer2>(m, "TensorVectorConstReferencePointer2",
+                                                   "Reference on `std::vector<OneTensorFloat2>`.");
 
     // OneTensor
 
