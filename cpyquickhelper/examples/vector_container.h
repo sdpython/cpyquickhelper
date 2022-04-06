@@ -11,6 +11,7 @@
 #include <vector>
 #include <functional>
 #include <cstdlib>
+#include <stdio.h>
 
 
 template <typename T>
@@ -76,7 +77,7 @@ class RandomTensorVector {
                 }
             }
         }
-        
+
         const std::vector<VT>& get() const { return values_; }
 };
 
