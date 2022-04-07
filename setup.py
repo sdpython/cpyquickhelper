@@ -132,6 +132,21 @@ def get_extensions():
         language='c++',
         define_macros=define_macros)
 
+    ext_vector_container = Extension(
+        'cpyquickhelper.examples.vector_container_python',
+        [os.path.join(root, 'cpyquickhelper/examples/vector_container.cpp'),
+         os.path.join(root, 'cpyquickhelper/examples/vector_container_python.cpp')],
+        extra_compile_args=extra_compile_args_numbers,
+        extra_link_args=extra_link_args,
+        include_dirs=[
+            # Path to pybind11 headers
+            get_pybind_include(),
+            get_pybind_include(user=True),
+            os.path.join(root, 'cpyquickhelper/examples')
+        ],
+        language='c++',
+        define_macros=define_macros)
+
     ext_fast_dict = Extension(
         'cpyquickhelper.fastdata.fast_dict',
         [os.path.join(root, 'cpyquickhelper/fastdata/fast_dict.cpp')],
@@ -327,6 +342,7 @@ def get_extensions():
             ext_edit_distance_c,
             ext_slowcode,
             ext_custom_container,
+            ext_vector_container,
             ext_thread, ext_stdhelper,
             ext_numbers, ext_benchmark,
             ext_benchmark_dot,
