@@ -67,7 +67,7 @@ jobs:
   strategy:
     matrix:
       Python39-Windows:
-        python.version: '3.9'
+        python.version: '3.10'
     maxParallel: 3
   steps:
   - task: UsePythonVersion@0
@@ -84,7 +84,7 @@ jobs:
     displayName: 'Build inplace'
   - script: python setup.py install
     displayName: 'install the package'
-  - script: pytest _unittests --ignore-glob=**/test_run_notebooks.py
+  - script: pytest -v _unittests --ignore-glob=**/test_run_notebooks.py
     displayName: 'Runs Unit Tests'
   - script: |
       python -m pip install cibuildwheel
