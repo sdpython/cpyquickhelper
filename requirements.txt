@@ -11,7 +11,7 @@ pandas>=1.0
 pillow
 pybind11
 pycodestyle
-pylint
+pylint>=2.14.0
 pyquickhelper>=1.11.3697
 pyquicksetup
 scipy
