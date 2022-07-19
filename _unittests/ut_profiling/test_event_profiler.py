@@ -163,7 +163,7 @@ class TestEventProfiler(ExtTestCase):
         end = perf_counter()
         ev.stop()
         duration = end - begin
-        msg = "evppy: %1.6f microsecond" % (duration / N * 1e6)
+        msg = f"evppy: {duration / N * 1000000.0:1.6f} microsecond"
         self.assertNotEmpty(msg)
         if __name__ == "__main__":
             print(msg)
@@ -181,7 +181,7 @@ class TestEventProfiler(ExtTestCase):
         end = perf_counter()
         ev.stop()
         duration = end - begin
-        msg = "evcpy+: %1.6f microsecond" % (duration / N * 1e6)
+        msg = f"evcpy+: {duration / N * 1000000.0:1.6f} microsecond"
         self.assertNotEmpty(msg)
         if __name__ == "__main__":
             print(msg)
@@ -197,7 +197,7 @@ class TestEventProfiler(ExtTestCase):
         _profiling_delete()
         _profiling_stop()
         duration = end - begin
-        msg = "evcap+: %1.6f microsecond" % (duration / N * 1e6)
+        msg = f"evcap+: {duration / N * 1000000.0:1.6f} microsecond"
         self.assertNotEmpty(msg)
         if __name__ == "__main__":
             print(msg)
@@ -215,7 +215,7 @@ class TestEventProfiler(ExtTestCase):
         end = perf_counter()
         ev.stop()
         duration = end - begin
-        msg = "logg: %1.6f microsecond" % (duration / N * 1e6)
+        msg = f"logg: {duration / N * 1000000.0:1.6f} microsecond"
         self.assertNotEmpty(msg)
         if __name__ == "__main__":
             print(msg)

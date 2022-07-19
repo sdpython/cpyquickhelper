@@ -163,7 +163,7 @@ class EventProfiler:
             sys.setprofile(_profiling_log_event)
         else:
             raise ValueError(  # pragma: no cover
-                "Unexpected value for impl=%r." % self._impl)
+                f"Unexpected value for impl={self._impl!r}.")
 
     def _restore_profiler(self):
         """

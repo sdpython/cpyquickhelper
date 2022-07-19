@@ -146,7 +146,7 @@ def measure_implementation(impl):
         ev.stop()
 
     duration = end - begin
-    msg = "%s: %1.6f microsecond" % (impl, duration / N * 1e6)
+    msg = f"{impl}: {duration / N * 1000000.0:1.6f} microsecond"
     return msg
 
 
