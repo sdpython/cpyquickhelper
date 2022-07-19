@@ -8,6 +8,7 @@ jobs:
     
     steps:
       - checkout
+      - run: python --version
 
       - restore_cache:
           keys:
@@ -47,9 +48,7 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            python -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
+                    python -m pip install -r requirements.txt
 
       - save_cache:
           paths:
@@ -59,30 +58,26 @@ jobs:
       - run:
           name: gcc version
           command: |
-            . venv/bin/activate
             gcc --version
 
       - run:
           name: compile and build
           command: |
-            . venv/bin/activate
-            python setup.py build_ext --inplace
+                    python setup.py build_ext --inplace
 
       - run:
           name: run tests
           command: |
-            . venv/bin/activate
-            python setup.py unittests
+                    python setup.py unittests
 
       - run:
           name: wheel
           command: |
-            . venv/bin/activate
-            python setup.py bdist_wheel
-            mkdir -p test-reports/dist
-            cp dist/*.whl test-reports/dist
-            mkdir -p test-reports/src
-            cp -r  cpyquickhelper test-reports/src
+                    python setup.py bdist_wheel
+                    mkdir -p test-reports/dist
+                    cp dist/*.whl test-reports/dist
+                    mkdir -p test-reports/src
+                    cp -r  cpyquickhelper test-reports/src
 
       #- run:
       #    name: documentation
