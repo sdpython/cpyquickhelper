@@ -50,7 +50,7 @@ C++ buffer for @see cl EventProfiler.)pbdoc"
                 self.register_pyinstance((void*)f.ptr());
              }, "Registers the python instance with holds this one.");
 
-    pyev.def("__iter__", [](CEventProfiler &v) {
+    pyev.def("__iter__", [](const CEventProfiler &v) {
                 return py::make_iterator(v.begin(), v.end());
              }, py::keep_alive<0, 1>()); /* Keep vector alive while iterator is used */
 
