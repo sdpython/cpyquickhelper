@@ -11,7 +11,7 @@ from pyquicksetup import read_version, read_readme, default_cmdclass
 #########
 
 project_var_name = "cpyquickhelper"
-versionPython = "%s.%s" % (sys.version_info.major, sys.version_info.minor)
+versionPython = f"{sys.version_info.major}.{sys.version_info.minor}"
 path = "Lib/site-packages/" + project_var_name
 readme = 'README.rst'
 history = "HISTORY.rst"
@@ -165,7 +165,7 @@ def get_extensions():
     name = 'fast_dict_cpy'
     ext_fast_dict_cpy = Extension(
         pattern1 % name,
-        ['cpyquickhelper/fastdata/%s.pyx' % name],
+        [f'cpyquickhelper/fastdata/{name}.pyx'],
         include_dirs=[numpy.get_include()],
         extra_compile_args=["-O3"],
         define_macros=define_macros,
@@ -266,7 +266,7 @@ def get_extensions():
     name = 'direct_blas_lapack'
     ext_blas = Extension(
         pattern1 % name,
-        ['cpyquickhelper/numbers/%s.pyx' % name],
+        [f'cpyquickhelper/numbers/{name}.pyx'],
         include_dirs=[numpy.get_include()],
         extra_compile_args=["-O3"],
         define_macros=define_macros)
@@ -358,7 +358,7 @@ try:
     ext_modules = get_extensions()
 except ImportError as e:
     warnings.warn(
-        "Unable to build C++ extension with missing dependencies %r." % e)
+        f"Unable to build C++ extension with missing dependencies {e!r}.")
     ext_modules = None
 
 
@@ -379,7 +379,7 @@ setup(
     packages=packages,
     package_dir=package_dir,
     package_data=package_data,
-    setup_requires=["pybind11", "cython", "scipy", "numpy", "pyquicksetup"],
-    install_requires=["pybind11", "numpy>=1.16",
+    setup_requires=["pybind11<2.10.0", "cython", "scipy", "numpy", "pyquicksetup"],
+    install_requires=["pybind11<2.10.0", "numpy>=1.16",
                       "cython", 'scipy', 'pandas>=1.0'],
 )

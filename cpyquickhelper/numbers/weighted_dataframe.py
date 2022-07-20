@@ -81,7 +81,7 @@ class WeightedSeriesDtype(ExtensionDtype):
             If a class cannot be constructed from this 'string'.
         """
         if not string.startswith("WD"):  # pragma no cover
-            raise TypeError("Unable to parse '{0}'".format(string))
+            raise TypeError(f"Unable to parse '{string}'")
         val = string[2:].strip('() ').split(",")
         if len(val) == 1 and val[0]:
             val = float(val[0])
@@ -90,10 +90,10 @@ class WeightedSeriesDtype(ExtensionDtype):
         elif len(val) == 0 or (len(val) == 1 and val[0] == ''):
             val = numpy.nan
         else:  # pragma no cover
-            raise TypeError("Unable to parse '{0}'".format(string))
+            raise TypeError(f"Unable to parse '{string}'")
         if isinstance(val, tuple):
             if len(val) != 2:  # pragma no cover
-                raise TypeError("Unable to parse '{0}'".format(string))
+                raise TypeError(f"Unable to parse '{string}'")
             return WeightedDouble(val[0], val[1])
         return WeightedDouble(val)
 
@@ -176,7 +176,7 @@ class WeightedSeries(Series):
             return getattr(obj, attr)
         if attr == '_ndarray':
             return numpy.array(self)
-        raise AttributeError("Unkown attribute '{0}'".format(attr))
+        raise AttributeError(f"Unkown attribute '{attr}'")
 
 
 class WeightedArray(PandasArray):

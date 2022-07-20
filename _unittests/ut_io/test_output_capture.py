@@ -62,7 +62,7 @@ class TestOutputCapture(ExtTestCase):
                     self.assertEqual(out, b'cout1aout2')
                 else:
                     if not out.endswith(b'cout1\naout2\n'):
-                        raise AssertionError("###{0}###".format(out))
+                        raise AssertionError(f"###{out}###")
 
     def test_c_output_capture_py(self):
         def callf():

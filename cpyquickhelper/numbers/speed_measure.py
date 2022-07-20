@@ -41,8 +41,7 @@ def measure_time(stmt, context=None, repeat=10, number=50, div_by_number=False,
     """
     if not callable(stmt) and not isinstance(stmt, str):
         raise TypeError(
-            "stmt is not callable or a string but is of type %r."
-            "" % type(stmt))
+            f"stmt is not callable or a string but is of type {type(stmt)!r}.")
     if context is None:
         context = {}
 

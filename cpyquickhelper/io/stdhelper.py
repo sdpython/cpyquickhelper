@@ -35,7 +35,7 @@ def capture_output_c(function_to_call) -> Tuple:
     if isinstance(res, tuple):  # pragma: no cover
         return (fout, ) + res
     raise TypeError(  # pragma no cover
-        "Unexpected return type '{0}'.".format(type(res)))
+        f"Unexpected return type '{type(res)}'.")
 
 
 def capture_output_py(function_to_call) -> Tuple[str, str]:
@@ -77,4 +77,4 @@ def capture_output(function_to_call, lang="py"):
         return capture_output_py(function_to_call)
     if lang == "c":
         return capture_output_c(function_to_call)
-    raise ValueError("lang must be 'py' or 'c' not '{0}'".format(lang))
+    raise ValueError(f"lang must be 'py' or 'c' not '{lang}'")
