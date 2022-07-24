@@ -353,4 +353,4 @@ class TestEventProfiler(ExtTestCase):
 
 if __name__ == "__main__":
     # TestEventProfiler().test_profiling_exc()
-    unittest.main()
+    unittest.main(verbosity=2)
