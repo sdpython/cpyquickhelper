@@ -43,14 +43,12 @@ jobs:
   - script: |
       python -m pip install cibuildwheel
       export CIBW_MANYLINUX_X86_64_IMAGE="manylinux_2_24"
-      export CIBW_BEFORE_BUILD="pip install ."
       export CIBW_BEFORE_BUILD="pip install pybind11 cython numpy scipy pyquickhelper"
       export CIBW_BUILD="cp310-manylinux_x86_64"
       python -m cibuildwheel --output-dir dist/wheelhouse310 --platform linux
     displayName: 'Build Package manylinux_x_y_py310'
   - script: |
       export CIBW_MANYLINUX_X86_64_IMAGE="manylinux2014"
-      export CIBW_BEFORE_BUILD="pip install ."
       export CIBW_BEFORE_BUILD="pip install pybind11 cython numpy scipy pyquickhelper"
       export CIBW_MANYLINUX_X86_64_IMAGE=quay.io/pypa/manylinux2014_x86_64:latest
       export CIBW_BUILD="cp37-manylinux_x86_64 cp38-manylinux_x86_64 cp39-manylinux_x86_64"
@@ -88,7 +86,6 @@ jobs:
     displayName: 'Runs Unit Tests'
   - script: |
       python -m pip install cibuildwheel
-      set CIBW_BEFORE_BUILD=pip install .
       set CIBW_BEFORE_BUILD="pip install pybind11 cython numpy scipy pyquickhelper"
       set CIBW_BUILD="cp37-win_amd64 cp38-win_amd64 cp39-win_amd64 cp310-win_amd64"
       python -m cibuildwheel --output-dir dist/wheelhouse
@@ -166,7 +163,6 @@ jobs:
     displayName: 'Runs Unit Tests'
   - script: |
       python -m pip install cibuildwheel
-      export CIBW_BEFORE_BUILD="pip install ."
       export CIBW_BEFORE_BUILD="pip install pybind11 cython numpy scipy pyquickhelper pyquicksetup"
       export CIBW_BUILD="cp37-macosx_x86_64 cp38-macosx_x86_64 cp39-macosx_x86_64 cp310-macosx_x86_64"
       python -m cibuildwheel --output-dir dist/wheelhouse

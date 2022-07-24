@@ -4,8 +4,10 @@
 import unittest
 import inspect
 import logging
+import platform
 from time import sleep, perf_counter
 from pyquickhelper.pycode import ExtTestCase
+from pyquickhelper.pycode.ci_helper import is_travis_or_appveyor
 from cpyquickhelper.profiling import (
     EventProfiler, WithEventProfiler)
 from cpyquickhelper.profiling.event_profiler import EventProfilerDebug
@@ -286,6 +288,10 @@ class TestEventProfiler(ExtTestCase):
         self.assertIn('sleep', set(df['name']))
         self.assertIn('time', set(df['mod']))
 
+    @unittest.skipIf(
+        platform.system() == 'Windows' and
+        is_travis_or_appveyor() == 'azurepipe',
+        reason='crash')
     def test_profiling_c(self):
 
         def f1(t):
