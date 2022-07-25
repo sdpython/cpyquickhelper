@@ -135,8 +135,9 @@ class TestOutputCapture(ExtTestCase):
 
         if len(excs) == 2:
             mes = [str(e) for e in excs]
-            raise Exception(
-                "Unable to run autosignature:\n{0}".format("\n----\n".join(mes)))
+            raise AssertionError(
+                "Unable to run autosignature:\n{}\n----\n{}".format(
+                    newstring, "\n----\n".join(mes)))
 
         if len(excs) == 1:
             res = str(excs[0]) + "\n---\n" + res

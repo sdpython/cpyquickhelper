@@ -12,7 +12,7 @@ pillow
 pybind11<2.10.0
 pycodestyle
 pylint>=2.14.0
-pyquickhelper>=1.11.3697
+pyquickhelper>=1.11.3747
 pyquicksetup
 scipy
 sphinx
