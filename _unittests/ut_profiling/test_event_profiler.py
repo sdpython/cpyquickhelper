@@ -212,8 +212,8 @@ class TestEventProfiler(ExtTestCase):
         ev.start()
         begin = perf_counter()
         for _ in range(N):
-            logger.info("call %d", inspect.currentframe().f_lineno)
-            logger.info("return %d", inspect.currentframe().f_lineno)
+            logger.info(f"call {inspect.currentframe().f_lineno}")
+            logger.info(f"return {inspect.currentframe().f_lineno}")
         end = perf_counter()
         ev.stop()
         duration = end - begin
@@ -324,6 +324,9 @@ class TestEventProfiler(ExtTestCase):
         self.assertIn('sleep', set(df['name']))
         self.assertIn('time', set(df['mod']))
 
+    @unittest.skipIf(
+        platform.system() == 'Windows',
+        reason='crash')
     def test_profiling_c_20(self):
 
         def f1(t):

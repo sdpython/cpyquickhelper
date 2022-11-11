@@ -64,7 +64,7 @@ jobs:
     vmImage: 'windows-latest'
   strategy:
     matrix:
-      Python310-Windows:
+      Python311-Windows:
         python.version: '3.11'
     maxParallel: 3
   steps:
@@ -100,7 +100,7 @@ jobs:
     vmImage: 'macOS-latest'
   strategy:
     matrix:
-      Python310-MacOs:
+      Python311-MacOs:
         python.version: "3.11"
   steps:
   - task: UsePythonVersion@0
@@ -164,7 +164,7 @@ jobs:
   - script: |
       python -m pip install cibuildwheel
       export CIBW_BEFORE_BUILD="pip install pybind11 cython numpy scipy pyquickhelper pyquicksetup"
-      export CIBW_BUILD="cp38-macosx_x86_64 cp39-macosx_x86_64 cp310-macosx_x86_64 cp311-macosx_x86_64"
+      export CIBW_BUILD="cp310-macosx_x86_64 cp311-macosx_x86_64"
       python -m cibuildwheel --output-dir dist/wheelhouse
     displayName: 'Build Package many'
   - task: PublishPipelineArtifact@0
