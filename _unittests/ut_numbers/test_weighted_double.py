@@ -1,11 +1,12 @@
 """
 @brief      test log(time=4s)
 """
-
+import platform
 import unittest
 from inspect import signature, isbuiltin, isclass, ismethod, isfunction, _signature_fromstr, Signature
-from pyquickhelper.pycode import ExtTestCase
 from pyquickhelper.helpgen import rst2html
+from pyquickhelper.pycode import ExtTestCase
+from pyquickhelper.pycode.ci_helper import is_travis_or_appveyor
 from cpyquickhelper.numbers.weighted_number import WeightedDouble, WeightedFloat  # pylint: disable=E0611
 from cpyquickhelper.numbers.weighted_dataframe import WeightedSeriesDtype
 
@@ -35,6 +36,10 @@ class TestWeightedDouble(ExtTestCase):
         n3 = n1 + 1
         self.assertEqual(n3, WeightedFloat(2, 2))
 
+    @unittest.skipIf(
+        platform.system() == 'Windows' and
+        is_travis_or_appveyor() == 'appveyor',
+        reason='crash')
     def test_signature(self):
         self.assertRaise(lambda: signature(
             WeightedDouble.__init__), ValueError)
