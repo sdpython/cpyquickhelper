@@ -79,7 +79,7 @@ def get_compile_args():
         extra_compile_args_numbers = ['-stdlib=libc++', '-mmacosx-version-min=10.7',
                                       '-std=c++11', '-Xpreprocessor', '-fopenmp']
         extra_compile_args_bench = extra_compile_args_numbers.copy()
-        extra_link_args = ["-lomp"]
+        extra_link_args = ["-lomp", "-Llib/"]
         define_macros = [('USE_OPENMP', None)]
     else:
         libraries_thread = None
