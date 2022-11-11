@@ -137,21 +137,21 @@ jobs:
   - bash: conda update conda --yes --quiet
     displayName: Update conda.
   - bash: conda info -a
-  - bash: conda create --yes --quiet --name pyenv -c defaults -c conda-forge python=3.10 tox sphinx jupyter Cython numpy mkl scipy scikit-learn pandas coverage pylint
-    displayName: Create Anaconda environment.
-  - bash: source activate pyenv
-    displayName: Switch to pyenv.
-  - script: |
-          curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-          python get-pip.py
-    displayName: Install pip
+  #- bash: conda create --yes --quiet --name pyenv -c defaults -c conda-forge python=3.10 tox sphinx jupyter Cython numpy mkl scipy scikit-learn pandas coverage pylint
+  #  displayName: Create Anaconda environment.
+  #- bash: source activate pyenv
+  #  displayName: Switch to pyenv.
+  #- script: |
+  #        curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+  #        python get-pip.py
+  #  displayName: Install pip
   - script: python -m pip install wheel setuptools
     displayName: 'Install wheel, setuptools'
   - script: python -m pip install pyquicksetup
     displayName: 'Install pyquicksetup'
   - script: python -m pip install -r requirements.txt
     displayName: 'Install Requirements'
-  - script: python -c "import platform;print(platform.version())"
+  - script: python -c "import platform;import sys;print(platform.version());print(sys.version_info())"
     displayName: 'Platform'
   - script: |
           # export MACOSX_DEPLOYMENT_TARGET=10.13
