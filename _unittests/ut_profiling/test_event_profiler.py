@@ -204,6 +204,10 @@ class TestEventProfiler(ExtTestCase):
         if __name__ == "__main__":
             print(msg)
 
+    @unittest.skipIf(
+        platform.system() == 'Windows' and
+        is_travis_or_appveyor() == 'appveyor',
+        reason='crash')
     def test_debug_logging(self):
         N = 100
         logger = logging.getLogger('cpyquickhelper-ut')
@@ -212,8 +216,8 @@ class TestEventProfiler(ExtTestCase):
         ev.start()
         begin = perf_counter()
         for _ in range(N):
-            logger.info(f"call {inspect.currentframe().f_lineno}")
-            logger.info(f"return {inspect.currentframe().f_lineno}")
+            logger.info("call %d", inspect.currentframe().f_lineno)
+            logger.info("return %d", inspect.currentframe().f_lineno)
         end = perf_counter()
         ev.stop()
         duration = end - begin
