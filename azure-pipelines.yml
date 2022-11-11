@@ -145,8 +145,10 @@ jobs:
   #        curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
   #        python get-pip.py
   #  displayName: Install pip
-  - script: conda install pip wheel setuptools
-    displayName: 'Install pip, wheel, setuptools'
+  - script: conda install wheel setuptools
+    displayName: 'Install wheel, setuptools'
+  - script: conda install pip
+    displayName: 'Install pip'
   - script: python -m pip install pyquicksetup
     displayName: 'Install pyquicksetup'
   - script: python -m pip install -r requirements.txt
