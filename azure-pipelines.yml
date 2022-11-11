@@ -137,9 +137,10 @@ jobs:
   - bash: conda update conda --yes --quiet
     displayName: Update conda.
   - bash: conda info -a
-  - bash: conda create --yes --quiet --name pyenv -c defaults -c conda-forge python=$PYTHON_VERSION tox sphinx jupyter Cython numpy mkl scipy scikit-learn pandas coverage pylint
+  - bash: conda create --yes --quiet --name pyenv -c defaults -c conda-forge python=3.10 tox sphinx jupyter Cython numpy mkl scipy scikit-learn pandas coverage pylint
     displayName: Create Anaconda environment.
   - bash: source activate pyenv
+    displayName: Switch to pyenv.
   - script: |
           curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
           python get-pip.py
@@ -150,8 +151,6 @@ jobs:
     displayName: 'Install pyquicksetup'
   - script: python -m pip install -r requirements.txt
     displayName: 'Install Requirements'
-  - script: export PYTHONPATH=src
-    displayName: 'PYTHONPATH=src'
   - script: python -c "import platform;print(platform.version())"
     displayName: 'Platform'
   - script: |
