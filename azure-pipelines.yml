@@ -145,6 +145,10 @@ jobs:
     displayName: Switch to pyenv.
   - bash: python -c "import sys;print(sys.version_info)"
     displayName: Python version
+  - script: |
+          curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+          python get-pip.py
+    displayName: Install pip
   - script: python -m pip install pyquicksetup
     displayName: 'Install pyquicksetup'
   - script: conda install --file requirements.txt
