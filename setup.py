@@ -80,12 +80,14 @@ def get_compile_args():
         #                          -L/usr/local/opt/libomp/lib -lomp"
         libraries_thread = None
         extra_compile_args_thread = ['-lpthread', '-stdlib=libc++', '-std=c++11',
-                                     '-mmacosx-version-min=10.7', '-Xpreprocessor',
-                                     '-fopenmp']
+                                     '-mmacosx-version-min=10.7', '-Xpreprocessor']
+        # openmp is disabled for mac, setup too complicated to find.
+        # extra_compile_args_thread.append('-fopenmp')
         extra_compile_args_numbers = ['-stdlib=libc++', '-mmacosx-version-min=10.7',
-                                      '-std=c++11', '-Xpreprocessor', '-fopenmp']
+                                      '-std=c++11', '-Xpreprocessor']
+        # extra_compile_args_numbers.append('-fopenmp')
         extra_compile_args_bench = extra_compile_args_numbers.copy()
-        extra_link_args = ["-lomp", "-L/usr/local/opt/libomp/lib"]
+        extra_link_args = []  # "-lomp"
         define_macros = [('USE_OPENMP', None)]
     else:
         libraries_thread = None
