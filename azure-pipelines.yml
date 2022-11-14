@@ -149,7 +149,7 @@ jobs:
           curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
           python get-pip.py
     displayName: Install pip
-  - script: python -m pip install pyquicksetup
+  - script: python -m pip install pyquicksetup pyquickhelper jyquickhelper
     displayName: 'Install pyquicksetup'
   - script: conda install --file requirements.txt
     displayName: 'Install Requirements'
