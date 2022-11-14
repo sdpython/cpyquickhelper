@@ -72,6 +72,12 @@ def get_compile_args():
         extra_link_args = None
         define_macros = [('USE_OPENMP', None)]
     elif sys.platform.startswith("darwin"):
+        # see https://github.com/scikit-learn/scikit-learn/blob/main/sklearn/_build_utils/openmp_helpers.py#L30
+        # export CPPFLAGS="$CPPFLAGS -Xpreprocessor -fopenmp"
+        # export CFLAGS="$CFLAGS -I/usr/local/opt/libomp/include"
+        # export CXXFLAGS="$CXXFLAGS -I/usr/local/opt/libomp/include"
+        # export LDFLAGS="$LDFLAGS -Wl,-rpath,/usr/local/opt/libomp/lib
+        #                          -L/usr/local/opt/libomp/lib -lomp"
         libraries_thread = None
         extra_compile_args_thread = ['-lpthread', '-stdlib=libc++', '-std=c++11',
                                      '-mmacosx-version-min=10.7', '-Xpreprocessor',
@@ -79,7 +85,7 @@ def get_compile_args():
         extra_compile_args_numbers = ['-stdlib=libc++', '-mmacosx-version-min=10.7',
                                       '-std=c++11', '-Xpreprocessor', '-fopenmp']
         extra_compile_args_bench = extra_compile_args_numbers.copy()
-        extra_link_args = ["-lomp"]
+        extra_link_args = ["-lomp", "-L/usr/local/opt/libomp/lib"]
         define_macros = [('USE_OPENMP', None)]
     else:
         libraries_thread = None
