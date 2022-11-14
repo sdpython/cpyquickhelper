@@ -152,7 +152,7 @@ jobs:
 #    displayName: 'Install pyquicksetup'
 #  - script: conda install --file requirements.txt
 #    displayName: 'Install Requirements'
-  - script: python -c "import platform;import sys;print(platform.version());print(sys.version_info())"
+  - script: python -c "import platform;import sys;print(platform.version());print(sys.version_info)"
     displayName: 'Platform'
 #  - script: |
 #          # export MACOSX_DEPLOYMENT_TARGET=10.13
