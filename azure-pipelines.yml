@@ -150,7 +150,7 @@ jobs:
     displayName: Install pip
   - script: python -m pip install pyquicksetup pyquickhelper jyquickhelper
     displayName: 'Install pyquicksetup'
-  - script: conda install --file requirements.txt
+  - script: conda install --file requirements-osx.txt
     displayName: 'Install Requirements'
   - script: python -c "import platform;import sys;print(platform.version());print(sys.version_info)"
     displayName: 'Platform'
