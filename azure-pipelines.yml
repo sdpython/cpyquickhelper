@@ -116,20 +116,19 @@ jobs:
     displayName: 'export'
   - script: gcc --version
     displayName: 'gcc version'
-  - script: brew install llvm
-    displayName: 'install llvm'
-  - script: brew install libomp
-    displayName: 'Install omp'
-  # already installed
-  #- script: brew install p7zip
-  #  displayName: 'Install p7zip'
-  - script: brew install pandoc
-    displayName: 'Install Pandoc'
-  - script: brew install graphviz
-    continueOnError: true
-    displayName: 'Install Graphviz'
-  - script: brew install pybind11
-    displayName: 'Install pybind11'
+
+#  - script: brew install llvm
+#    displayName: 'install llvm'
+#  - script: brew install libomp
+#    displayName: 'Install omp'
+#  - script: brew install pandoc
+#    displayName: 'Install Pandoc'
+#  - script: brew install graphviz
+#    continueOnError: true
+#    displayName: 'Install Graphviz'
+#  - script: brew install pybind11
+#    displayName: 'Install pybind11'
+
   - bash: echo "##vso[task.prependpath]$CONDA/bin"
     displayName: Add conda to PATH.
   - bash: sudo chown -R $USER $CONDA
@@ -149,19 +148,19 @@ jobs:
           curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
           python get-pip.py
     displayName: Install pip
-  - script: python -m pip install pyquicksetup pyquickhelper jyquickhelper
-    displayName: 'Install pyquicksetup'
-  - script: conda install --file requirements.txt
-    displayName: 'Install Requirements'
+#  - script: python -m pip install pyquicksetup pyquickhelper jyquickhelper
+#    displayName: 'Install pyquicksetup'
+#  - script: conda install --file requirements.txt
+#    displayName: 'Install Requirements'
   - script: python -c "import platform;import sys;print(platform.version());print(sys.version_info())"
     displayName: 'Platform'
-  - script: |
-          # export MACOSX_DEPLOYMENT_TARGET=10.13
-          python setup.py build_ext --inplace
-    displayName: 'Build package'
-  - script: |
-      python -u setup.py unittests
-    displayName: 'Runs Unit Tests'
+#  - script: |
+#          # export MACOSX_DEPLOYMENT_TARGET=10.13
+#          python setup.py build_ext --inplace
+#    displayName: 'Build package'
+#  - script: |
+#      python -u setup.py unittests
+#    displayName: 'Runs Unit Tests'
   - script: |
       python -m pip install cibuildwheel
       export CIBW_BEFORE_BUILD="pip install pybind11 cython numpy scipy pyquickhelper pyquicksetup"
