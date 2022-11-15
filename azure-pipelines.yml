@@ -116,6 +116,7 @@ jobs:
   - script: gcc --version
     displayName: 'gcc version'
   - script: brew install llvm
+    continueOnError: true
     displayName: 'install llvm'
   - script: brew install libomp
     displayName: 'Install omp'
