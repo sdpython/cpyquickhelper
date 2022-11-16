@@ -389,7 +389,8 @@ setup(
     packages=packages,
     package_dir=package_dir,
     package_data=package_data,
-    setup_requires=["pybind11<2.10.0", "cython", "scipy", "numpy", "pyquicksetup"],
+    setup_requires=["pybind11<2.10.0", "cython",
+                    "scipy", "numpy", "pyquicksetup"],
     install_requires=["pybind11<2.10.0", "numpy>=1.16",
                       "cython", 'scipy', 'pandas>=1.0'],
 )

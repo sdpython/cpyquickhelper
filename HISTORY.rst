@@ -5,18 +5,25 @@
 History
 =======
 
-current - 2022-01-12 - 0.00Mb
+current - 2022-11-16 - 0.00Mb
+=============================
+
+* #39: Drops python 3.7, add python 3.11 (2022-11-16)
+* #38: Uses f strings (2022-07-20)
+* #37: Investigates use of PYBIND11_MAKE_OPAQUE (2022-04-07)
+
+0.3.412 - 2022-01-12 - 9.74Mb
 =============================
 
 * #36: Restores the use of strings in measure_time (2022-01-12)
 * #35: Investigates pybind11 overhead (2022-01-10)
 
-0.3.404 - 2022-01-07 - 8.84Mb
+0.3.404 - 2022-01-07 - 0.16Mb
 =============================
 
 * #34: Switches CI to python 3.10 (2022-01-06)
 
-0.3.398 - 2021-12-15 - 0.16Mb
+0.3.398 - 2021-12-15 - 0.65Mb
 =============================
 
 * #33: Adds parameter max_time to measure_time to measure a statement for a fixed duration (2021-12-15)
@@ -29,35 +36,23 @@ current - 2022-01-12 - 0.00Mb
 * #25: Implements a custom profiler (2021-10-18)
 * #24: Update azure-pipelines.yml to build on python 3.9 (2021-08-18)
 
-0.3.369 - 2021-08-15 - 0.52Mb
+0.3.369 - 2021-08-15 - 0.85Mb
 =============================
 
 * #23: Implements edit_distance with pybind11 (2021-08-15)
 
-0.3.353 - 2021-01-09 - 0.14Mb
+0.3.353 - 2021-01-09 - 5.94Mb
 =============================
 
 * #22: Update ci to build manylinux wheels (2021-01-09)
 
-0.3.341 - 2021-01-03 - 0.14Mb
+0.3.341 - 2021-01-03 - 0.44Mb
 =============================
 
 * #21: Fixes setup.py when dependencies are not installed. (2021-01-01)
-
-0.2.330 - 2020-09-02 - 0.45Mb
-=============================
-
 * #20: Fixes build on ubuntu 16.04 (2020-09-02)
 * #19: PandasDtype fails with numpy 1.19 (2020-08-07)
-
-0.2.303 - 2020-05-16 - 0.43Mb
-=============================
-
 * #18: Returns the results as well when capturing the standard output (2020-05-16)
-
-0.2.299 - 2020-05-08 - 0.45Mb
-=============================
-
 * #17: Add a simple C++ implementation for gemm. (2020-01-17)
 * #15: enable openmp on mac (2020-01-17)
 * #16: Add an example of an agnostic container (no data in python containers) (2019-08-29)
