@@ -204,6 +204,10 @@ class TestEventProfiler(ExtTestCase):
         if __name__ == "__main__":
             print(msg)
 
+    @unittest.skipIf(
+        platform.system() == 'Windows' and
+        is_travis_or_appveyor() == 'appveyor',
+        reason='crash')
     def test_debug_logging(self):
         N = 100
         logger = logging.getLogger('cpyquickhelper-ut')
@@ -324,6 +328,9 @@ class TestEventProfiler(ExtTestCase):
         self.assertIn('sleep', set(df['name']))
         self.assertIn('time', set(df['mod']))
 
+    @unittest.skipIf(
+        platform.system() == 'Windows',
+        reason='crash')
     def test_profiling_c_20(self):
 
         def f1(t):

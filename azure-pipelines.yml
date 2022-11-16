@@ -4,8 +4,8 @@ jobs:
     vmImage: 'ubuntu-latest'
   strategy:
     matrix:
-      Python310-Linux:
-        python.version: '3.10'
+      Python311-Linux:
+        python.version: '3.11'
     maxParallel: 3
   steps:
   - task: UsePythonVersion@0
@@ -44,14 +44,14 @@ jobs:
       python -m pip install cibuildwheel
       export CIBW_MANYLINUX_X86_64_IMAGE="manylinux_2_24"
       export CIBW_BEFORE_BUILD="pip install pybind11 cython numpy scipy pyquickhelper"
-      export CIBW_BUILD="cp310-manylinux_x86_64"
+      export CIBW_BUILD="cp310-manylinux_x86_64 cp311-manylinux_x86_64"
       python -m cibuildwheel --output-dir dist/wheelhouse310 --platform linux
     displayName: 'Build Package manylinux_x_y_py310'
   - script: |
       export CIBW_MANYLINUX_X86_64_IMAGE="manylinux2014"
       export CIBW_BEFORE_BUILD="pip install pybind11 cython numpy scipy pyquickhelper"
       export CIBW_MANYLINUX_X86_64_IMAGE=quay.io/pypa/manylinux2014_x86_64:latest
-      export CIBW_BUILD="cp37-manylinux_x86_64 cp38-manylinux_x86_64 cp39-manylinux_x86_64"
+      export CIBW_BUILD="cp38-manylinux_x86_64 cp39-manylinux_x86_64"
       python -m cibuildwheel --output-dir dist/wheelhouse --platform linux
     displayName: 'Build Package manylinux2014'
   - task: PublishPipelineArtifact@0
@@ -64,8 +64,8 @@ jobs:
     vmImage: 'windows-latest'
   strategy:
     matrix:
-      Python310-Windows:
-        python.version: '3.10'
+      Python311-Windows:
+        python.version: '3.11'
     maxParallel: 3
   steps:
   - task: UsePythonVersion@0
@@ -87,7 +87,7 @@ jobs:
   - script: |
       python -m pip install cibuildwheel
       set CIBW_BEFORE_BUILD=pip install pybind11 cython numpy scipy pyquickhelper
-      set CIBW_BUILD=cp37-win_amd64 cp38-win_amd64 cp39-win_amd64 cp310-win_amd64
+      set CIBW_BUILD=cp38-win_amd64 cp39-win_amd64 cp310-win_amd64 cp311-win_amd64
       python -m cibuildwheel --output-dir dist/wheelhouse
     displayName: 'Build Package many'
   - task: PublishPipelineArtifact@0
@@ -101,7 +101,7 @@ jobs:
   strategy:
     matrix:
       Python310-MacOs:
-        python.version: "3.10"
+        python.version: '3.10'
   steps:
   - task: UsePythonVersion@0
     inputs:
@@ -109,63 +109,52 @@ jobs:
       architecture: 'x64'
   - script: gcc --version
     displayName: 'gcc version'
-  - script: |
-          brew update
+  - script: brew update
     displayName: 'brew update'
   - script: export
     displayName: 'export'
   - script: gcc --version
     displayName: 'gcc version'
   - script: brew install llvm
+    continueOnError: true
     displayName: 'install llvm'
   - script: brew install libomp
     displayName: 'Install omp'
-  # already installed
-  #- script: brew install p7zip
-  #  displayName: 'Install p7zip'
-  - script: brew install pandoc
-    displayName: 'Install Pandoc'
+  - script: brew upgrade p7zip
+    continueOnError: true
+    displayName: 'Install p7zip'
+#  - script: brew install pandoc
+#    displayName: 'Install Pandoc'
   - script: brew install graphviz
     continueOnError: true
     displayName: 'Install Graphviz'
-  - script: brew install pybind11
-    displayName: 'Install pybind11'
+  - script: brew install cairo pango gdk-pixbuf libffi
+    displayName: 'Install cairo pango gdk-pixbuf libffi'
   - bash: echo "##vso[task.prependpath]$CONDA/bin"
     displayName: Add conda to PATH.
   - bash: sudo chown -R $USER $CONDA
     displayName: Take ownership of conda installation
-  - bash: conda update conda --yes --quiet
-    displayName: Update conda.
-  - bash: conda info -a
-  - bash: conda create --yes --quiet --name pyenv -c defaults -c conda-forge python=$PYTHON_VERSION tox sphinx jupyter Cython numpy mkl scipy scikit-learn pandas coverage pylint
-    displayName: Create Anaconda environment.
-  - bash: source activate pyenv
-  - script: |
-          curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-          python get-pip.py
-    displayName: Install pip
-  - script: python -m pip install wheel setuptools
-    displayName: 'Install wheel, setuptools'
-  - script: python -m pip install pyquicksetup
-    displayName: 'Install pyquicksetup'
-  - script: python -m pip install -r requirements.txt
+  - bash: conda install -y -c conda-forge numpy scipy
+    displayName: Install numpy scipy
+  - bash: conda install -y -c conda-forge llvmlite numba pybind11
+    displayName: Install llvmlite numba pybind11
+  - script: pip install -r requirements.txt
     displayName: 'Install Requirements'
-  - script: export PYTHONPATH=src
-    displayName: 'PYTHONPATH=src'
-  - script: python -c "import platform;print(platform.version())"
-    displayName: 'Platform'
   - script: |
-          # export MACOSX_DEPLOYMENT_TARGET=10.13
-          python setup.py build_ext --inplace
-    displayName: 'Build package'
-  - script: |
-      python -u setup.py unittests
+         # export MACOSX_DEPLOYMENT_TARGET=10.13
+         python setup.py build_ext --inplace
+    displayName: 'Build package inplace'
+  - script: python -u setup.py unittests
     displayName: 'Runs Unit Tests'
   - script: |
       python -m pip install cibuildwheel
       export CIBW_BEFORE_BUILD="pip install pybind11 cython numpy scipy pyquickhelper pyquicksetup"
-      export CIBW_BUILD="cp37-macosx_x86_64 cp38-macosx_x86_64 cp39-macosx_x86_64 cp310-macosx_x86_64"
+      export CIBW_BUILD="cp39-macosx_x86_64 cp310-macosx_x86_64 cp311-macosx_x86_64"
+      export CIBW_ENVIRONMENT="MACOSX_DEPLOYMENT_TARGET=10.13"
+      export CC=gcc
+      export CXX=g++
       python -m cibuildwheel --output-dir dist/wheelhouse
+    continueOnError: true
     displayName: 'Build Package many'
   - task: PublishPipelineArtifact@0
     inputs:
