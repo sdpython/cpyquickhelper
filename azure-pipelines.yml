@@ -154,6 +154,7 @@ jobs:
       export CC=gcc
       export CXX=g++
       python -m cibuildwheel --output-dir dist/wheelhouse
+    continueOnError: true
     displayName: 'Build Package many'
   - task: PublishPipelineArtifact@0
     inputs:
