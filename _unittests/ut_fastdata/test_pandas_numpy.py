@@ -16,7 +16,7 @@ class TestPandasNumpy(ExtTestCase):
         arr = df2array(df)
         self.assertIsInstance(arr, numpy.ndarray)
         self.assertEqual(arr.shape, (2, 2))
-        self.assertEqual(arr.dtype, numpy.float)
+        self.assertEqual(arr.dtype, numpy.float_)
 
         df = pandas.DataFrame(
             [dict(a=3.4, b=5.6, c="e"), dict(a=3.5, b=5.7, c="r")])
@@ -45,7 +45,7 @@ class TestPandasNumpy(ExtTestCase):
         arr = {k: v for k, v in arr}  # pylint: disable=R1721
         self.assertIsInstance(arr["a,b"], numpy.ndarray)
         self.assertEqual(arr["a,b"].shape, (2, 2))
-        self.assertEqual(arr["a,b"].dtype, numpy.float)
+        self.assertEqual(arr["a,b"].dtype, numpy.float_)
         self.assertIsInstance(arr["c"], numpy.ndarray)
         self.assertEqual(arr["c"].shape, (1, 2))
         self.assertEqual(arr["c"].dtype, object)
