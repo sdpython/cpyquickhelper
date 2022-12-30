@@ -11,8 +11,9 @@ local_template = os.path.join(os.path.abspath(
 from pyquickhelper.helpgen.default_conf import set_sphinx_variables
 set_sphinx_variables(__file__, "cpyquickhelper", "Xavier Dupré", 2022,
                      "alabaster", alabaster.get_path(),
-                     locals(), extlinks=dict(
-                         issue=('https://github.com/sdpython/cpyquickhelper/issues/%s', 'issue %s')),
+                     locals(), extlinks=dict(issue=(
+                         'https://github.com/sdpython/cpyquickhelper/issues/%s',
+                         'issue %s')),
                      title="cpyquickhelper", book=True)
 
 blog_root = "http://www.xavierdupre.fr/app/cpyquickhelper/helpsphinx/"
