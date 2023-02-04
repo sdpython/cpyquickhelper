@@ -78,8 +78,10 @@ def measure_time(stmt, context=None, repeat=10, number=50, div_by_number=False,
         mean = ttime / tw
         ave = res[:, 1] / res[:, 0]
         dev = (((ave - mean) ** 2 * res[:, 0]).sum() / tw) ** 0.5
-        mes = dict(average=mean, deviation=dev, min_exec=numpy.min(ave),
-                   max_exec=numpy.max(ave), repeat=1, number=tw,
+        mes = dict(average=mean, deviation=dev,  # pylint: disable=R1735
+                   min_exec=numpy.min(ave),
+                   max_exec=numpy.max(ave),
+                   repeat=1, number=tw,
                    ttime=ttime)
     else:
         res = numpy.array(tim.repeat(repeat=repeat, number=number))
@@ -89,9 +91,10 @@ def measure_time(stmt, context=None, repeat=10, number=50, div_by_number=False,
         mean = numpy.mean(res)
         dev = numpy.mean(res ** 2)
         dev = (dev - mean**2) ** 0.5
-        mes = dict(average=mean, deviation=dev, min_exec=numpy.min(res),
-                   max_exec=numpy.max(res), repeat=repeat, number=number,
-                   ttime=res.sum())
+        mes = dict(average=mean, deviation=dev,  # pylint: disable=R1735
+                   min_exec=numpy.min(res),
+                   max_exec=numpy.max(res), repeat=repeat,
+                   number=number, ttime=res.sum())
 
     if 'values' in context:
         if hasattr(context['values'], 'shape'):
