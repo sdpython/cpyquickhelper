@@ -87,7 +87,7 @@ jobs:
   - script: |
       python -m pip install cibuildwheel
       set CIBW_BEFORE_BUILD=pip install pybind11 cython numpy scipy pyquickhelper
-      set CIBW_BUILD=cp39-win_amd64 cp310-win_amd64 cp311-win_amd64
+      set CIBW_BUILD=cp310-win_amd64 cp311-win_amd64
       python -m cibuildwheel --output-dir dist/wheelhouse
     displayName: 'Build Package many'
   - task: PublishPipelineArtifact@0
@@ -149,7 +149,7 @@ jobs:
   - script: |
       python -m pip install cibuildwheel
       export CIBW_BEFORE_BUILD="pip install pybind11 cython numpy scipy pyquickhelper pyquicksetup"
-      export CIBW_BUILD="cp39-macosx_x86_64 cp310-macosx_x86_64 cp311-macosx_x86_64"
+      export CIBW_BUILD="cp310-macosx_x86_64 cp311-macosx_x86_64"
       export CIBW_ENVIRONMENT="MACOSX_DEPLOYMENT_TARGET=10.13"
       export CC=gcc
       export CXX=g++
